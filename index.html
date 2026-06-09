@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>دليل الشروق لمستلزمات طب الأسنان</title>
     <link rel="manifest" href="manifest.json">
     <style>
@@ -12,13 +13,18 @@
             padding: 0;
         }
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #1a3a6b;
+        }
         .app-frame {
-            width: 370px;
-            min-height: 780px;
+            width: 100%;
+            max-width: 430px;
+            min-height: 100vh;
             margin: 0 auto;
             background: #f0f4fa;
-            border-radius: 36px;
-            border: 2.5px solid #c8d4e8;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -26,18 +32,9 @@
             direction: rtl;
             position: relative;
         }
+        /* إخفاء شريط الحالة بالكامل */
         .status-bar {
-            background: #1a3a6b;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 18px;
-            flex-shrink: 0;
-        }
-        .status-bar span {
-            color: #fff;
-            font-size: 11px;
+            display: none !important;
         }
         .page {
             display: none;
@@ -797,12 +794,6 @@
     <div class="app-frame" role="main">
         <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">تطبيق الشروق لمستلزمات طب الأسنان</h2>
 
-        <div class="status-bar">
-            <span>9:41</span>
-            <span>الشروق</span>
-            <span>🔋 87%</span>
-        </div>
-
         <!-- MAIN PAGE -->
         <div class="page active" id="pageMain">
             <div class="hdr">
@@ -993,7 +984,7 @@
         let sel = null;
         let activeCat = 'الكل';
         let editingId = null;
-        let selectedImageData = null; // Stores the Base64 image data
+        let selectedImageData = null;
 
         // ---------- Helper Functions ----------
         function handleImageSelect(event) {
@@ -1004,13 +995,12 @@
             }
             const reader = new FileReader();
             reader.onload = function(e) {
-                selectedImageData = e.target.result; // Base64 string
+                selectedImageData = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
         function updateCategoryUI() {
-            // Update dropdown in admin
             const sel = document.getElementById('aCat');
             sel.innerHTML = '<option value="">اختر الفئة</option>';
             categories.forEach(c => {
@@ -1020,7 +1010,6 @@
                 sel.appendChild(opt);
             });
 
-            // Update category tags in admin
             const tagsContainer = document.getElementById('catTags');
             tagsContainer.innerHTML = '';
             categories.forEach(c => {
@@ -1030,16 +1019,13 @@
                 tagsContainer.appendChild(tag);
             });
 
-            // Update chips in main page
             const chipsContainer = document.getElementById('cats');
             chipsContainer.innerHTML = '';
-            // Add 'All' chip
             const allChip = document.createElement('button');
             allChip.className = 'chip active';
             allChip.textContent = 'الكل';
             allChip.onclick = function() { filterCat(this, 'الكل'); };
             chipsContainer.appendChild(allChip);
-            // Add category chips
             categories.forEach(c => {
                 const chip = document.createElement('button');
                 chip.className = 'chip';
@@ -1158,13 +1144,11 @@
             const code = document.getElementById('aCode').value.trim();
             const price = parseFloat(document.getElementById('aPrice').value);
             const cat = document.getElementById('aCat').value;
-            // Use the selected image if available, otherwise keep existing (in edit mode)
             let image = selectedImageData || '';
             if (!name || !price || !cat) { alert('يرجى ملء اسم الصنف والسعر والفئة'); return; }
             if (editingId) {
                 const idx = products.findIndex(p => p.id === editingId);
                 if (idx > -1) {
-                    // If a new image was selected, use it. Otherwise, keep the old one.
                     if (!image) {
                         image = products[idx].image;
                     }
@@ -1209,7 +1193,6 @@
             document.getElementById('aName').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // ---------- Category Management ----------
         function addCategory() {
             const newCat = document.getElementById('newCatName').value.trim();
             if (!newCat) { alert('يرجى كتابة اسم الفئة'); return; }
@@ -1220,11 +1203,9 @@
         }
 
         function deleteCategory(catName) {
-            // Check if any product uses this category
             const used = products.some(p => p.cat === catName);
             if (used) {
                 if (!confirm(`هذه الفئة مستخدمة في ${products.filter(p=>p.cat===catName).length} منتج(ات). هل تريد حذفها مع المنتجات؟`)) return;
-                // Delete products in this category
                 products = products.filter(p => p.cat !== catName);
                 renderAdminList();
             }
@@ -1240,6 +1221,11 @@
 
         // ---------- Initialize ----------
         updateCategoryUI();
+
+        // طلب ملء الشاشة تلقائياً عند فتح التطبيق
+        if (document.fullscreenEnabled) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        }
 
         document.addEventListener('click', e => {
             if (!e.target.closest('.search-wrap') && !e.target.closest('#dd'))
