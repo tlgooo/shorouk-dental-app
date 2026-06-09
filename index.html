@@ -220,6 +220,7 @@
             gap: 6px;
             overflow-x: auto;
             padding-bottom: 2px;
+            flex-wrap: nowrap;
         }
         .cats::-webkit-scrollbar {
             display: none;
@@ -479,6 +480,13 @@
             align-items: center;
             justify-content: center;
             min-height: 160px;
+            overflow: hidden;
+        }
+        .prod-img-box img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
         }
         .prod-img-placeholder {
             display: flex;
@@ -752,6 +760,36 @@
         .msg-success.show {
             display: flex;
         }
+
+        /* CATEGORY MANAGEMENT */
+        .cat-mgmt {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .cat-tag {
+            background: #e8f0fb;
+            border: 1px solid #b8cde8;
+            border-radius: 12px;
+            padding: 3px 10px;
+            font-size: 11px;
+            color: #1a3a6b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cat-tag .del-cat {
+            color: #dd4444;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 1;
+            padding: 0 2px;
+        }
+        .cat-tag .del-cat:hover {
+            color: #aa2222;
+        }
     </style>
 </head>
 <body>
@@ -792,12 +830,7 @@
                 </div>
 
                 <div class="cats" id="cats">
-                    <button class="chip active" onclick="filterCat(this,'الكل')">الكل</button>
-                    <button class="chip" onclick="filterCat(this,'تقويم')">تقويم</button>
-                    <button class="chip" onclick="filterCat(this,'أندو')">أندو</button>
-                    <button class="chip" onclick="filterCat(this,'جلدز')">جلدز</button>
-                    <button class="chip" onclick="filterCat(this,'كمبوزيت')">كمبوزيت</button>
-                    <button class="chip" onclick="filterCat(this,'مستهلكات')">مستهلكات</button>
+                    <!-- سيتم توليد الفئات تلقائياً من JavaScript -->
                 </div>
 
                 <div class="price-card" id="pc">
@@ -848,11 +881,8 @@
             </div>
 
             <div class="det-body">
-                <div class="prod-img-box">
-                    <div class="prod-img-placeholder">
-                        <i class="ti ti-dental" aria-hidden="true"></i>
-                        <span style="font-size:11px;text-align:center" id="detImgLabel">صورة المنتج</span>
-                    </div>
+                <div class="prod-img-box" id="detImgBox">
+                    <!-- سيتم وضع الصورة هنا تلقائياً -->
                 </div>
 
                 <div class="prod-info-card">
@@ -902,6 +932,7 @@
             </div>
 
             <div class="adm-body">
+                <!-- إضافة / تعديل صنف -->
                 <div class="adm-card">
                     <div class="adm-card-title"><i class="ti ti-plus" aria-hidden="true" style="font-size:15px;color:#1e4d9b"></i> إضافة / تعديل صنف</div>
                     <div class="adm-form">
@@ -910,19 +941,30 @@
                             <input class="adm-inp" id="aCode" type="text" placeholder="كود المنتج (مثال: KT-301)" />
                             <input class="adm-inp" id="aPrice" type="number" placeholder="السعر بالجنيه" />
                         </div>
+                        <div class="adm-row">
+                            <input class="adm-inp" id="aImage" type="file" accept="image/*" onchange="handleImageSelect(event)" style="flex:1; padding: 6px; background: #f5f8fd; border: 1.5px solid #b8cde8; border-radius: 10px; font-size: 12px; color: #1a3a6b;" />
+                        </div>
                         <select class="adm-sel" id="aCat">
-                            <option value="">اختر الفئة</option>
-                            <option value="تقويم">تقويم</option>
-                            <option value="أندو">أندو</option>
-                            <option value="جلدز">جلدز</option>
-                            <option value="كمبوزيت">كمبوزيت</option>
-                            <option value="مستهلكات">مستهلكات</option>
+                            <!-- سيتم توليد الفئات تلقائياً من JavaScript -->
                         </select>
                         <div class="msg-success" id="msgOk"><i class="ti ti-check" aria-hidden="true"></i> تم الحفظ بنجاح!</div>
                         <button class="btn-add" onclick="addProduct()"><i class="ti ti-device-floppy" aria-hidden="true"></i> حفظ الصنف</button>
                     </div>
                 </div>
 
+                <!-- إدارة الفئات -->
+                <div class="adm-card">
+                    <div class="adm-card-title"><i class="ti ti-folder" aria-hidden="true" style="font-size:15px;color:#1e4d9b"></i> إدارة الفئات</div>
+                    <div class="adm-form" style="flex-direction:row;flex-wrap:wrap;gap:6px;">
+                        <input class="adm-inp" id="newCatName" type="text" placeholder="اسم الفئة الجديدة" style="flex:2;min-width:120px" />
+                        <button class="btn-add" onclick="addCategory()" style="flex:1;min-width:80px;padding:8px;"><i class="ti ti-plus" aria-hidden="true"></i> إضافة</button>
+                    </div>
+                    <div class="cat-mgmt" id="catTags">
+                        <!-- سيتم توليد الفئات كعلامات -->
+                    </div>
+                </div>
+
+                <!-- قائمة الأصناف -->
                 <div class="adm-card">
                     <div class="adm-card-title"><i class="ti ti-list" aria-hidden="true" style="font-size:15px;color:#1e4d9b"></i> قائمة الأصناف الحالية (<span id="prodCount">0</span>)</div>
                     <div class="prod-list" id="prodList"></div>
@@ -934,22 +976,78 @@
 
     <script>
         const WA = '201224561525';
+        let categories = ["تقويم", "أندو", "جلدز", "كمبوزيت", "مستهلكات"];
         let products = [
-            { id: 1, name: 'كيت تقويم مصري 3 مقاسات جودة عالية', code: 'KT-301', price: 160, cat: 'تقويم' },
-            { id: 2, name: 'مسطرة أندو', code: 'EN-205', price: 35, cat: 'أندو' },
-            { id: 3, name: 'هوك أبيكسليكتور', code: 'AP-110', price: 20, cat: 'أندو' },
-            { id: 4, name: 'جلدز لاتكس', code: 'GL-LAT', price: 185, cat: 'جلدز' },
-            { id: 5, name: 'جلدز فحص', code: 'GL-FHS', price: 15, cat: 'جلدز' },
-            { id: 6, name: 'نابكن مصري (كرتونة)', code: 'NP-EGY', price: 300, cat: 'مستهلكات' },
-            { id: 7, name: 'رابر بيز زيتا', code: 'RB-ZTA', price: 1970, cat: 'مستهلكات' },
-            { id: 8, name: 'رابر بيز سلاكسي', code: 'RB-SLX', price: 1875, cat: 'مستهلكات' },
-            { id: 9, name: 'كمبوزيت روبي', code: 'CM-RBY', price: 185, cat: 'كمبوزيت' },
-            { id: 10, name: 'كمبوزيت إيفوكلار', code: 'CM-IVC', price: 650, cat: 'كمبوزيت' },
+            { id: 1, name: 'كيت تقويم مصري 3 مقاسات جودة عالية', code: 'KT-301', price: 160, cat: 'تقويم', image: '' },
+            { id: 2, name: 'مسطرة أندو', code: 'EN-205', price: 35, cat: 'أندو', image: '' },
+            { id: 3, name: 'هوك أبيكسليكتور', code: 'AP-110', price: 20, cat: 'أندو', image: '' },
+            { id: 4, name: 'جلدز لاتكس', code: 'GL-LAT', price: 185, cat: 'جلدز', image: '' },
+            { id: 5, name: 'جلدز فحص', code: 'GL-FHS', price: 15, cat: 'جلدز', image: '' },
+            { id: 6, name: 'نابكن مصري (كرتونة)', code: 'NP-EGY', price: 300, cat: 'مستهلكات', image: '' },
+            { id: 7, name: 'رابر بيز زيتا', code: 'RB-ZTA', price: 1970, cat: 'مستهلكات', image: '' },
+            { id: 8, name: 'رابر بيز سلاكسي', code: 'RB-SLX', price: 1875, cat: 'مستهلكات', image: '' },
+            { id: 9, name: 'كمبوزيت روبي', code: 'CM-RBY', price: 185, cat: 'كمبوزيت', image: '' },
+            { id: 10, name: 'كمبوزيت إيفوكلار', code: 'CM-IVC', price: 650, cat: 'كمبوزيت', image: '' },
         ];
         let nextId = 11;
         let sel = null;
         let activeCat = 'الكل';
         let editingId = null;
+        let selectedImageData = null; // Stores the Base64 image data
+
+        // ---------- Helper Functions ----------
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                selectedImageData = null;
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedImageData = e.target.result; // Base64 string
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateCategoryUI() {
+            // Update dropdown in admin
+            const sel = document.getElementById('aCat');
+            sel.innerHTML = '<option value="">اختر الفئة</option>';
+            categories.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                sel.appendChild(opt);
+            });
+
+            // Update category tags in admin
+            const tagsContainer = document.getElementById('catTags');
+            tagsContainer.innerHTML = '';
+            categories.forEach(c => {
+                const tag = document.createElement('div');
+                tag.className = 'cat-tag';
+                tag.innerHTML = `${c} <span class="del-cat" onclick="deleteCategory('${c}')">×</span>`;
+                tagsContainer.appendChild(tag);
+            });
+
+            // Update chips in main page
+            const chipsContainer = document.getElementById('cats');
+            chipsContainer.innerHTML = '';
+            // Add 'All' chip
+            const allChip = document.createElement('button');
+            allChip.className = 'chip active';
+            allChip.textContent = 'الكل';
+            allChip.onclick = function() { filterCat(this, 'الكل'); };
+            chipsContainer.appendChild(allChip);
+            // Add category chips
+            categories.forEach(c => {
+                const chip = document.createElement('button');
+                chip.className = 'chip';
+                chip.textContent = c;
+                chip.onclick = function() { filterCat(this, c); };
+                chipsContainer.appendChild(chip);
+            });
+        }
 
         function getFiltered() {
             return activeCat === 'الكل' ? [...products] : products.filter(p => p.cat === activeCat);
@@ -971,7 +1069,8 @@
             list.forEach(p => {
                 const d = document.createElement('div');
                 d.className = 'dd-item';
-                d.innerHTML = `<i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i><span>${p.name}</span><span class="dd-price">${p.price} ج</span>`;
+                d.innerHTML =
+                    `<i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i><span>${p.name}</span><span class="dd-price">${p.price} ج</span>`;
                 d.onclick = () => pick(p);
                 dd.appendChild(d);
             });
@@ -1001,7 +1100,8 @@
 
         function goWa() {
             if (!sel) return;
-            const msg = encodeURIComponent(`السلام عليكم، أريد طلب (${sel.name} - ${sel.code}) بسعر (${sel.price} جنيه). الرجاء تأكيد الطلب.`);
+            const msg = encodeURIComponent(
+                `السلام عليكم، أريد طلب (${sel.name} - ${sel.code}) بسعر (${sel.price} جنيه). الرجاء تأكيد الطلب.`);
             const url = `https://wa.me/${WA}?text=${msg}`;
             if (typeof openLink === 'function') openLink(url);
             else window.open(url, '_blank');
@@ -1013,7 +1113,18 @@
             document.getElementById('detCode').textContent = 'الكود: ' + sel.code;
             document.getElementById('detCat').textContent = sel.cat;
             document.getElementById('detAmt').textContent = sel.price;
-            document.getElementById('detImgLabel').textContent = sel.name;
+
+            const imgBox = document.getElementById('detImgBox');
+            if (sel.image && sel.image.trim() !== '') {
+                imgBox.innerHTML = `<img src="${sel.image}" alt="${sel.name}" loading="lazy" />`;
+            } else {
+                imgBox.innerHTML = `
+                    <div class="prod-img-placeholder">
+                        <i class="ti ti-dental" aria-hidden="true"></i>
+                        <span style="font-size:11px;text-align:center">صورة المنتج</span>
+                    </div>
+                `;
+            }
             showPage('pageDetail');
         }
 
@@ -1047,19 +1158,29 @@
             const code = document.getElementById('aCode').value.trim();
             const price = parseFloat(document.getElementById('aPrice').value);
             const cat = document.getElementById('aCat').value;
+            // Use the selected image if available, otherwise keep existing (in edit mode)
+            let image = selectedImageData || '';
             if (!name || !price || !cat) { alert('يرجى ملء اسم الصنف والسعر والفئة'); return; }
             if (editingId) {
                 const idx = products.findIndex(p => p.id === editingId);
-                if (idx > -1) products[idx] = { id: editingId, name, code: code || '—', price, cat };
+                if (idx > -1) {
+                    // If a new image was selected, use it. Otherwise, keep the old one.
+                    if (!image) {
+                        image = products[idx].image;
+                    }
+                    products[idx] = { id: editingId, name, code: code || '—', price, cat, image };
+                }
                 editingId = null;
                 document.querySelector('.btn-add').innerHTML = '<i class="ti ti-device-floppy" aria-hidden="true"></i> حفظ الصنف';
             } else {
-                products.push({ id: nextId++, name, code: code || '—', price, cat });
+                products.push({ id: nextId++, name, code: code || '—', price, cat, image });
             }
             document.getElementById('aName').value = '';
             document.getElementById('aCode').value = '';
             document.getElementById('aPrice').value = '';
+            document.getElementById('aImage').value = '';
             document.getElementById('aCat').value = '';
+            selectedImageData = null;
             const msg = document.getElementById('msgOk');
             msg.classList.add('show');
             setTimeout(() => msg.classList.remove('show'), 2000);
@@ -1082,9 +1203,44 @@
             document.getElementById('aCode').value = p.code;
             document.getElementById('aPrice').value = p.price;
             document.getElementById('aCat').value = p.cat;
+            selectedImageData = null;
+            document.getElementById('aImage').value = '';
             document.querySelector('.btn-add').innerHTML = '<i class="ti ti-refresh" aria-hidden="true"></i> تحديث الصنف';
             document.getElementById('aName').scrollIntoView({ behavior: 'smooth' });
         }
+
+        // ---------- Category Management ----------
+        function addCategory() {
+            const newCat = document.getElementById('newCatName').value.trim();
+            if (!newCat) { alert('يرجى كتابة اسم الفئة'); return; }
+            if (categories.includes(newCat)) { alert('هذه الفئة موجودة بالفعل'); return; }
+            categories.push(newCat);
+            document.getElementById('newCatName').value = '';
+            updateCategoryUI();
+        }
+
+        function deleteCategory(catName) {
+            // Check if any product uses this category
+            const used = products.some(p => p.cat === catName);
+            if (used) {
+                if (!confirm(`هذه الفئة مستخدمة في ${products.filter(p=>p.cat===catName).length} منتج(ات). هل تريد حذفها مع المنتجات؟`)) return;
+                // Delete products in this category
+                products = products.filter(p => p.cat !== catName);
+                renderAdminList();
+            }
+            categories = categories.filter(c => c !== catName);
+            if (activeCat === catName) { activeCat = 'الكل';
+                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                document.querySelector('.chip:first-child').classList.add('active'); }
+            if (sel && sel.cat === catName) { sel = null;
+                document.getElementById('pc').classList.remove('show');
+                document.getElementById('btnWa').disabled = true; }
+            updateCategoryUI();
+        }
+
+        // ---------- Initialize ----------
+        updateCategoryUI();
+
         document.addEventListener('click', e => {
             if (!e.target.closest('.search-wrap') && !e.target.closest('#dd'))
                 document.getElementById('dd').classList.remove('open');
