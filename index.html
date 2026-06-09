@@ -1,0 +1,439 @@
+ 
+<style> 
+*{box-sizing:border-box;margin:0;padding:0}
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+.app-frame{width:370px;min-height:780px;margin:0 auto;background:#f0f4fa;border-radius:36px;border:2.5px solid #c8d4e8;overflow:hidden;display:flex;flex-direction:column;font-family:'Tajawal',sans-serif;direction:rtl;position:relative}
+.status-bar{background:#1a3a6b;height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0}
+.status-bar span{color:#fff;font-size:11px}
+.page{display:none;flex-direction:column;flex:1;overflow-y:auto;overflow-x:hidden}
+.page.active{display:flex}
+.page::-webkit-scrollbar{display:none}
+ 
+/* HEADER */
+.hdr{background:#1a3a6b;padding:13px 14px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.logo-row{display:flex;align-items:center;gap:10px;width:100%}
+.logo-circ{width:52px;height:52px;border-radius:50%;background:#fff;border:2px solid #c8b86e;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-inner{display:flex;flex-direction:column;align-items:center;line-height:1}
+.logo-s{font-size:22px;font-weight:800;color:#c8b86e;font-family:Georgia,serif}
+.logo-t{font-size:12px}
+.co-info{flex:1}
+.co-name{color:#e8d98a;font-size:12px;font-weight:700}
+.co-sub{color:#a8c4e8;font-size:10px}
+.hdr-nav-btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;padding:5px 10px;font-size:11px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.hdr-nav-btn:hover{background:rgba(255,255,255,0.2)}
+.tagline{background:rgba(255,255,255,0.1);border-radius:10px;padding:7px 12px;color:#fff;font-size:11.5px;font-weight:700;border:1px solid rgba(200,184,110,0.35);width:100%;text-align:center}
+ 
+/* BODY */
+.body{flex:1;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f0f4fa}
+.sec-lbl{font-size:12px;color:#1a3a6b;font-weight:700;margin-bottom:3px}
+.search-wrap{position:relative}
+.s-inp{width:100%;background:#fff;border:1.5px solid #b8cde8;border-radius:12px;padding:10px 40px 10px 12px;font-size:13px;color:#222;outline:none;direction:rtl;font-family:inherit}
+.s-inp:focus{border-color:#1e4d9b}
+.s-ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#1e4d9b;font-size:18px;pointer-events:none}
+.dropdown{background:#fff;border:1.5px solid #b8cde8;border-radius:10px;overflow:hidden;margin-top:3px;display:none;flex-direction:column;max-height:200px;overflow-y:auto}
+.dropdown.open{display:flex}
+.dd-item{padding:9px 12px;font-size:12px;color:#1a3a6b;border-bottom:0.5px solid #e4eaf5;cursor:pointer;display:flex;align-items:center;gap:7px}
+.dd-item:hover{background:#e8f0fb}
+.dd-item:last-child{border-bottom:none}
+.dd-price{color:#c8b86e;font-weight:700;margin-right:auto;font-size:11.5px;white-space:nowrap}
+.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.cats::-webkit-scrollbar{display:none}
+.chip{background:#fff;border:1px solid #c8d4e8;border-radius:20px;padding:5px 10px;font-size:11px;color:#1a3a6b;white-space:nowrap;cursor:pointer;font-family:inherit;flex-shrink:0}
+.chip.active,.chip:hover{background:#1e4d9b;color:#fff;border-color:#1e4d9b}
+.price-card{background:#fff;border-radius:14px;border:1.5px solid #c8b86e;padding:12px;display:none;flex-direction:column;gap:6px}
+.price-card.show{display:flex}
+.pc-header{display:flex;align-items:center;gap:7px}
+.pc-badge{background:#1e4d9b;color:#fff;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700}
+.pc-name{color:#1a3a6b;font-size:12.5px;font-weight:700;flex:1}
+.pc-code{color:#8899bb;font-size:10.5px}
+.pc-amt-row{display:flex;align-items:baseline;gap:5px}
+.pc-lbl{color:#6677aa;font-size:11.5px}
+.pc-amt{color:#c8b86e;font-size:26px;font-weight:800}
+.pc-cur{color:#1a3a6b;font-size:12.5px;font-weight:700}
+.pc-note{color:#8899bb;font-size:10px}
+.btn-view{background:#1e4d9b;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;justify-content:center}
+.btn-view:hover{background:#163d82}
+.btn-wa{background:#25D366;color:#fff;border:none;border-radius:13px;padding:12px 16px;font-size:13px;font-weight:700;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;width:100%}
+.btn-wa:hover{background:#1da851}
+.btn-wa:disabled{background:#b0ccb5;cursor:not-allowed}
+.how-card{background:#fff;border-radius:12px;border:1px solid #dce8f5;padding:11px 12px}
+.how-title{color:#1a3a6b;font-size:12px;font-weight:700;margin-bottom:7px}
+.how-step{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:#445577;margin-bottom:5px}
+.how-num{background:#1e4d9b;color:#fff;border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.footer{background:#1a3a6b;padding:8px 14px;text-align:center;color:#a8c4e8;font-size:10px;line-height:1.6;flex-shrink:0}
+.footer strong{color:#e8d98a}
+ 
+/* DETAIL PAGE */
+.det-hdr{background:#1a3a6b;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.det-back{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;padding:5px 10px;font-size:11px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px}
+.det-back:hover{background:rgba(255,255,255,0.25)}
+.det-logo{display:flex;flex-direction:column;align-items:center}
+.det-logo-c{width:42px;height:42px;border-radius:50%;background:#fff;border:2px solid #c8b86e;display:flex;align-items:center;justify-content:center}
+.det-logo-s{font-size:18px;font-weight:800;color:#c8b86e;font-family:Georgia,serif}
+.det-cart{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;padding:5px 10px;font-size:11px;font-family:inherit;cursor:pointer;position:relative}
+.cart-badge{position:absolute;top:-5px;right:-5px;background:#c8b86e;color:#1a3a6b;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;display:none}
+.det-body{flex:1;padding:14px;display:flex;flex-direction:column;gap:12px;background:#f0f4fa}
+.prod-img-box{background:#fff;border-radius:16px;border:1.5px solid #e0e8f5;padding:20px;display:flex;align-items:center;justify-content:center;min-height:160px}
+.prod-img-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:#8899bb}
+.prod-img-placeholder i{font-size:60px;color:#c8b86e}
+.prod-info-card{background:#fff;border-radius:14px;border:1px solid #dce8f5;padding:14px;display:flex;flex-direction:column;gap:8px}
+.prod-title{color:#1a3a6b;font-size:15px;font-weight:800;line-height:1.4}
+.prod-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.prod-code{color:#8899bb;font-size:11px;background:#f0f4fa;padding:3px 8px;border-radius:6px}
+.prod-cat-badge{color:#fff;background:#1e4d9b;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:700}
+.price-box{background:#1e4d9b;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.price-main{display:flex;align-items:baseline;gap:6px}
+.price-num{color:#fff;font-size:32px;font-weight:800}
+.price-unit{color:#a8c4e8;font-size:14px;font-weight:700}
+.price-tax{color:#a8c4e8;font-size:10.5px}
+.price-updated{display:flex;align-items:center;gap:4px;color:#a8c4e8;font-size:10px}
+.det-footer{background:#1a3a6b;padding:8px 14px;text-align:center;color:#a8c4e8;font-size:9.5px;line-height:1.6;flex-shrink:0}
+.det-footer strong{color:#e8d98a}
+ 
+/* ADMIN PAGE */
+.adm-hdr{background:#1a3a6b;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.adm-title{color:#e8d98a;font-size:14px;font-weight:700}
+.adm-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f0f4fa}
+.adm-card{background:#fff;border-radius:14px;border:1px solid #dce8f5;padding:13px}
+.adm-card-title{color:#1a3a6b;font-size:12.5px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.adm-form{display:flex;flex-direction:column;gap:8px}
+.adm-row{display:flex;gap:7px}
+.adm-inp{flex:1;background:#f5f8fd;border:1.5px solid #b8cde8;border-radius:10px;padding:8px 11px;font-size:12px;color:#1a3a6b;outline:none;direction:rtl;font-family:inherit}
+.adm-inp:focus{border-color:#1e4d9b;background:#fff}
+.adm-sel{flex:1;background:#f5f8fd;border:1.5px solid #b8cde8;border-radius:10px;padding:8px 11px;font-size:12px;color:#1a3a6b;outline:none;direction:rtl;font-family:inherit}
+.adm-sel:focus{border-color:#1e4d9b}
+.btn-add{background:#1e4d9b;color:#fff;border:none;border-radius:10px;padding:10px;font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-add:hover{background:#163d82}
+.prod-list{display:flex;flex-direction:column;gap:7px;max-height:280px;overflow-y:auto}
+.prod-list::-webkit-scrollbar{width:3px}
+.prod-list::-webkit-scrollbar-thumb{background:#c8d4e8;border-radius:3px}
+.prod-row{background:#f5f8fd;border-radius:10px;border:1px solid #e0e8f5;padding:9px 11px;display:flex;align-items:center;gap:8px}
+.prod-row-name{flex:1;font-size:12px;color:#1a3a6b;font-weight:700}
+.prod-row-sub{font-size:10px;color:#8899bb}
+.prod-row-price{color:#c8b86e;font-size:13px;font-weight:800;white-space:nowrap}
+.btn-del{background:none;border:none;color:#dd4444;cursor:pointer;font-size:16px;padding:2px;display:flex;align-items:center}
+.btn-del:hover{color:#aa2222}
+.btn-edit-p{background:none;border:none;color:#1e4d9b;cursor:pointer;font-size:16px;padding:2px;display:flex;align-items:center}
+.empty-list{text-align:center;color:#8899bb;font-size:12px;padding:20px}
+.msg-success{background:#e8f5ee;border:1px solid #4caf7a;border-radius:8px;padding:8px 11px;color:#1a6637;font-size:11.5px;display:none;align-items:center;gap:6px}
+.msg-success.show{display:flex}
+</style>
+ 
+<div class="app-frame" role="main">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">طھط·ط¨ظٹظ‚ ط§ظ„ط´ط±ظˆظ‚ ظ„ظ…ط³طھظ„ط²ظ…ط§طھ ط·ط¨ ط§ظ„ط£ط³ظ†ط§ظ†</h2>
+ 
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>ط§ظ„ط´ط±ظˆظ‚</span>
+    <span>âڑ، 87%</span>
+  </div>
+ 
+  <!-- MAIN PAGE -->
+  <div class="page active" id="pageMain">
+    <div class="hdr">
+      <div class="logo-row">
+        <div class="logo-circ">
+          <div class="logo-inner"><span class="logo-s">S</span><span class="logo-t">ًں¦·</span></div>
+        </div>
+        <div class="co-info">
+          <div class="co-name">ط§ظ„ط´ط±ظˆظ‚ ظ„ظ…ط³طھظ„ط²ظ…ط§طھ ط·ط¨ ط§ظ„ط£ط³ظ†ط§ظ†</div>
+          <div class="co-sub">Dr. Bilal Al-Najashi</div>
+        </div>
+        <button class="hdr-nav-btn" onclick="goAdmin()"><i class="ti ti-settings" aria-hidden="true"></i> ط¥ط¯ط§ط±ط©</button>
+      </div>
+      <div class="tagline">ط¯ظ„ظٹظ„ ط§ظ„ط´ط±ظˆظ‚ â€“ ط§ط¨ط­ط« ط¹ظ† طµظ†ظپظƒ ظˆط§ط­طµظ„ ط¹ظ„ظ‰ ط§ظ„ط³ط¹ط± ظپظˆط±ط§ظ‹</div>
+    </div>
+ 
+    <div class="body">
+      <div>
+        <div class="sec-lbl">ط§ط¨ط­ط« ط¹ظ† طµظ†ظپظƒ</div>
+        <div class="search-wrap">
+          <input class="s-inp" id="si" type="text" placeholder="ط§ظƒطھط¨ ط§ط³ظ… ط§ظ„طµظ†ظپ..." oninput="doSearch()" onfocus="doSearch()"/>
+          <i class="ti ti-search s-ic" aria-hidden="true"></i>
+        </div>
+        <div class="dropdown" id="dd"></div>
+      </div>
+ 
+      <div class="cats" id="cats">
+        <button class="chip active" onclick="filterCat(this,'ط§ظ„ظƒظ„')">ط§ظ„ظƒظ„</button>
+        <button class="chip" onclick="filterCat(this,'طھظ‚ظˆظٹظ…')">طھظ‚ظˆظٹظ…</button>
+        <button class="chip" onclick="filterCat(this,'ط£ظ†ط¯ظˆ')">ط£ظ†ط¯ظˆ</button>
+        <button class="chip" onclick="filterCat(this,'ط¬ظ„ظپط²')">ط¬ظ„ظپط²</button>
+        <button class="chip" onclick="filterCat(this,'ظƒظ…ط¨ظˆط²ظٹطھ')">ظƒظ…ط¨ظˆط²ظٹطھ</button>
+        <button class="chip" onclick="filterCat(this,'ظ…ط³طھظ‡ظ„ظƒط§طھ')">ظ…ط³طھظ‡ظ„ظƒط§طھ</button>
+      </div>
+ 
+      <div class="price-card" id="pc">
+        <div class="pc-header">
+          <div class="pc-badge">ط³ط¹ط± ط§ظ„ظٹظˆظ…</div>
+          <div class="pc-name" id="pcName">â€”</div>
+        </div>
+        <div class="pc-code" id="pcCode">â€”</div>
+        <div class="pc-amt-row">
+          <span class="pc-lbl">ط§ظ„ط³ط¹ط± ط§ظ„ط­ط§ظ„ظٹ:</span>
+          <span class="pc-amt" id="pcAmt">â€”</span>
+          <span class="pc-cur">ط¬ظ†ظٹظ‡</span>
+        </div>
+        <div class="pc-note">âœ“ ط§ظ„ط³ط¹ط± ظ…ط­ط¯ظ‘ط« | ظ…طھظˆظپط± ظپظٹ ط§ظ„ظ…ط®ط²ظ†</div>
+        <button class="btn-view" onclick="goDetail()"><i class="ti ti-eye" aria-hidden="true"></i> ط¹ط±ط¶ طµظپط­ط© ط§ظ„ظ…ظ†طھط¬</button>
+      </div>
+ 
+      <button class="btn-wa" id="btnWa" disabled onclick="goWa()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.17 14.19c-.22.62-1.29 1.2-1.77 1.24-.48.05-.93.23-3.14-.65-2.65-1.05-4.35-3.74-4.49-3.91-.13-.17-1.1-1.47-1.1-2.8s.69-1.98.94-2.25c.24-.27.53-.34.71-.34l.51.01c.16 0 .38-.06.59.45.22.53.74 1.82.81 1.96.06.13.1.29.01.46-.09.17-.13.28-.26.43l-.39.46c-.13.13-.27.27-.12.53.16.26.69 1.13 1.47 1.83.99.88 1.84 1.16 2.12 1.3.27.13.43.11.59-.07.16-.19.67-.78.85-1.05.18-.27.36-.22.6-.13.24.08 1.53.72 1.79.85.26.13.44.2.5.31.07.11.07.63-.15 1.25z"/></svg>
+        ط§ط·ظ„ط¨ ط§ظ„ط¢ظ† ط¹ط¨ط± ظˆط§طھط³ط§ط¨
+      </button>
+ 
+      <div class="how-card">
+        <div class="how-title">ًں“¦ ظƒظٹظپ ظٹطµظ„ظƒ ط·ظ„ط¨ظƒطں</div>
+        <div class="how-step"><span class="how-num">1</span><span>ط§ط®طھط± ط§ظ„طµظ†ظپ ظˆط§ط¶ط؛ط· "ط§ط·ظ„ط¨ ط¹ط¨ط± ظˆط§طھط³ط§ط¨"</span></div>
+        <div class="how-step"><span class="how-num">2</span><span>طھظ†ظپطھط­ ط±ط³ط§ظ„ط© ط¬ط§ظ‡ط²ط© ظ…ط¹ ط§ط³ظ… ط§ظ„طµظ†ظپ ظˆط§ظ„ط³ط¹ط± طھظ„ظ‚ط§ط¦ظٹط§ظ‹</span></div>
+        <div class="how-step"><span class="how-num">3</span><span>ظ…ظ†ط¯ظˆط¨ ط§ظ„ط´ط±ظˆظ‚ ظٹطھظˆط§طµظ„ ظ…ط¹ظƒ ظ„طھط£ظƒظٹط¯ ط§ظ„ط·ظ„ط¨ ظˆط§ظ„طھظˆطµظٹظ„</span></div>
+        <div class="how-step" style="margin-bottom:0"><span class="how-num">4</span><span>ظٹطµظ„ظƒ ط§ظ„ط·ظ„ط¨ ط¹ظ„ظ‰ ط¹ظٹط§ط¯طھظƒ ط£ظˆ طھط³طھظ„ظ… ظ…ظ† ط§ظ„ظ…ط®ط²ظ†</span></div>
+      </div>
+    </div>
+ 
+    <div class="footer">
+      ط¬ظ…ظٹط¹ ط§ظ„ط£ط³ط¹ط§ط± طھظڈط­ط¯ظژظ‘ط« ط´ظ‡ط±ظٹط§ظ‹<br>
+      <strong>ط´ط±ظƒط© ط§ظ„ط´ط±ظˆظ‚ ظ„ظ…ط³طھظ„ط²ظ…ط§طھ ط·ط¨ ط§ظ„ط£ط³ظ†ط§ظ†</strong>
+    </div>
+  </div>
+ 
+  <!-- DETAIL PAGE -->
+  <div class="page" id="pageDetail">
+    <div class="det-hdr">
+      <button class="det-back" onclick="goBack('pageMain')"><i class="ti ti-arrow-right" aria-hidden="true"></i> ط±ط¬ظˆط¹</button>
+      <div class="det-logo">
+        <div class="det-logo-c"><span class="det-logo-s">S</span></div>
+      </div>
+      <div class="det-cart">
+        <i class="ti ti-shopping-bag" aria-hidden="true" style="font-size:18px;color:#fff"></i>
+      </div>
+    </div>
+ 
+    <div class="det-body">
+      <div class="prod-img-box">
+        <div class="prod-img-placeholder">
+          <i class="ti ti-dental" aria-hidden="true"></i>
+          <span style="font-size:11px;text-align:center" id="detImgLabel">طµظˆط±ط© ط§ظ„ظ…ظ†طھط¬</span>
+        </div>
+      </div>
+ 
+      <div class="prod-info-card">
+        <div class="prod-title" id="detName">â€”</div>
+        <div class="prod-meta">
+          <span class="prod-code" id="detCode">â€”</span>
+          <span class="prod-cat-badge" id="detCat">â€”</span>
+        </div>
+        <div style="font-size:11px;color:#8899bb;display:flex;align-items:center;gap:5px">
+          <i class="ti ti-check" aria-hidden="true" style="color:#25D366"></i>
+          ظ…طھظˆظپط± ظپظٹ ط§ظ„ظ…ط®ط²ظ† â€“ ظٹظڈطµط±ظپ ظپظˆط±ط§ظ‹
+        </div>
+      </div>
+ 
+      <div class="price-box">
+        <div>
+          <div class="price-main">
+            <span class="price-num" id="detAmt">â€”</span>
+            <span class="price-unit">ط¬ظ†ظٹظ‡</span>
+          </div>
+          <div class="price-tax">ط§ظ„ط³ط¹ط± ط´ط§ظ…ظ„ ط§ظ„ط¶ط±ظٹط¨ط©</div>
+        </div>
+        <div class="price-updated">
+          <i class="ti ti-calendar" aria-hidden="true" style="font-size:14px"></i>
+          <span>ظ…ط­ط¯ظ‘ط« ط´ظ‡ط±ظٹط§ظ‹</span>
+        </div>
+      </div>
+ 
+      <button class="btn-wa" onclick="goWa()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.17 14.19c-.22.62-1.29 1.2-1.77 1.24-.48.05-.93.23-3.14-.65-2.65-1.05-4.35-3.74-4.49-3.91-.13-.17-1.1-1.47-1.1-2.8s.69-1.98.94-2.25c.24-.27.53-.34.71-.34l.51.01c.16 0 .38-.06.59.45.22.53.74 1.82.81 1.96.06.13.1.29.01.46-.09.17-.13.28-.26.43l-.39.46c-.13.13-.27.27-.12.53.16.26.69 1.13 1.47 1.83.99.88 1.84 1.16 2.12 1.3.27.13.43.11.59-.07.16-.19.67-.78.85-1.05.18-.27.36-.22.6-.13.24.08 1.53.72 1.79.85.26.13.44.2.5.31.07.11.07.63-.15 1.25z"/></svg>
+        ط§ط·ظ„ط¨ ط§ظ„ط¢ظ† ط¹ط¨ط± ظˆط§طھط³ط§ط¨
+      </button>
+    </div>
+ 
+    <div class="det-footer">
+      ط¬ظ…ظٹط¹ ط§ظ„ط£ط³ط¹ط§ط± طھط­ط¯ط« ط´ظ‡ط±ظٹط§ظ‹ â€“ ط´ط±ظƒط© ط§ظ„ط´ط±ظˆظ‚ ظ„ظ…ط³طھظ„ط²ظ…ط§طھ ط·ط¨ ط§ظ„ط£ط³ظ†ط§ظ†<br>
+      <strong>Dr. Bilal Al-Najashi آ© 2026</strong>
+    </div>
+  </div>
+ 
+  <!-- ADMIN PAGE -->
+  <div class="page" id="pageAdmin">
+    <div class="adm-hdr">
+      <button class="det-back" onclick="goBack('pageMain')"><i class="ti ti-arrow-right" aria-hidden="true"></i> ط±ط¬ظˆط¹</button>
+      <div class="adm-title"><i class="ti ti-settings" aria-hidden="true"></i> ظ„ظˆط­ط© ط§ظ„ط¥ط¯ط§ط±ط©</div>
+      <div style="width:60px"></div>
+    </div>
+ 
+    <div class="adm-body">
+      <div class="adm-card">
+        <div class="adm-card-title"><i class="ti ti-plus" aria-hidden="true" style="font-size:15px;color:#1e4d9b"></i> ط¥ط¶ط§ظپط© / طھط¹ط¯ظٹظ„ طµظ†ظپ</div>
+        <div class="adm-form">
+          <input class="adm-inp" id="aName" type="text" placeholder="ط§ط³ظ… ط§ظ„طµظ†ظپ (ظ…ط·ظ„ظˆط¨)"/>
+          <div class="adm-row">
+            <input class="adm-inp" id="aCode" type="text" placeholder="ظƒظˆط¯ ط§ظ„ظ…ظ†طھط¬ (ظ…ط«ط§ظ„: KT-301)"/>
+            <input class="adm-inp" id="aPrice" type="number" placeholder="ط§ظ„ط³ط¹ط± ط¨ط§ظ„ط¬ظ†ظٹظ‡"/>
+          </div>
+          <select class="adm-sel" id="aCat">
+            <option value="">ط§ط®طھط± ط§ظ„ظپط¦ط©</option>
+            <option value="طھظ‚ظˆظٹظ…">طھظ‚ظˆظٹظ…</option>
+            <option value="ط£ظ†ط¯ظˆ">ط£ظ†ط¯ظˆ</option>
+            <option value="ط¬ظ„ظپط²">ط¬ظ„ظپط²</option>
+            <option value="ظƒظ…ط¨ظˆط²ظٹطھ">ظƒظ…ط¨ظˆط²ظٹطھ</option>
+            <option value="ظ…ط³طھظ‡ظ„ظƒط§طھ">ظ…ط³طھظ‡ظ„ظƒط§طھ</option>
+          </select>
+          <div class="msg-success" id="msgOk"><i class="ti ti-check" aria-hidden="true"></i> طھظ… ط§ظ„ط­ظپط¸ ط¨ظ†ط¬ط§ط­!</div>
+          <button class="btn-add" onclick="addProduct()"><i class="ti ti-device-floppy" aria-hidden="true"></i> ط­ظپط¸ ط§ظ„طµظ†ظپ</button>
+        </div>
+      </div>
+ 
+      <div class="adm-card">
+        <div class="adm-card-title"><i class="ti ti-list" aria-hidden="true" style="font-size:15px;color:#1e4d9b"></i> ظ‚ط§ط¦ظ…ط© ط§ظ„ط£طµظ†ط§ظپ ط§ظ„ط­ط§ظ„ظٹط© (<span id="prodCount">0</span>)</div>
+        <div class="prod-list" id="prodList"></div>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+ 
+<script> 
+const WA='201224561525';
+let products=[
+  {id:1,name:'ظƒظٹطھ طھظ‚ظˆظٹظ… ظ…طµط±ظٹ 3 ظ…ظ‚ط§ط³ط§طھ ط¬ظˆط¯ط© ط¹ط§ظ„ظٹط©',code:'KT-301',price:160,cat:'طھظ‚ظˆظٹظ…'},
+  {id:2,name:'ظ…ط³ط·ط±ط© ط£ظ†ط¯ظˆ',code:'EN-205',price:35,cat:'ط£ظ†ط¯ظˆ'},
+  {id:3,name:'ظ‡ظˆظƒ ط£ط¨ظٹظƒط³ظ„ظٹظƒطھظˆط±',code:'AP-110',price:20,cat:'ط£ظ†ط¯ظˆ'},
+  {id:4,name:'ط¬ظ„ظپط² ظ„ط§طھظƒط³',code:'GL-LAT',price:185,cat:'ط¬ظ„ظپط²'},
+  {id:5,name:'ط¬ظ„ظپط² ظپط­طµ',code:'GL-FHS',price:15,cat:'ط¬ظ„ظپط²'},
+  {id:6,name:'ظ†ط§ط¨ظƒظ† ظ…طµط±ظٹ (ظƒط±طھظˆظ†ط©)',code:'NP-EGY',price:300,cat:'ظ…ط³طھظ‡ظ„ظƒط§طھ'},
+  {id:7,name:'ط±ط§ط¨ط± ط¨ظٹط² ط²ظٹطھط§',code:'RB-ZTA',price:1970,cat:'ظ…ط³طھظ‡ظ„ظƒط§طھ'},
+  {id:8,name:'ط±ط§ط¨ط± ط¨ظٹط² ط³ظ„ط§ظƒط³ظٹظ„',code:'RB-SLX',price:1875,cat:'ظ…ط³طھظ‡ظ„ظƒط§طھ'},
+  {id:9,name:'ظƒظ…ط¨ظˆط²ظٹطھ ط±ظˆط¨ظٹ',code:'CM-RBY',price:185,cat:'ظƒظ…ط¨ظˆط²ظٹطھ'},
+  {id:10,name:'ظƒظ…ط¨ظˆط²ظٹطھ ط¥ظٹظپظˆظƒظ„ط§ط±',code:'CM-IVC',price:650,cat:'ظƒظ…ط¨ظˆط²ظٹطھ'},
+];
+let nextId=11;
+let sel=null;
+let activeCat='ط§ظ„ظƒظ„';
+let editingId=null;
+ 
+function getFiltered(){
+  return activeCat==='ط§ظ„ظƒظ„'?[...products]:products.filter(p=>p.cat===activeCat);
+}
+function doSearch(){
+  const val=document.getElementById('si').value.trim();
+  const dd=document.getElementById('dd');
+  let list=getFiltered();
+  if(val) list=list.filter(p=>p.name.includes(val)||p.code.toLowerCase().includes(val.toLowerCase()));
+  renderDD(list);
+  dd.classList.add('open');
+}
+function renderDD(list){
+  const dd=document.getElementById('dd');
+  dd.innerHTML='';
+  if(!list.length){dd.innerHTML='<div class="dd-item" style="color:#8899bb">ظ„ط§ طھظˆط¬ط¯ ظ†طھط§ط¦ط¬</div>';return;}
+  list.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='dd-item';
+    d.innerHTML=`<i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i><span>${p.name}</span><span class="dd-price">${p.price} ط¬</span>`;
+    d.onclick=()=>pick(p);
+    dd.appendChild(d);
+  });
+}
+function pick(p){
+  sel=p;
+  document.getElementById('si').value=p.name;
+  document.getElementById('dd').classList.remove('open');
+  document.getElementById('pcName').textContent=p.name;
+  document.getElementById('pcCode').textContent='ط§ظ„ظƒظˆط¯: '+p.code+' | '+p.cat;
+  document.getElementById('pcAmt').textContent=p.price;
+  document.getElementById('pc').classList.add('show');
+  document.getElementById('btnWa').disabled=false;
+}
+function filterCat(btn,cat){
+  activeCat=cat;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('si').value='';
+  document.getElementById('dd').classList.remove('open');
+  document.getElementById('pc').classList.remove('show');
+  document.getElementById('btnWa').disabled=true;
+  sel=null;
+}
+function goWa(){
+  if(!sel)return;
+  const msg=encodeURIComponent(`ط§ظ„ط³ظ„ط§ظ… ط¹ظ„ظٹظƒظ…طŒ ط£ط±ظٹط¯ ط·ظ„ط¨ (${sel.name} - ${sel.code}) ط¨ط³ط¹ط± (${sel.price} ط¬ظ†ظٹظ‡). ط§ظ„ط±ط¬ط§ط، طھط£ظƒظٹط¯ ط§ظ„ط·ظ„ط¨.`);
+  const url=`https://wa.me/${WA}?text=${msg}`;
+  if(typeof openLink==='function') openLink(url);
+  else window.open(url,'_blank');
+}
+function goDetail(){
+  if(!sel)return;
+  document.getElementById('detName').textContent=sel.name;
+  document.getElementById('detCode').textContent='ط§ظ„ظƒظˆط¯: '+sel.code;
+  document.getElementById('detCat').textContent=sel.cat;
+  document.getElementById('detAmt').textContent=sel.price;
+  document.getElementById('detImgLabel').textContent=sel.name;
+  showPage('pageDetail');
+}
+function goAdmin(){showPage('pageAdmin');renderAdminList();}
+function goBack(pg){showPage(pg);}
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function renderAdminList(){
+  const list=document.getElementById('prodList');
+  const count=document.getElementById('prodCount');
+  count.textContent=products.length;
+  if(!products.length){list.innerHTML='<div class="empty-list">ظ„ط§ طھظˆط¬ط¯ ط£طµظ†ط§ظپ ط¨ط¹ط¯</div>';return;}
+  list.innerHTML='';
+  products.forEach(p=>{
+    const row=document.createElement('div');
+    row.className='prod-row';
+    row.innerHTML=`<div style="flex:1"><div class="prod-row-name">${p.name}</div><div class="prod-row-sub">${p.code} | ${p.cat}</div></div><span class="prod-row-price">${p.price} ط¬</span><button class="btn-edit-p" onclick="editProduct(${p.id})" aria-label="طھط¹ط¯ظٹظ„"><i class="ti ti-edit" aria-hidden="true"></i></button><button class="btn-del" onclick="delProduct(${p.id})" aria-label="ط­ط°ظپ"><i class="ti ti-trash" aria-hidden="true"></i></button>`;
+    list.appendChild(row);
+  });
+}
+function addProduct(){
+  const name=document.getElementById('aName').value.trim();
+  const code=document.getElementById('aCode').value.trim();
+  const price=parseFloat(document.getElementById('aPrice').value);
+  const cat=document.getElementById('aCat').value;
+  if(!name||!price||!cat){alert('ظٹط±ط¬ظ‰ ظ…ظ„ط، ط§ط³ظ… ط§ظ„طµظ†ظپ ظˆط§ظ„ط³ط¹ط± ظˆط§ظ„ظپط¦ط©');return;}
+  if(editingId){
+    const idx=products.findIndex(p=>p.id===editingId);
+    if(idx>-1) products[idx]={id:editingId,name,code:code||'â€”',price,cat};
+    editingId=null;
+    document.querySelector('.btn-add').innerHTML='<i class="ti ti-device-floppy" aria-hidden="true"></i> ط­ظپط¸ ط§ظ„طµظ†ظپ';
+  } else {
+    products.push({id:nextId++,name,code:code||'â€”',price,cat});
+  }
+  document.getElementById('aName').value='';
+  document.getElementById('aCode').value='';
+  document.getElementById('aPrice').value='';
+  document.getElementById('aCat').value='';
+  const msg=document.getElementById('msgOk');
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'),2000);
+  renderAdminList();
+}
+function delProduct(id){
+  products=products.filter(p=>p.id!==id);
+  if(sel&&sel.id===id){sel=null;document.getElementById('pc').classList.remove('show');document.getElementById('btnWa').disabled=true;}
+  renderAdminList();
+}
+function editProduct(id){
+  const p=products.find(x=>x.id===id);
+  if(!p)return;
+  editingId=id;
+  document.getElementById('aName').value=p.name;
+  document.getElementById('aCode').value=p.code;
+  document.getElementById('aPrice').value=p.price;
+  document.getElementById('aCat').value=p.cat;
+  document.querySelector('.btn-add').innerHTML='<i class="ti ti-refresh" aria-hidden="true"></i> طھط­ط¯ظٹط« ط§ظ„طµظ†ظپ';
+  document.getElementById('aName').scrollIntoView({behavior:'smooth'});
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.search-wrap')&&!e.target.closest('#dd'))
+    document.getElementById('dd').classList.remove('open');
+});
+</script>
+
