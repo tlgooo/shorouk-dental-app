@@ -965,25 +965,42 @@
     </div>
 
     <script>
-        const WA = '201224561525';
-        let categories = ["تقويم", "أندو", "جلدز", "كمبوزيت", "مستهلكات"];
-        let products = [
-            { id: 1, name: 'كيت تقويم مصري 3 مقاسات جودة عالية', code: 'KT-301', price: 160, cat: 'تقويم', image: '' },
-            { id: 2, name: 'مسطرة أندو', code: 'EN-205', price: 35, cat: 'أندو', image: '' },
-            { id: 3, name: 'هوك أبيكسليكتور', code: 'AP-110', price: 20, cat: 'أندو', image: '' },
-            { id: 4, name: 'جلدز لاتكس', code: 'GL-LAT', price: 185, cat: 'جلدز', image: '' },
-            { id: 5, name: 'جلدز فحص', code: 'GL-FHS', price: 15, cat: 'جلدز', image: '' },
-            { id: 6, name: 'نابكن مصري (كرتونة)', code: 'NP-EGY', price: 300, cat: 'مستهلكات', image: '' },
-            { id: 7, name: 'رابر بيز زيتا', code: 'RB-ZTA', price: 1970, cat: 'مستهلكات', image: '' },
-            { id: 8, name: 'رابر بيز سلاكسي', code: 'RB-SLX', price: 1875, cat: 'مستهلكات', image: '' },
-            { id: 9, name: 'كمبوزيت روبي', code: 'CM-RBY', price: 185, cat: 'كمبوزيت', image: '' },
-            { id: 10, name: 'كمبوزيت إيفوكلار', code: 'CM-IVC', price: 650, cat: 'كمبوزيت', image: '' },
-        ];
-        let nextId = 11;
-        let sel = null;
-        let activeCat = 'الكل';
-        let editingId = null;
-        let selectedImageData = null;
+      const WA = '201224561525';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby09vd4sHVcNCPKSJ1FxzhjMLqOzvFjwoTHpG3P6k-qdrcTqTWIZ4lPu-ZuGhhjHhvY/exec';
+
+let products = [];
+let categories = ["الكل"];
+let nextId = 1;
+let sel = null;
+let activeCat = 'الكل';
+let editingId = null;
+let selectedImageData = null;
+
+async function fetchProducts() {
+    try {
+        const response = await fetch(WEB_APP_URL);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
+}
+
+// عند تحميل الصفحة
+window.onload = async function() {
+    products = await fetchProducts();
+    if (products.length > 0) {
+        // استخراج الفئات من البيانات
+        const cats = new Set(products.map(p => p.الفئة));
+        categories = ['الكل', ...cats];
+        // تحديث الـ ID
+        const ids = products.map(p => parseInt(p.ID) || 0);
+        nextId = Math.max(...ids) + 1;
+    }
+    updateCategoryUI();
+    renderAdminList();
+};
 
         // ---------- Helper Functions ----------
         function handleImageSelect(event) {
