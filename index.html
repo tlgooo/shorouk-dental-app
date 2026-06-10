@@ -1332,29 +1332,31 @@
             });
         }
 
-        function pick(p) {
-            sel = p;
-            document.getElementById('si').value = p['اسم المنتج'];
-            document.getElementById('dd').classList.remove('open');
-            document.getElementById('pcName').textContent = p['اسم المنتج'];
-            document.getElementById('pcCode').textContent = 'الكود: ' + p['الكود'] + ' | ' + p['الفئة'];
-            document.getElementById('pcAmt').textContent = p['السعر'];
-            document.getElementById('pc').classList.add('show');
-            document.getElementById('btnWa').disabled = false;
+    function pick(p) {
+    sel = p;
+    document.getElementById('si').value = p['اسم المنتج'] || p['اسم_المنتج'] || p['product_name'] || 'غير معروف';
+    document.getElementById('dd').classList.remove('open');
+    document.getElementById('pcName').textContent = p['اسم المنتج'] || p['اسم_المنتج'] || p['product_name'] || 'غير معروف';
+    document.getElementById('pcCode').textContent = 'الكود: ' + (p['الكود'] || p['code'] || '') + ' | ' + (p['الفئة'] || p['category'] || '');
+    document.getElementById('pcAmt').textContent = p['السعر'] || p['price'] || 0;
+    document.getElementById('pc').classList.add('show');
+    document.getElementById('btnWa').disabled = false;
 
-            // إضافة زر "أضف للسلة" في بطاقة السعر
-            const pc = document.getElementById('pc');
-            const existingBtn = pc.querySelector('.btn-add-cart');
-            if (!existingBtn) {
-                const btn = document.createElement('button');
-                btn.className = 'btn-add-cart';
-                btn.textContent = 'أضف للسلة';
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    addToCart(p);
-                    alert('تمت الإضافة للسلة');
-                };
-                pc.appendChild(btn);
+    // إضافة زر "أضف للسلة" في بطاقة السعر
+    const pc = document.getElementById('pc');
+    const existingBtn = pc.querySelector('.btn-add-cart');
+    if (!existingBtn) {
+        const btn = document.createElement('button');
+        btn.className = 'btn-add-cart';
+        btn.textContent = 'أضف للسلة';
+        btn.onclick = function(e) {
+            e.stopPropagation();
+            addToCart(p);
+            alert('تمت الإضافة للسلة');
+        };
+        pc.appendChild(btn);
+    }
+}
             }
         }
 
