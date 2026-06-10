@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1111,6 +1110,7 @@
     <script>
         // ——————————— إعدادات ———————————
         const WA = '201224561525';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzgZIZAkhxhjCjL-5puXG3yddEaIgU7EHJ8CZ_Q61kktZmTADzSWcmY6ds5kKdJGFQ/exec';
 
         let products = [];
         let categories = ["الكل"];
@@ -1123,44 +1123,27 @@
         // ——————————— بيانات السلة ———————————
         let cart = [];
 
-        // ——————————— تحميل البيانات من LocalStorage ———————————
-        function loadProducts() {
-            const stored = localStorage.getItem('shorouk_products');
-            if (stored) {
-                products = JSON.parse(stored);
-                // تحديث nextId
-                if (products.length > 0) {
-                    const ids = products.map(p => p.id);
-                    nextId = Math.max(...ids) + 1;
-                }
-            } else {
-                // بيانات افتراضية في حال عدم وجود بيانات
-                products = [
-                    { id: 1, 'اسم المنتج': 'كيت تقويم مصري 3 مقاسات', 'الكود': 'KT-301', 'السعر': 160, 'الفئة': 'تقويم', 'الصورة': '' },
-                    { id: 2, 'اسم المنتج': 'مسطرة أندو', 'الكود': 'EN-205', 'السعر': 35, 'الفئة': 'أندو', 'الصورة': '' },
-                    { id: 3, 'اسم المنتج': 'جلدز لاتكس', 'الكود': 'GL-LAT', 'السعر': 185, 'الفئة': 'جلدز', 'الصورة': '' },
-                    { id: 4, 'اسم المنتج': 'كمبوزيت روبي', 'الكود': 'CM-RBY', 'السعر': 185, 'الفئة': 'كمبوزيت', 'الصورة': '' },
-                    { id: 5, 'اسم المنتج': 'رابر بيز سلاكسي', 'الكود': 'RB-SLX', 'السعر': 1875, 'الفئة': 'مستهلكات', 'الصورة': '' },
-                    { id: 6, 'اسم المنتج': 'نابكن مصري (كرتونة)', 'الكود': 'NP-EGY', 'السعر': 300, 'الفئة': 'مستهلكات', 'الصورة': '' },
-                    { id: 7, 'اسم المنتج': 'كيت حشو مؤقت', 'الكود': 'TR-FIL', 'السعر': 250, 'الفئة': 'كمبوزيت', 'الصورة': '' },
-                    { id: 8, 'اسم المنتج': 'مرآة تقويم 3 مقاسات', 'الكود': 'MR-003', 'السعر': 45, 'الفئة': 'تقويم', 'الصورة': '' },
-                    { id: 9, 'اسم المنتج': 'هوك أبيكسليكتور', 'الكود': 'AP-110', 'السعر': 20, 'الفئة': 'أندو', 'الصورة': '' },
-                    { id: 10, 'اسم المنتج': 'رابر بيز زيتا', 'الكود': 'RB-ZTA', 'السعر': 1970, 'الفئة': 'مستهلكات', 'الصورة': '' },
-                ];
-                saveProducts();
+        // ——————————— جلب المنتجات من Google Sheets ———————————
+        async function fetchProducts() {
+            try {
+                const response = await fetch(WEB_APP_URL);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                return [];
             }
-            // تحديث الفئات
-            const cats = new Set(products.map(p => p['الفئة']));
-            categories = ['الكل', ...cats];
         }
 
-        function saveProducts() {
-            localStorage.setItem('shorouk_products', JSON.stringify(products));
-        }
-
-        // ——————————— عند تحميل الصفحة ———————————
-        window.onload = function() {
-            loadProducts();
+        // عند تحميل الصفحة
+        window.onload = async function() {
+            products = await fetchProducts();
+            if (products.length > 0) {
+                const cats = new Set(products.map(p => p['الفئة']));
+                categories = ['الكل', ...cats];
+                const ids = products.map(p => parseInt(p['ID']) || 0);
+                nextId = Math.max(...ids) + 1;
+            }
             updateCategoryUI();
             renderAdminList();
         };
@@ -1182,9 +1165,11 @@
         }
 
         function updateCartUI() {
+            // تحديث العلامة
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
             document.getElementById('cartCount').textContent = totalItems;
 
+            // تحديث السلة داخل المودال
             const container = document.getElementById('cartItems');
             if (cart.length === 0) {
                 container.innerHTML = '<div style="text-align:center;color:#8899bb;padding:20px">السلة فارغة</div>';
@@ -1194,10 +1179,10 @@
             let html = '';
             let total = 0;
             cart.forEach(item => {
-                const subtotal = item['السعر'] * item.qty;
+                const subtotal = item.price * item.qty;
                 total += subtotal;
                 html += `<div class="cart-item">
-                    <span>${item['اسم المنتج']} (x${item.qty})</span>
+                    <span>${item.name} (x${item.qty})</span>
                     <span>
                         ${subtotal} جنيه
                         <span class="cart-remove" onclick="removeFromCart(${item.id})">×</span>
@@ -1232,9 +1217,8 @@
                 return;
             }
 
-            let itemsText = cart.map(item => 
-                `${item['اسم المنتج']} (${item['الكود']}) × ${item.qty} = ${item['السعر'] * item.qty} جنيه`
-            ).join('\n');
+            // تجهيز رسالة واتساب
+            let itemsText = cart.map(item => `${item['اسم المنتج']} (${item['الكود']}) × ${item.qty} = ${item['السعر'] * item.qty} جنيه`).join('\n');
             const total = cart.reduce((sum, item) => sum + (item['السعر'] * item.qty), 0);
             const msg = encodeURIComponent(
                 `طلب جديد من: ${name}\nهاتف: ${phone}\nالعنوان: ${address}\nالدفع: ${payment}\n\nالمنتجات:\n${itemsText}\n\nالإجمالي: ${total} جنيه`
@@ -1279,6 +1263,8 @@
 
             const chipsContainer = document.getElementById('cats');
             chipsContainer.innerHTML = '';
+            
+            // إنشاء أزرار الفئات مرة واحدة فقط
             categories.forEach((c, index) => {
                 const chip = document.createElement('button');
                 chip.className = 'chip';
@@ -1286,6 +1272,8 @@
                 chip.onclick = function() { filterCat(this, c); };
                 chipsContainer.appendChild(chip);
             });
+
+            // جعل زر "الكل" نشطاً افتراضياً (أول عنصر)
             if (chipsContainer.firstChild) {
                 chipsContainer.firstChild.classList.add('active');
             }
@@ -1296,15 +1284,20 @@
         }
 
         function doSearch() {
+            // التأكد من أن المنتجات تم تحميلها أولاً
             if (!products || products.length === 0) {
+                // إذا كانت المنتجات فارغة، نوقف البحث
                 return;
             }
+            
             const val = document.getElementById('si').value.trim();
             const dd = document.getElementById('dd');
             let list = getFiltered();
+            
             if (val) {
                 list = list.filter(p => p['اسم المنتج'].includes(val) || p['الكود'].toLowerCase().includes(val.toLowerCase()));
             }
+            
             renderDD(list);
             dd.classList.add('open');
         }
@@ -1319,6 +1312,7 @@
             list.forEach(p => {
                 const d = document.createElement('div');
                 d.className = 'dd-item';
+                // إضافة صورة مصغرة (إذا وجدت) في القائمة المنسدلة
                 let imgHtml = '';
                 if (p['الصورة'] && p['الصورة'].trim() !== '') {
                     imgHtml = `<img src="${p['الصورة']}" alt="${p['اسم المنتج']}" loading="lazy" />`;
@@ -1345,6 +1339,7 @@
             document.getElementById('pc').classList.add('show');
             document.getElementById('btnWa').disabled = false;
 
+            // إضافة زر "أضف للسلة" في بطاقة السعر
             const pc = document.getElementById('pc');
             const existingBtn = pc.querySelector('.btn-add-cart');
             if (!existingBtn) {
@@ -1374,8 +1369,7 @@
         function goWa() {
             if (!sel) return;
             const msg = encodeURIComponent(
-                `السلام عليكم، أريد طلب (${sel['اسم المنتج']} - ${sel['الكود']}) بسعر (${sel['السعر']} جنيه). الرجاء تأكيد الطلب.`
-            );
+                `السلام عليكم، أريد طلب (${sel['اسم المنتج']} - ${sel['الكود']}) بسعر (${sel['السعر']} جنيه). الرجاء تأكيد الطلب.`);
             const url = `https://wa.me/${WA}?text=${msg}`;
             window.open(url, '_blank');
         }
@@ -1446,7 +1440,6 @@
             } else {
                 products.push({ id: nextId++, 'اسم المنتج': name, 'الكود': code, 'السعر': price, 'الفئة': cat, 'الصورة': image });
             }
-            saveProducts();
             document.getElementById('aName').value = '';
             document.getElementById('aCode').value = '';
             document.getElementById('aPrice').value = '';
@@ -1464,7 +1457,6 @@
             if (sel && sel.id === id) { sel = null;
                 document.getElementById('pc').classList.remove('show');
                 document.getElementById('btnWa').disabled = true; }
-            saveProducts();
             renderAdminList();
         }
 
@@ -1496,7 +1488,6 @@
             if (used) {
                 if (!confirm(`هذه الفئة مستخدمة في ${products.filter(p=>p['الفئة']===catName).length} منتج(ات). هل تريد حذفها مع المنتجات؟`)) return;
                 products = products.filter(p => p['الفئة'] !== catName);
-                saveProducts();
                 renderAdminList();
             }
             categories = categories.filter(c => c !== catName);
