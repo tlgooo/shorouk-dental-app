@@ -1110,7 +1110,6 @@
     <script>
         // ——————————— إعدادات ———————————
         const WA = '201224561525';
-            
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw2OJCsmCRa8Z0aXhwk6pEnc6mS0BpdxjR32yHNhvvKG7uXMv1HR_nX7lVt193-dv3H_Q/exec';
 
         let products = [];
@@ -1124,18 +1123,15 @@
         // ——————————— بيانات السلة ———————————
         let cart = [];
 
-     async function fetchProducts() {
-    try {
-        const response = await fetch(WEB_APP_URL);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching products:', error);
-        return [];
-    }
-}
-    }
-}
+        // ——————————— جلب المنتجات من Google Sheets ———————————
+        async function fetchProducts() {
+            try {
+                const response = await fetch(WEB_APP_URL);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                return [];
             }
         }
 
@@ -1222,8 +1218,8 @@
             }
 
             // تجهيز رسالة واتساب
-            let itemsText = cart.map(item => `${item.name} (${item.code}) × ${item.qty} = ${item.price * item.qty} جنيه`).join('\n');
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let itemsText = cart.map(item => `${item['اسم المنتج']} (${item['الكود']}) × ${item.qty} = ${item['السعر'] * item.qty} جنيه`).join('\n');
+            const total = cart.reduce((sum, item) => sum + (item['السعر'] * item.qty), 0);
             const msg = encodeURIComponent(
                 `طلب جديد من: ${name}\nهاتف: ${phone}\nالعنوان: ${address}\nالدفع: ${payment}\n\nالمنتجات:\n${itemsText}\n\nالإجمالي: ${total} جنيه`
             );
@@ -1431,12 +1427,12 @@
                     if (!image) {
                         image = products[idx]['الصورة'];
                     }
-                    products[idx] = { id: editingId, name, code, price, cat, 'الصورة': image };
+                    products[idx] = { id: editingId, 'اسم المنتج': name, 'الكود': code, 'السعر': price, 'الفئة': cat, 'الصورة': image };
                 }
                 editingId = null;
                 document.querySelector('.btn-add').innerHTML = '<i class="ti ti-device-floppy" aria-hidden="true"></i> حفظ الصنف';
             } else {
-                products.push({ id: nextId++, name, code, price, cat, 'الصورة': image });
+                products.push({ id: nextId++, 'اسم المنتج': name, 'الكود': code, 'السعر': price, 'الفئة': cat, 'الصورة': image });
             }
             document.getElementById('aName').value = '';
             document.getElementById('aCode').value = '';
