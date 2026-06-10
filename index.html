@@ -1306,8 +1306,15 @@
             list.forEach(p => {
                 const d = document.createElement('div');
                 d.className = 'dd-item';
+                // إضافة صورة مصغرة (إذا وجدت) في القائمة المنسدلة
+                let imgHtml = '';
+                if (p.الصورة && p.الصورة.trim() !== '') {
+                    imgHtml = `<img src="${p.الصورة}" alt="${p.name}" loading="lazy" />`;
+                } else {
+                    imgHtml = `<i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i>`;
+                }
                 d.innerHTML = `
-                    <i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i>
+                    ${imgHtml}
                     <span>${p.name}</span>
                     <span class="dd-price">${p.price} ج</span>
                 `;
@@ -1358,8 +1365,7 @@
             const msg = encodeURIComponent(
                 `السلام عليكم، أريد طلب (${sel.name} - ${sel.code}) بسعر (${sel.price} جنيه). الرجاء تأكيد الطلب.`);
             const url = `https://wa.me/${WA}?text=${msg}`;
-            if (typeof openLink === 'function') openLink(url);
-            else window.open(url, '_blank');
+            window.open(url, '_blank');
         }
 
         function goDetail() {
@@ -1370,8 +1376,8 @@
             document.getElementById('detAmt').textContent = sel.price;
 
             const imgBox = document.getElementById('detImgBox');
-            if (sel.image && sel.image.trim() !== '') {
-                imgBox.innerHTML = `<img src="${sel.image}" alt="${sel.name}" loading="lazy" />`;
+            if (sel.الصورة && sel.الصورة.trim() !== '') {
+                imgBox.innerHTML = `<img src="${sel.الصورة}" alt="${sel.name}" loading="lazy" />`;
             } else {
                 imgBox.innerHTML = `
                     <div class="prod-img-placeholder">
@@ -1419,14 +1425,14 @@
                 const idx = products.findIndex(p => p.id === editingId);
                 if (idx > -1) {
                     if (!image) {
-                        image = products[idx].image;
+                        image = products[idx].الصورة;
                     }
-                    products[idx] = { id: editingId, name, code: code || '—', price, cat, image };
+                    products[idx] = { id: editingId, name, code: code || '—', price, cat, الصورة: image };
                 }
                 editingId = null;
                 document.querySelector('.btn-add').innerHTML = '<i class="ti ti-device-floppy" aria-hidden="true"></i> حفظ الصنف';
             } else {
-                products.push({ id: nextId++, name, code: code || '—', price, cat, image });
+                products.push({ id: nextId++, name, code: code || '—', price, cat, الصورة: image });
             }
             document.getElementById('aName').value = '';
             document.getElementById('aCode').value = '';
