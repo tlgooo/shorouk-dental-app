@@ -787,6 +787,116 @@
         .cat-tag .del-cat:hover {
             color: #aa2222;
         }
+
+        /* ——————————— NEW CSS: CART & MODAL ——————————— */
+        .cart-btn {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            white-space: nowrap;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #c8b86e;
+            color: #1a3a6b;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: #fff;
+            max-width: 400px;
+            width: 90%;
+            border-radius: 16px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            direction: rtl;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .modal-box h3 { color: #1a3a6b; font-size: 16px; margin-bottom: 12px; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+        .cart-total { text-align: left; font-weight: 700; font-size: 16px; margin-top: 10px; color: #c8b86e; }
+        .cart-remove {
+            color: #dd4444;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        .cart-form input, .cart-form textarea {
+            width: 100%;
+            padding: 8px 10px;
+            margin: 4px 0 10px;
+            border: 1.5px solid #b8cde8;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        .cart-form label { font-size: 12px; font-weight: 700; color: #1a3a6b; }
+        .btn-checkout {
+            background: #1e4d9b;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-checkout:hover { background: #163d82; }
+        .close-modal {
+            float: left;
+            cursor: pointer;
+            font-size: 20px;
+            color: #8899bb;
+        }
+        .btn-add-cart {
+            background: #c8b86e;
+            color: #1a3a6b;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-add-cart:hover { background: #b0a85a; }
     </style>
 </head>
 <body>
@@ -805,7 +915,13 @@
                         <div class="co-name">الشروق لمستلزمات طب الأسنان</div>
                         <div class="co-sub">Dr. Bilal Al-Najashi</div>
                     </div>
-<!-- زر الإدارة مخفي حاليًا -->                </div>
+                    <!-- زر السلة بدلاً من زر الإدارة -->
+                    <button class="cart-btn" onclick="openCart()">
+                        <i class="ti ti-shopping-bag" aria-hidden="true"></i>
+                        السلة
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </button>
+                </div>
                 <div class="tagline">دليل الشروق – ابحث عن صنفك واحصل على السعر فوراً</div>
             </div>
 
@@ -962,47 +1078,157 @@
             </div>
         </div>
 
+        <!-- ——————————— نافذة السلة وبيانات الطبيب ——————————— -->
+        <div class="modal-overlay" id="cartModal">
+            <div class="modal-box">
+                <span class="close-modal" onclick="closeCart()">×</span>
+                <h3>🛒 سلة المشتريات</h3>
+                <div id="cartItems"></div>
+                <div class="cart-total" id="cartTotal">الإجمالي: 0 جنيه</div>
+                <hr style="margin:12px 0">
+                <div class="cart-form">
+                    <label>اسم العميل</label>
+                    <input type="text" id="custName" placeholder="الاسم ثلاثي">
+                    <label>رقم الهاتف</label>
+                    <input type="text" id="custPhone" placeholder="مثال: 01012345678">
+                    <label>العنوان</label>
+                    <textarea id="custAddress" rows="2" placeholder="العنوان بالتفصيل"></textarea>
+                    <label>طريقة الدفع</label>
+                    <select id="custPayment">
+                        <option value="كاش عند الاستلام">كاش عند الاستلام</option>
+                        <option value="تحويل بنكي">تحويل بنكي</option>
+                        <option value="إنستاباي">إنستاباي</option>
+                        <option value="فودافون كاش">فودافون كاش</option>
+                    </select>
+                    <button class="btn-checkout" onclick="submitOrder()">إتمام الطلب عبر واتساب</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-      const WA = '201224561525';
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby09vd4sHVcNCPKSJ1FxzhjMLqOzvFjwoTHpG3P6k-qdrcTqTWIZ4lPu-ZuGhhjHhvY/exec';
+        // ——————————— إعدادات ———————————
+        const WA = '201224561525';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby09vd4sHVcNCPKSJ1FxzhjMLqOzvFjwoTHpG3P6k-qdrcTqTWIZ4lPu-ZuGhhjHhvY/exec';
 
-let products = [];
-let categories = ["الكل"];
-let nextId = 1;
-let sel = null;
-let activeCat = 'الكل';
-let editingId = null;
-let selectedImageData = null;
+        let products = [];
+        let categories = ["الكل"];
+        let nextId = 1;
+        let sel = null;
+        let activeCat = 'الكل';
+        let editingId = null;
+        let selectedImageData = null;
 
-async function fetchProducts() {
-    try {
-        const response = await fetch(WEB_APP_URL);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching products:', error);
-        return [];
-    }
-}
+        // ——————————— بيانات السلة ———————————
+        let cart = [];
 
-// عند تحميل الصفحة
-window.onload = async function() {
-    products = await fetchProducts();
-    if (products.length > 0) {
-        // استخراج الفئات من البيانات
-        const cats = new Set(products.map(p => p.الفئة));
-        categories = ['الكل', ...cats];
-        // تحديث الـ ID
-        const ids = products.map(p => parseInt(p.ID) || 0);
-        nextId = Math.max(...ids) + 1;
-    }
-    updateCategoryUI();
-    renderAdminList();
-};
+        // ——————————— جلب المنتجات من Google Sheets ———————————
+        async function fetchProducts() {
+            try {
+                const response = await fetch(WEB_APP_URL);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                return [];
+            }
+        }
 
-        // ---------- Helper Functions ----------
+        // عند تحميل الصفحة
+        window.onload = async function() {
+            products = await fetchProducts();
+            if (products.length > 0) {
+                const cats = new Set(products.map(p => p.الفئة));
+                categories = ['الكل', ...cats];
+                const ids = products.map(p => parseInt(p.ID) || 0);
+                nextId = Math.max(...ids) + 1;
+            }
+            updateCategoryUI();
+            renderAdminList();
+        };
+
+        // ——————————— دوال السلة ———————————
+        function addToCart(product) {
+            const existing = cart.find(item => item.id === product.id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // تحديث العلامة
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+
+            // تحديث السلة داخل المودال
+            const container = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:#8899bb;padding:20px">السلة فارغة</div>';
+                document.getElementById('cartTotal').textContent = 'الإجمالي: 0 جنيه';
+                return;
+            }
+            let html = '';
+            let total = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                html += `<div class="cart-item">
+                    <span>${item.name} (x${item.qty})</span>
+                    <span>
+                        ${subtotal} جنيه
+                        <span class="cart-remove" onclick="removeFromCart(${item.id})">×</span>
+                    </span>
+                </div>`;
+            });
+            container.innerHTML = html;
+            document.getElementById('cartTotal').textContent = `الإجمالي: ${total} جنيه`;
+        }
+
+        function openCart() {
+            updateCartUI();
+            document.getElementById('cartModal').classList.add('open');
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('open');
+        }
+
+        function submitOrder() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const payment = document.getElementById('custPayment').value;
+
+            if (!name || !phone || !address) {
+                alert('يرجى ملء جميع البيانات (الاسم، الهاتف، العنوان)');
+                return;
+            }
+            if (cart.length === 0) {
+                alert('السلة فارغة');
+                return;
+            }
+
+            // تجهيز رسالة واتساب
+            let itemsText = cart.map(item => `${item.name} (${item.code}) × ${item.qty} = ${item.price * item.qty} جنيه`).join('\n');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const msg = encodeURIComponent(
+                `طلب جديد من: ${name}\nهاتف: ${phone}\nالعنوان: ${address}\nالدفع: ${payment}\n\nالمنتجات:\n${itemsText}\n\nالإجمالي: ${total} جنيه`
+            );
+            const url = `https://wa.me/${WA}?text=${msg}`;
+            window.open(url, '_blank');
+            closeCart();
+        }
+
+        // ——————————— دوال التطبيق الحالية ———————————
         function handleImageSelect(event) {
             const file = event.target.files[0];
             if (!file) {
@@ -1087,6 +1313,21 @@ window.onload = async function() {
             document.getElementById('pcAmt').textContent = p.price;
             document.getElementById('pc').classList.add('show');
             document.getElementById('btnWa').disabled = false;
+
+            // إضافة زر "أضف للسلة" في بطاقة السعر
+            const pc = document.getElementById('pc');
+            const existingBtn = pc.querySelector('.btn-add-cart');
+            if (!existingBtn) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-add-cart';
+                btn.textContent = 'أضف للسلة';
+                btn.onclick = function(e) {
+                    e.stopPropagation();
+                    addToCart(p);
+                    alert('تمت الإضافة للسلة');
+                };
+                pc.appendChild(btn);
+            }
         }
 
         function filterCat(btn, cat) {
@@ -1235,10 +1476,7 @@ window.onload = async function() {
             updateCategoryUI();
         }
 
-        // ---------- Initialize ----------
-        updateCategoryUI();
-
-        // طلب ملء الشاشة تلقائياً عند فتح التطبيق
+        // ——————————— طلب ملء الشاشة ———————————
         if (document.fullscreenEnabled) {
             document.documentElement.requestFullscreen().catch(() => {});
         }
