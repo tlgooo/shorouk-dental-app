@@ -1100,7 +1100,31 @@
                         <option value="إنستاباي">إنستاباي</option>
                         <option value="فودافون كاش">فودافون كاش</option>
                     </select>
-                    <button class="btn-checkout" onclick="submitOrder()">إتمام الطلب عبر واتساب</button>
+                    <button class="btn-checkout" onclick="function submitOrder() {
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+    const payment = document.getElementById('custPayment').value;
+
+    if (!name || !phone || !address) {
+        alert('يرجى ملء جميع البيانات (الاسم، الهاتف، العنوان)');
+        return;
+    }
+    if (cart.length === 0) {
+        alert('السلة فارغة');
+        return;
+    }
+
+    // تجهيز رسالة واتساب (استخدام المفاتيح العربية)
+    let itemsText = cart.map(item => `${item['اسم المنتج']} (${item['الكود']}) × ${item.qty} = ${item['السعر'] * item.qty} جنيه`).join('\n');
+    const total = cart.reduce((sum, item) => sum + (item['السعر'] * item.qty), 0);
+    const msg = encodeURIComponent(
+        `طلب جديد من: ${name}\nهاتف: ${phone}\nالعنوان: ${address}\nالدفع: ${payment}\n\nالمنتجات:\n${itemsText}\n\nالإجمالي: ${total} جنيه`
+    );
+    const url = `https://wa.me/${WA}?text=${msg}`;
+    window.open(url, '_blank');
+    closeCart();
+}()">إتمام الطلب عبر واتساب</button>
                 </div>
             </div>
         </div>
