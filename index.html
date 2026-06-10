@@ -1287,7 +1287,11 @@
             const val = document.getElementById('si').value.trim();
             const dd = document.getElementById('dd');
             let list = getFiltered();
-            if (val) list = list.filter(p => p.name.includes(val) || p.code.toLowerCase().includes(val.toLowerCase()));
+            
+            if (val) {
+                list = list.filter(p => p.name.includes(val) || p.code.toLowerCase().includes(val.toLowerCase()));
+            }
+            
             renderDD(list);
             dd.classList.add('open');
         }
@@ -1295,12 +1299,18 @@
         function renderDD(list) {
             const dd = document.getElementById('dd');
             dd.innerHTML = '';
-            if (!list.length) { dd.innerHTML = '<div class="dd-item" style="color:#8899bb">لا توجد نتائج</div>'; return; }
+            if (!list || list.length === 0) {
+                dd.innerHTML = '<div class="dd-item" style="color:#8899bb">لا توجد نتائج</div>';
+                return;
+            }
             list.forEach(p => {
                 const d = document.createElement('div');
                 d.className = 'dd-item';
-                d.innerHTML =
-                    `<i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i><span>${p.name}</span><span class="dd-price">${p.price} ج</span>`;
+                d.innerHTML = `
+                    <i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i>
+                    <span>${p.name}</span>
+                    <span class="dd-price">${p.price} ج</span>
+                `;
                 d.onclick = () => pick(p);
                 dd.appendChild(d);
             });
