@@ -1263,18 +1263,20 @@
 
             const chipsContainer = document.getElementById('cats');
             chipsContainer.innerHTML = '';
-            const allChip = document.createElement('button');
-            allChip.className = 'chip active';
-            allChip.textContent = 'الكل';
-            allChip.onclick = function() { filterCat(this, 'الكل'); };
-            chipsContainer.appendChild(allChip);
-            categories.forEach(c => {
+            
+            // إنشاء أزرار الفئات مرة واحدة فقط
+            categories.forEach((c, index) => {
                 const chip = document.createElement('button');
                 chip.className = 'chip';
                 chip.textContent = c;
                 chip.onclick = function() { filterCat(this, c); };
                 chipsContainer.appendChild(chip);
             });
+
+            // جعل زر "الكل" نشطاً افتراضياً (أول عنصر)
+            if (chipsContainer.firstChild) {
+                chipsContainer.firstChild.classList.add('active');
+            }
         }
 
         function getFiltered() {
