@@ -3,56 +3,175 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>شركة الشروق لمستلزمات الأسنان</title>
+<title>شركة الشروق - مستلزمات الأسنان</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
-body { background: #f5f5f5; }
-header { background: #1e88e5; color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 10; }
-.admin-bar { background: #ff9800; padding: 10px; text-align: center; }
-.admin-bar button { background: white; color: #ff9800; border: none; padding: 8px 15px; border-radius: 6px; margin: 5px; cursor: pointer; font-weight: bold; }
+body { background: #f0f4f8; }
+
+header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: white;
+  padding: 20px 15px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+header h1 { font-size: 20px; margin-bottom: 5px; }
+header p { font-size: 13px; opacity: 0.9; }
+
+.admin-bar {
+  background: #f59e0b;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.admin-bar button {
+  background: white;
+  color: #f59e0b;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+}
+
 .search-box { padding: 15px; background: white; }
-.search-box input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
+.search-box input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+.search-box input:focus { border-color: #1e40af; outline: none; }
+
 .container { padding: 15px; }
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-.card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; text-align: center; display: flex; flex-direction: column; gap: 8px; }
-.card-img-box { width: 100%; height: 120px; background: #f0f0f0; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.card img { width: 100%; height: 100%; object-fit: cover; }
-.card h3 { font-size: 14px; color: #333; line-height: 1.4; min-height: 38px; }
-.card p { color: #1e88e5; font-weight: bold; font-size: 16px; }
-.details-page { display: none; padding: 15px; background: white; min-height: 100vh; }
-.back-btn { background: #1e88e5; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-bottom: 15px; }
-.details-page img { width: 100%; max-height: 300px; object-fit: contain; margin: 15px 0; background: #f0f0f0; border-radius: 8px; }
-.details-page h2 { color: #333; margin: 10px 0; }
-.details-page.price { font-size: 24px; color: #1e88e5; font-weight: bold; margin: 15px 0; }
-.add-cart-btn { width: 100%; background: #4caf50; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; cursor: pointer; }
-.no-results { text-align: center; padding: 50px; color: #999; }
+.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+.card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.card:active { transform: scale(0.97); }
+.card-img-box {
+  width: 100%;
+  height: 140px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+.card img { width: 100%; height: 100%; object-fit: contain; }
+.card-body { padding: 12px; }
+.card h3 { font-size: 14px; color: #1e293b; line-height: 1.4; height: 40px; overflow: hidden; }
+.card p { color: #1e40af; font-weight: bold; font-size: 18px; margin-top: 8px; }
+
+.details-page { display: none; background: white; min-height: 100vh; }
+.details-header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: sticky;
+  top: 0;
+}
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+}
+.details-content { padding: 20px; }
+.details-content img {
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.details-content h2 { color: #1e293b; margin-bottom: 10px; font-size: 22px; }
+.details-content.cat { color: #64748b; margin-bottom: 15px; }
+.details-content.price { font-size: 28px; color: #1e40af; font-weight: bold; margin: 20px 0; }
+
+.btn-group { display: flex; gap: 10px; margin-top: 20px; }
+.btn {
+  flex: 1;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-cart { background: #10b981; color: white; }
+.btn-whatsapp { background: #25D366; color: white; }
+
+.no-results { text-align: center; padding: 60px 20px; color: #94a3b8; }
+
+/* سلة */
+#cartCount {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  background: #ef4444;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
 
 /* لوحة الأدمن */
-#adminPanel { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 100; overflow-y: auto; }
-.admin-content { background: white; margin: 20px; padding: 20px; border-radius: 10px; }
-.admin-content h3 { margin-bottom: 15px; color: #333; }
-.admin-content input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
-.admin-content button { background: #1e88e5; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; margin: 8px 0; cursor: pointer; font-size: 16px; }
-.admin-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-.admin-list-item button { width: auto; background: #f44336; padding: 5px 10px; font-size: 14px; }
+#adminPanel { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; overflow-y: auto; }
+.admin-content { background: white; margin: 20px; padding: 20px; border-radius: 16px; max-width: 500px; margin: 40px auto; }
+.admin-content h3 { margin-bottom: 15px; color: #1e293b; }
+.admin-content input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; }
+.admin-content button { background: #1e40af; color: white; border: none; padding: 14px; border-radius: 8px; width: 100%; margin: 8px 0; cursor: pointer; font-size: 16px; font-weight: bold; }
+.admin-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f1f5f9; }
+.admin-list-item button { width: auto; background: #ef4444; padding: 6px 12px; font-size: 13px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>شركة الشروق لمستلزمات الأسنان</h1>
+  <button id="cartCount" onclick="showCart()">0</button>
+  <h1>شركة الشروق</h1>
+  <p>لمستلزمات وخدمات طب الأسنان</p>
 </header>
 
 <div class="admin-bar">
   <button onclick="openAdmin()">⚙️ إدارة المنتجات</button>
-  <button onclick="exportData()">📥 تصدير نسخة</button>
-  <button onclick="document.getElementById('importFile').click()">📤 استرجاع نسخة</button>
+  <button onclick="exportData()">📥 تصدير</button>
+  <button onclick="document.getElementById('importFile').click()">📤 استرجاع</button>
   <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
 </div>
 
 <div id="listPage">
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="ابحث عن منتج... بنج، كومبوزت، جوانتي">
+    <input type="text" id="searchInput" placeholder="🔍 ابحث عن: بنج، كومبوزت، جوانتي، سرنجة...">
   </div>
   <div class="container">
     <div class="products-grid" id="productsGrid"></div>
@@ -60,8 +179,11 @@ header { background: #1e88e5; color: white; padding: 15px; text-align: center; p
 </div>
 
 <div id="detailsPage" class="details-page">
-  <button class="back-btn" onclick="showList()">← رجوع للقائمة</button>
-  <div id="detailsContent"></div>
+  <div class="details-header">
+    <button class="back-btn" onclick="showList()">←</button>
+    <h2>تفاصيل المنتج</h2>
+  </div>
+  <div class="details-content" id="detailsContent"></div>
 </div>
 
 <!-- لوحة الأدمن -->
@@ -71,64 +193,74 @@ header { background: #1e88e5; color: white; padding: 15px; text-align: center; p
     <input id="pName" placeholder="اسم المنتج">
     <input id="pPrice" type="number" placeholder="السعر">
     <input id="pImg" placeholder="لينك الصورة">
-    <input id="pCat" placeholder="القسم - بنج، كومبوزت...">
+    <input id="pCat" placeholder="القسم">
     <button onclick="addProduct()">➕ إضافة منتج</button>
-    <hr style="margin:15px 0">
-    <h4>المنتجات الحالية:</h4>
+    <hr style="margin:20px 0">
+    <h4 style="margin-bottom:10px">المنتجات الحالية:</h4>
     <div id="adminList"></div>
-    <button onclick="closeAdmin()" style="background:#666">إغلاق</button>
+    <button onclick="closeAdmin()" style="background:#64748b">إغلاق</button>
   </div>
 </div>
 
 <script>
-// تحميل الداتا من localStorage أو داتا افتراضية أول مرة
 let products = JSON.parse(localStorage.getItem('shorouk_products')) || [
-  { id: 1, name: "بنج ليدوكايين 2%", price: 85, category: "بنج", image: "https://via.placeholder.com/150/4caf50/ffffff?text=بنج" },
-  { id: 2, name: "كومبوزت 3M Z350", price: 1200, category: "كومبوزت", image: "https://via.placeholder.com/150/2196f3/ffffff?text=كومبوزت" },
-  { id: 3, name: "جوانتي لاتكس M", price: 45, category: "جوانتيات", image: "https://via.placeholder.com/150/ff9800/ffffff?text=جوانتي" }
+  { id: 1, name: "بنج ليدوكايين 2% - 50 أمبول", price: 85, category: "بنج موضعي", image: "https://via.placeholder.com/200/3b82f6/ffffff?text=Lidocaine" },
+  { id: 2, name: "كومبوزت 3M Filtek Z350 XT", price: 1200, category: "مواد حشو", image: "https://via.placeholder.com/200/10b981/ffffff?text=3M+Z350" },
+  { id: 3, name: "جوانتي لاتكس مقاس M - 100 قطعة", price: 45, category: "مستلزمات وقائية", image: "https://via.placeholder.com/200/f59e0b/ffffff?text=Gloves" },
+  { id: 4, name: "سرنجة كربول معدن أصلي", price: 250, category: "أدوات", image: "https://via.placeholder.com/200/ef4444/ffffff?text=Syringe" }
 ];
 
-// حفظ في localStorage
+let cart = JSON.parse(localStorage.getItem('shorouk_cart')) || [];
+let currentProduct = null;
+
 function saveData() {
   localStorage.setItem('shorouk_products', JSON.stringify(products));
+  localStorage.setItem('shorouk_cart', JSON.stringify(cart));
+  updateCartCount();
 }
 
-// عرض المنتجات
+function updateCartCount() {
+  document.getElementById('cartCount').textContent = cart.length;
+}
+
 function renderProducts(list) {
   const grid = document.getElementById('productsGrid');
   if(list.length === 0) {
-    grid.innerHTML = '<div class="no-results">مفيش منتجات بالاسم ده</div>';
+    grid.innerHTML = '<div class="no-results">😔 مفيش منتجات بالاسم ده</div>';
     return;
   }
   grid.innerHTML = list.map(p => `
     <div class="card" onclick="showDetails(${p.id})">
       <div class="card-img-box">
-        <img src="${p.image}" alt="" onerror="this.src='https://via.placeholder.com/150/cccccc/ffffff?text=لا+صورة'">
+        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200/e2e8f0/94a3b8?text=No+Image'">
       </div>
-      <h3>${p.name}</h3>
-      <p>${p.price} جنيه</p>
+      <div class="card-body">
+        <h3>${p.name}</h3>
+        <p>${p.price} ج</p>
+      </div>
     </div>
   `).join('');
 }
 
-// البحث
 document.getElementById('searchInput').addEventListener('input', function(e) {
   const search = e.target.value.toLowerCase().trim();
-  const filtered = products.filter(p => p.name.toLowerCase().includes(search));
+  const filtered = products.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
   renderProducts(filtered);
 });
 
-// صفحة التفاصيل
 function showDetails(id) {
-  const product = products.find(p => p.id === id);
+  currentProduct = products.find(p => p.id === id);
   document.getElementById('listPage').style.display = 'none';
   document.getElementById('detailsPage').style.display = 'block';
   document.getElementById('detailsContent').innerHTML = `
-    <img src="${product.image}" onerror="this.src='https://via.placeholder.com/150/cccccc/ffffff?text=لا+صورة'">
-    <h2>${product.name}</h2>
-    <p>القسم: ${product.category}</p>
-    <div class="price">${product.price} جنيه</div>
-    <button class="add-cart-btn" onclick="alert('تم إضافة المنتج للسلة')">أضف للسلة</button>
+    <img src="${currentProduct.image}" onerror="this.src='https://via.placeholder.com/200/e2e8f0/94a3b8?text=No+Image'">
+    <h2>${currentProduct.name}</h2>
+    <div class="cat">القسم: ${currentProduct.category}</div>
+    <div class="price">${currentProduct.price} جنيه</div>
+    <div class="btn-group">
+      <button class="btn btn-cart" onclick="addToCart()">🛒 أضف للسلة</button>
+      <button class="btn btn-whatsapp" onclick="orderWhatsApp()">💬 واتساب</button>
+    </div>
   `;
   window.scrollTo(0, 0);
 }
@@ -139,15 +271,41 @@ function showList() {
   window.scrollTo(0, 0);
 }
 
+function addToCart() {
+  if(!currentProduct) return;
+  cart.push(currentProduct);
+  saveData();
+  alert('✅ تم إضافة المنتج للسلة');
+}
+
+function orderWhatsApp() {
+  if(!currentProduct) return;
+  let phone = "201xxxxxxxxxx"; // حط رقم الواتساب بتاع الشركة هنا
+  let msg = `مرحبا، أريد طلب المنتج التالي:%0A%0A${currentProduct.name}%0Aالسعر: ${currentProduct.price} جنيه`;
+  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+}
+
+function showCart() {
+  if(cart.length === 0) {
+    alert('السلة فاضية');
+    return;
+  }
+  let list = cart.map(p => `- ${p.name}: ${p.price} ج`).join('%0A');
+  let total = cart.reduce((sum, p) => sum + p.price, 0);
+  let phone = "201xxxxxxxxxx";
+  let msg = `طلب جديد من التطبيق:%0A%0A${list}%0A%0Aالإجمالي: ${total} جنيه`;
+  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+  cart = [];
+  saveData();
+}
+
 // ========== لوحة الأدمن ==========
 function openAdmin() {
-  let pass = prompt('ادخل كود الأدمن:');
+  let pass = prompt('كود الأدمن:');
   if(pass === '1234') {
     document.getElementById('adminPanel').style.display = 'block';
     showAdminList();
-  } else if(pass) {
-    alert('كود غلط!');
-  }
+  } else if(pass) alert('كود غلط!');
 }
 
 function closeAdmin() {
@@ -157,7 +315,7 @@ function closeAdmin() {
 function addProduct() {
   let name = document.getElementById('pName').value.trim();
   let price = document.getElementById('pPrice').value;
-  let img = document.getElementById('pImg').value.trim() || 'https://via.placeholder.com/150/cccccc/ffffff?text=لا+صورة';
+  let img = document.getElementById('pImg').value.trim() || 'https://via.placeholder.com/200/e2e8f0/94a3b8?text=No+Image';
   let cat = document.getElementById('pCat').value.trim() || 'عام';
 
   if(!name ||!price) {
@@ -169,17 +327,15 @@ function addProduct() {
   saveData();
   showAdminList();
   renderProducts(products);
-
-  // فضي الحقول
   document.getElementById('pName').value = '';
   document.getElementById('pPrice').value = '';
   document.getElementById('pImg').value = '';
   document.getElementById('pCat').value = '';
-  alert('تمت الإضافة بنجاح');
+  alert('✅ تمت الإضافة');
 }
 
 function deleteProduct(id) {
-  if(confirm('متأكد عايز تحذف المنتج ده؟')) {
+  if(confirm('حذف المنتج؟')) {
     products = products.filter(p => p.id!== id);
     saveData();
     showAdminList();
@@ -191,12 +347,11 @@ function showAdminList() {
   document.getElementById('adminList').innerHTML = products.map(p => `
     <div class="admin-list-item">
       <span>${p.name} - ${p.price} ج</span>
-      <button onclick="deleteProduct(${p.id})">🗑️ حذف</button>
+      <button onclick="deleteProduct(${p.id})">🗑️</button>
     </div>
   `).join('');
 }
 
-// تصدير نسخة احتياطية
 function exportData() {
   const dataStr = JSON.stringify(products, null, 2);
   const blob = new Blob([dataStr], {type: 'application/json'});
@@ -205,14 +360,11 @@ function exportData() {
   a.href = url;
   a.download = 'shorouk_backup_' + new Date().toISOString().slice(0,10) + '.json';
   a.click();
-  alert('تم تحميل النسخة الاحتياطية. احفظ الملف ده كويس');
 }
 
-// استرجاع نسخة
 function importData(event) {
   const file = event.target.files[0];
   if(!file) return;
-
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
@@ -222,7 +374,7 @@ function importData(event) {
         saveData();
         renderProducts(products);
         showAdminList();
-        alert('تم استرجاع النسخة بنجاح');
+        alert('✅ تم الاسترجاع');
       }
     } catch(err) {
       alert('الملف بايظ!');
@@ -231,8 +383,9 @@ function importData(event) {
   reader.readAsText(file);
 }
 
-// أول ما الصفحة تفتح
+// تشغيل أولي
 renderProducts(products);
+updateCartCount();
 </script>
 </body>
 </html>
