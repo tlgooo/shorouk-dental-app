@@ -1139,9 +1139,9 @@
         window.onload = async function() {
             products = await fetchProducts();
             if (products.length > 0) {
-                const cats = new Set(products.map(p => p.الفئة));
+                const cats = new Set(products.map(p => p['الفئة']));
                 categories = ['الكل', ...cats];
-                const ids = products.map(p => parseInt(p.ID) || 0);
+                const ids = products.map(p => parseInt(p['ID']) || 0);
                 nextId = Math.max(...ids) + 1;
             }
             updateCategoryUI();
@@ -1280,7 +1280,7 @@
         }
 
         function getFiltered() {
-            return activeCat === 'الكل' ? [...products] : products.filter(p => p.cat === activeCat);
+            return activeCat === 'الكل' ? [...products] : products.filter(p => p['الفئة'] === activeCat);
         }
 
         function doSearch() {
@@ -1289,7 +1289,7 @@
             let list = getFiltered();
             
             if (val) {
-                list = list.filter(p => p.name.includes(val) || p.code.toLowerCase().includes(val.toLowerCase()));
+                list = list.filter(p => p['اسم المنتج'].includes(val) || p['الكود'].toLowerCase().includes(val.toLowerCase()));
             }
             
             renderDD(list);
@@ -1308,15 +1308,15 @@
                 d.className = 'dd-item';
                 // إضافة صورة مصغرة (إذا وجدت) في القائمة المنسدلة
                 let imgHtml = '';
-                if (p.الصورة && p.الصورة.trim() !== '') {
-                    imgHtml = `<img src="${p.الصورة}" alt="${p.name}" loading="lazy" />`;
+                if (p['الصورة'] && p['الصورة'].trim() !== '') {
+                    imgHtml = `<img src="${p['الصورة']}" alt="${p['اسم المنتج']}" loading="lazy" />`;
                 } else {
                     imgHtml = `<i class="ti ti-dental" aria-hidden="true" style="color:#c8b86e;font-size:14px"></i>`;
                 }
                 d.innerHTML = `
                     ${imgHtml}
-                    <span>${p.name}</span>
-                    <span class="dd-price">${p.price} ج</span>
+                    <span>${p['اسم المنتج']}</span>
+                    <span class="dd-price">${p['السعر']} ج</span>
                 `;
                 d.onclick = () => pick(p);
                 dd.appendChild(d);
@@ -1325,11 +1325,11 @@
 
         function pick(p) {
             sel = p;
-            document.getElementById('si').value = p.name;
+            document.getElementById('si').value = p['اسم المنتج'];
             document.getElementById('dd').classList.remove('open');
-            document.getElementById('pcName').textContent = p.name;
-            document.getElementById('pcCode').textContent = 'الكود: ' + p.code + ' | ' + p.cat;
-            document.getElementById('pcAmt').textContent = p.price;
+            document.getElementById('pcName').textContent = p['اسم المنتج'];
+            document.getElementById('pcCode').textContent = 'الكود: ' + p['الكود'] + ' | ' + p['الفئة'];
+            document.getElementById('pcAmt').textContent = p['السعر'];
             document.getElementById('pc').classList.add('show');
             document.getElementById('btnWa').disabled = false;
 
@@ -1363,21 +1363,21 @@
         function goWa() {
             if (!sel) return;
             const msg = encodeURIComponent(
-                `السلام عليكم، أريد طلب (${sel.name} - ${sel.code}) بسعر (${sel.price} جنيه). الرجاء تأكيد الطلب.`);
+                `السلام عليكم، أريد طلب (${sel['اسم المنتج']} - ${sel['الكود']}) بسعر (${sel['السعر']} جنيه). الرجاء تأكيد الطلب.`);
             const url = `https://wa.me/${WA}?text=${msg}`;
             window.open(url, '_blank');
         }
 
         function goDetail() {
             if (!sel) return;
-            document.getElementById('detName').textContent = sel.name;
-            document.getElementById('detCode').textContent = 'الكود: ' + sel.code;
-            document.getElementById('detCat').textContent = sel.cat;
-            document.getElementById('detAmt').textContent = sel.price;
+            document.getElementById('detName').textContent = sel['اسم المنتج'];
+            document.getElementById('detCode').textContent = 'الكود: ' + sel['الكود'];
+            document.getElementById('detCat').textContent = sel['الفئة'];
+            document.getElementById('detAmt').textContent = sel['السعر'];
 
             const imgBox = document.getElementById('detImgBox');
-            if (sel.الصورة && sel.الصورة.trim() !== '') {
-                imgBox.innerHTML = `<img src="${sel.الصورة}" alt="${sel.name}" loading="lazy" />`;
+            if (sel['الصورة'] && sel['الصورة'].trim() !== '') {
+                imgBox.innerHTML = `<img src="${sel['الصورة']}" alt="${sel['اسم المنتج']}" loading="lazy" />`;
             } else {
                 imgBox.innerHTML = `
                     <div class="prod-img-placeholder">
@@ -1409,7 +1409,7 @@
                 const row = document.createElement('div');
                 row.className = 'prod-row';
                 row.innerHTML =
-                    `<div style="flex:1"><div class="prod-row-name">${p.name}</div><div class="prod-row-sub">${p.code} | ${p.cat}</div></div><span class="prod-row-price">${p.price} ج</span><button class="btn-edit-p" onclick="editProduct(${p.id})" aria-label="تعديل"><i class="ti ti-edit" aria-hidden="true"></i></button><button class="btn-del" onclick="delProduct(${p.id})" aria-label="حذف"><i class="ti ti-trash" aria-hidden="true"></i></button>`;
+                    `<div style="flex:1"><div class="prod-row-name">${p['اسم المنتج']}</div><div class="prod-row-sub">${p['الكود']} | ${p['الفئة']}</div></div><span class="prod-row-price">${p['السعر']} ج</span><button class="btn-edit-p" onclick="editProduct(${p.id})" aria-label="تعديل"><i class="ti ti-edit" aria-hidden="true"></i></button><button class="btn-del" onclick="delProduct(${p.id})" aria-label="حذف"><i class="ti ti-trash" aria-hidden="true"></i></button>`;
                 list.appendChild(row);
             });
         }
@@ -1425,14 +1425,14 @@
                 const idx = products.findIndex(p => p.id === editingId);
                 if (idx > -1) {
                     if (!image) {
-                        image = products[idx].الصورة;
+                        image = products[idx]['الصورة'];
                     }
-                    products[idx] = { id: editingId, name, code: code || '—', price, cat, الصورة: image };
+                    products[idx] = { id: editingId, name, code, price, cat, 'الصورة': image };
                 }
                 editingId = null;
                 document.querySelector('.btn-add').innerHTML = '<i class="ti ti-device-floppy" aria-hidden="true"></i> حفظ الصنف';
             } else {
-                products.push({ id: nextId++, name, code: code || '—', price, cat, الصورة: image });
+                products.push({ id: nextId++, name, code, price, cat, 'الصورة': image });
             }
             document.getElementById('aName').value = '';
             document.getElementById('aCode').value = '';
@@ -1458,10 +1458,10 @@
             const p = products.find(x => x.id === id);
             if (!p) return;
             editingId = id;
-            document.getElementById('aName').value = p.name;
-            document.getElementById('aCode').value = p.code;
-            document.getElementById('aPrice').value = p.price;
-            document.getElementById('aCat').value = p.cat;
+            document.getElementById('aName').value = p['اسم المنتج'];
+            document.getElementById('aCode').value = p['الكود'];
+            document.getElementById('aPrice').value = p['السعر'];
+            document.getElementById('aCat').value = p['الفئة'];
             selectedImageData = null;
             document.getElementById('aImage').value = '';
             document.querySelector('.btn-add').innerHTML = '<i class="ti ti-refresh" aria-hidden="true"></i> تحديث الصنف';
@@ -1478,17 +1478,17 @@
         }
 
         function deleteCategory(catName) {
-            const used = products.some(p => p.cat === catName);
+            const used = products.some(p => p['الفئة'] === catName);
             if (used) {
-                if (!confirm(`هذه الفئة مستخدمة في ${products.filter(p=>p.cat===catName).length} منتج(ات). هل تريد حذفها مع المنتجات؟`)) return;
-                products = products.filter(p => p.cat !== catName);
+                if (!confirm(`هذه الفئة مستخدمة في ${products.filter(p=>p['الفئة']===catName).length} منتج(ات). هل تريد حذفها مع المنتجات؟`)) return;
+                products = products.filter(p => p['الفئة'] !== catName);
                 renderAdminList();
             }
             categories = categories.filter(c => c !== catName);
             if (activeCat === catName) { activeCat = 'الكل';
                 document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
                 document.querySelector('.chip:first-child').classList.add('active'); }
-            if (sel && sel.cat === catName) { sel = null;
+            if (sel && sel['الفئة'] === catName) { sel = null;
                 document.getElementById('pc').classList.remove('show');
                 document.getElementById('btnWa').disabled = true; }
             updateCategoryUI();
