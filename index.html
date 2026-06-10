@@ -2,106 +2,95 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الشروق لمستلزمات طب الأسنان</title>
+    <title>متجر الشروق الاحترافي</title>
     <style>
-        /* (احتفظ بنفس الـ CSS الخاص بك كما هو - قمت بالتأكد من التنسيقات في الأسفل) */
-        body { font-family: 'Tajawal', sans-serif; background: #f0f4fa; margin: 0; }
-        .page { display: none; }
-        .page.active { display: flex; flex-direction: column; min-height: 100vh; }
-        .dropdown { display: none; background: #fff; border: 1px solid #ccc; position: absolute; width: 100%; z-index: 100; }
+        body { font-family: 'Tajawal', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .page { display: none; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .page.active { display: block; }
+        .s-inp { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .dropdown { background: white; border: 1px solid #ddd; margin-top: 5px; border-radius: 8px; display: none; }
         .dropdown.open { display: block; }
-        .dd-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
-        .dd-item:hover { background: #e8f0fb; }
+        .dd-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        button { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="app-frame">
-    <div class="page active" id="pageMain">
-        <div class="hdr">
-            <h3>الشروق لمستلزمات طب الأسنان</h3>
-            <button onclick="openCart()">السلة (<span id="cartCount">0</span>)</button>
-        </div>
-        <div class="body">
-            <input type="text" id="si" class="s-inp" placeholder="ابحث عن منتج..." oninput="doSearch()">
-            <div class="dropdown" id="dd"></div>
-            <div id="pc" class="price-card" style="display:none;">
-                <h4 id="pcName"></h4>
-                <p id="pcAmt"></p>
-                <button onclick="goDetail()">عرض التفاصيل</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="page" id="pageDetail">
-        <div class="det-hdr">
-            <button onclick="goBack()">⬅ رجوع</button>
-        </div>
-        <div class="det-body">
-            <h2 id="detName"></h2>
-            <p>السعر: <span id="detAmt"></span> جنيه</p>
-            <button onclick="goWa()">اطلب عبر واتساب</button>
-        </div>
+<div class="page active" id="pageMain">
+    <h1>الشروق لمستلزمات الأسنان</h1>
+    <button onclick="showPage('pageCart')">السلة (<span id="cartCount">0</span>)</button>
+    <hr>
+    <input type="text" id="si" placeholder="ابحث عن منتج..." oninput="doSearch()">
+    <div class="dropdown" id="dd"></div>
+    <div id="pc" style="margin-top:20px; display:none;">
+        <h2 id="pcName"></h2>
+        <p>السعر: <span id="pcAmt"></span></p>
+        <button onclick="addToCart()">إضافة للسلة</button>
+        <button onclick="showPage('pageDetail')">عرض التفاصيل</button>
     </div>
 </div>
 
+<div class="page" id="pageDetail">
+    <button onclick="showPage('pageMain')">⬅ عودة للرئيسية</button>
+    <h2 id="detName"></h2>
+    <p id="detDesc">وصف احترافي للمنتج يظهر هنا...</p>
+    <button onclick="goWa()">اطلب عبر واتساب</button>
+</div>
+
+<div class="page" id="pageCart">
+    <button onclick="showPage('pageMain')">⬅ استمرار التسوق</button>
+    <h2>سلة المشتريات</h2>
+    <div id="cartList"></div>
+</div>
+
 <script>
-    // قاعدة بيانات المنتجات
     const products = [
-        { id: 1, name: "حشوة تجميلية", price: "250", code: "MAT-001" },
-        { id: 2, name: "قالب طبعات", price: "120", code: "MAT-002" },
-        { id: 3, name: "مقبض مشرط", price: "80", code: "MAT-003" }
+        { id: 1, name: "حشوة تجميلية", price: 250, desc: "حشوة عالية الجودة تدوم طويلاً" },
+        { id: 2, name: "قالب طبعات", price: 120, desc: "قالب مرن وسهل الاستخدام" }
     ];
 
+    let cart = [];
     let currentProduct = null;
 
-    // 1. منطق البحث
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+    }
+
     function doSearch() {
         const query = document.getElementById('si').value.toLowerCase();
         const dd = document.getElementById('dd');
-        if (!query) { dd.classList.remove('open'); return; }
-
-        const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-        dd.innerHTML = filtered.map(p => `
-            <div class="dd-item" onclick="selectProduct(${p.id})">${p.name}</div>
-        `).join('');
+        const filtered = products.filter(p => p.name.includes(query));
+        dd.innerHTML = filtered.map(p => `<div class="dd-item" onclick="selectProduct(${p.id})">${p.name}</div>`).join('');
         dd.classList.add('open');
     }
 
-    // 2. اختيار المنتج
     function selectProduct(id) {
         currentProduct = products.find(p => p.id === id);
-        document.getElementById('si').value = currentProduct.name;
-        document.getElementById('dd').classList.remove('open');
-        
         document.getElementById('pc').style.display = 'block';
         document.getElementById('pcName').innerText = currentProduct.name;
-        document.getElementById('pcAmt').innerText = currentProduct.price + " جنيه";
-    }
-
-    // 3. التنقل والرجوع
-    function goDetail() {
-        document.getElementById('pageMain').classList.remove('active');
-        document.getElementById('pageDetail').classList.add('active');
-        
+        document.getElementById('pcAmt').innerText = currentProduct.price + " ج.م";
+        document.getElementById('dd').classList.remove('open');
+        // تحديث صفحة التفاصيل
         document.getElementById('detName').innerText = currentProduct.name;
-        document.getElementById('detAmt').innerText = currentProduct.price;
     }
 
-    function goBack() {
-        document.getElementById('pageDetail').classList.remove('active');
-        document.getElementById('pageMain').classList.add('active');
+    function addToCart() {
+        cart.push(currentProduct);
+        document.getElementById('cartCount').innerText = cart.length;
+        alert("تمت الإضافة للسلة!");
+        updateCartList();
     }
 
-    // 4. واتساب
+    function updateCartList() {
+        const list = document.getElementById('cartList');
+        list.innerHTML = cart.map(p => `<div class="cart-item">${p.name} - ${p.price} ج.م</div>`).join('');
+    }
+
     function goWa() {
-        const url = `https://wa.me/201000000000?text=أريد طلب ${currentProduct.name}`;
-        window.open(url, '_blank');
+        window.open(`https://wa.me/201000000000?text=أريد طلب ${currentProduct.name}`, '_blank');
     }
-
-    function openCart() { alert("تم فتح السلة"); }
 </script>
-
 </body>
 </html>
