@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="دليل الشروق – أفضل أسعار مستلزمات طب الأسنان في القاهرة. تشكيلة واسعة، توصيل سريع، خدمة موثوقة للأطباء.">
+<title>دليل الشروق | مستلزمات طب الأسنان – القاهرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style> 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+:root {
+  --navy: #0b1829;
+  --navy-2: #122040;
+  --navy-3: #1e3260;
+  --gold: #c9a84c;
+  --gold-l: #e8cc7a;
+  --gold-pale: #fdf4dc;
+  --gold-dark: #9a7830;
+  --white: #ffffff;
+  --off: #f6f8fc;
+  --text: #0b1829;
+  --text-2: #4a5a72;
+  --text-3: #8fa0b8;
+  --border: rgba(11,24,41,0.10);
+}
+ 
+html { scroll-behavior: smooth; }
+ 
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--white);
+  color: var(--text);
+  overflow-x: hidden;
+}
+ 
+/* ====== NAV ====== */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  background: rgba(11,24,41,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,168,76,0.18);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-logo-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-l));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--navy); font-weight: 900;
+}
+.nav-logo-text { color: #fff; font-size: 15px; font-weight: 800; }
+.nav-logo-sub { color: rgba(201,168,76,0.8); font-size: 11px; display: block; line-height: 1; }
+.nav-cta {
+  background: var(--gold); color: var(--navy);
+  border: none; border-radius: 50px;
+  padding: 8px 20px; font-family: 'Tajawal', sans-serif;
+  font-size: 13px; font-weight: 800; cursor: pointer;
+  text-decoration: none; display: inline-block;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--gold-l); }
+ 
+/* ====== HERO ====== */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #060e1c 0%, #0b1829 40%, #122040 70%, #1a2e58 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 100px 24px 60px;
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+ 
+/* Subtle grid background */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+ 
+/* Gold accent circle */
+.hero-glow {
+  position: absolute; top: -120px; right: -120px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-glow-2 {
+  position: absolute; bottom: -80px; left: -80px;
+  width: 350px; height: 350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,74,158,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+ 
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold-l); font-size: 12px; font-weight: 700;
+  padding: 6px 16px; border-radius: 50px;
+  margin-bottom: 28px;
+  animation: fadeDown 0.6s ease both;
+}
+ 
+.hero-title {
+  font-size: clamp(36px, 7vw, 72px);
+  font-weight: 900; color: #fff;
+  line-height: 1.1; margin-bottom: 8px;
+  animation: fadeDown 0.7s ease 0.1s both;
+}
+.hero-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--gold), var(--gold-l));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+ 
+.hero-sub {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: rgba(255,255,255,0.65); font-weight: 400;
+  max-width: 560px; line-height: 1.7; margin: 0 auto 40px;
+  animation: fadeDown 0.7s ease 0.2s both;
+}
+ 
+.hero-actions {
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  animation: fadeDown 0.7s ease 0.3s both;
+}
+.btn-primary {
+  padding: 15px 32px; border-radius: 50px; border: none;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--navy); font-family: 'Tajawal', sans-serif;
+  font-size: 16px; font-weight: 800; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 9px;
+  box-shadow: 0 8px 28px rgba(201,168,76,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,168,76,0.4); }
+.btn-secondary {
+  padding: 15px 32px; border-radius: 50px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.07);
+  color: #fff; font-family: 'Tajawal', sans-serif;
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 9px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-secondary:hover { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.08); }
+ 
+/* Hero stats */
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 60px; flex-wrap: wrap; justify-content: center;
+  animation: fadeDown 0.7s ease 0.4s both;
+}
+.hstat { text-align: center; }
+.hstat-num { font-size: 32px; font-weight: 900; color: var(--gold-l); line-height: 1; }
+.hstat-lbl { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+.hstat-div { width: 1px; background: rgba(255,255,255,0.1); align-self: stretch; }
+ 
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,0.3); font-size: 20px;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+ 
+/* ====== SECTION SHARED ====== */
+section { padding: 80px 24px; }
+.section-inner { max-width: 960px; margin: 0 auto; }
+.eyebrow {
+  font-size: 12px; font-weight: 800; letter-spacing: 2px;
+  color: var(--gold-dark); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.section-title { font-size: clamp(26px, 4vw, 40px); font-weight: 900; color: var(--navy); line-height: 1.2; margin-bottom: 16px; }
+.section-desc { font-size: 16px; color: var(--text-2); line-height: 1.8; max-width: 560px; }
+ 
+/* ====== WHY US ====== */
+.why-section { background: var(--off); }
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px; margin-top: 44px;
+}
+.why-card {
+  background: #fff; border-radius: 18px;
+  border: 1.5px solid var(--border);
+  padding: 28px 22px;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.why-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(11,24,41,0.1); border-color: var(--gold); }
+.why-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--gold-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 16px; color: var(--gold-dark);
+}
+.why-card h3 { font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.why-card p { font-size: 14px; color: var(--text-2); line-height: 1.7; }
+ 
+/* ====== CATEGORIES PREVIEW ====== */
+.cats-section { background: var(--white); }
+.cats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px; margin-top: 44px;
+}
+.cat-card {
+  border-radius: 16px; padding: 22px 14px;
+  text-align: center; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1.5px solid transparent;
+}
+.cat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(11,24,41,0.1); }
+.cat-card-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+.cat-card-name { font-size: 14px; font-weight: 800; }
+.cat-card-cnt { font-size: 11px; opacity: 0.7; margin-top: 3px; }
+ 
+/* ====== HOW IT WORKS ====== */
+.how-section { background: linear-gradient(160deg, #060e1c, #0b1829, #122040); color: #fff; }
+.how-section .eyebrow { color: var(--gold); }
+.how-section .section-title { color: #fff; }
+.how-section .section-desc { color: rgba(255,255,255,0.55); }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px; margin-top: 50px; position: relative;
+}
+.step {
+  position: relative; padding: 28px 22px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 18px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.step:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.04); }
+.step-num {
+  font-size: 48px; font-weight: 900;
+  color: rgba(201,168,76,0.15); line-height: 1;
+  margin-bottom: 14px;
+}
+.step h3 { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.step p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+.step-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--gold-l); margin-bottom: 14px;
+}
+ 
+/* ====== TESTIMONIAL ====== */
+.testi-section { background: var(--off); }
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 44px; }
+.testi-card {
+  background: #fff; border-radius: 18px;
+  border: 1.5px solid var(--border);
+  padding: 24px 22px;
+}
+.testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 12px; }
+.testi-text { font-size: 15px; color: var(--text-2); line-height: 1.75; margin-bottom: 18px; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #e0e8ff, #c7d6ff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #2a4a9e; flex-shrink: 0;
+}
+.testi-name { font-size: 14px; font-weight: 800; color: var(--navy); }
+.testi-title { font-size: 12px; color: var(--text-3); }
+ 
+/* ====== CTA SECTION ====== */
+.cta-section {
+  background: linear-gradient(135deg, #0b1829, #1e3260);
+  text-align: center; padding: 80px 24px;
+}
+.cta-section .section-title { color: #fff; margin: 0 auto 14px; }
+.cta-section .section-desc { color: rgba(255,255,255,0.6); margin: 0 auto 36px; }
+.cta-wa {
+  display: inline-flex; align-items: center; gap: 11px;
+  padding: 16px 36px; border-radius: 50px; border: none;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff; font-family: 'Tajawal', sans-serif;
+  font-size: 17px; font-weight: 800; cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(37,211,102,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 14px;
+}
+.cta-wa:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(37,211,102,0.38); }
+.cta-note { font-size: 13px; color: rgba(255,255,255,0.4); }
+ 
+/* ====== FOOTER ====== */
+footer {
+  background: #060e1c;
+  padding: 32px 24px;
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,0.12);
+}
+.footer-logo { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+.footer-sub { font-size: 12px; color: rgba(201,168,76,0.7); margin-bottom: 16px; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.footer-link { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+.footer-link:hover { color: var(--gold-l); }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+ 
+/* ====== ANIMATIONS ====== */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+ 
+/* ====== FLOATING WA BUTTON ====== */
+.float-wa {
+  position: fixed; bottom: 24px; left: 24px; z-index: 90;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; color: #fff;
+  box-shadow: 0 6px 22px rgba(37,211,102,0.4);
+  text-decoration: none;
+  animation: pulse-wa 2.5s infinite;
+}
+@keyframes pulse-wa {
+  0%,100%{box-shadow:0 6px 22px rgba(37,211,102,0.4)}
+  50%{box-shadow:0 6px 32px rgba(37,211,102,0.65)}
+}
+ 
+/* ====== RESPONSIVE ====== */
+@media(max-width:600px){
+  .hero-stats { gap: 20px; }
+  .hstat-div { display: none; }
+  section { padding: 60px 18px; }
+  .nav-logo-sub { display: none; }
+}
+</style>
+</head>
+<body>
+ 
+<!-- FLOATING WA -->
+<a class="float-wa" href="https://wa.me/201224561525?text=مرحباً،%20أرغب%20في%20الاستفسار%20عن%20مستلزمات%20طب%20الأسنان" target="_blank" title="تواصل على واتساب">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+ 
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><i class="fa-solid fa-tooth"></i></div>
+    <div>
+      <div class="nav-logo-text">دليل الشروق</div>
+      <span class="nav-logo-sub">Dr. Bilal Al-Najashi</span>
+    </div>
+  </div>
+  <a class="nav-cta" href="#catalog">تصفح الكتالوج</a>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+ 
+  <div class="hero-badge">
+    <i class="fa-solid fa-location-dot"></i>
+    القاهرة · توصيل لجميع المحافظات
+  </div>
+ 
+  <h1 class="hero-title">
+    مستلزمات طب الأسنان<br>
+    <em>بأفضل الأسعار في مصر</em>
+  </h1>
+ 
+  <p class="hero-sub">
+    كل ما يحتاجه عيادتك في مكان واحد — تقويم، أندو، كمبوزيت، زراعة وأكثر.
+    تسوق بسهولة واطلب مباشرة عبر واتساب.
+  </p>
+ 
+  <div class="hero-actions">
+    <a class="btn-primary" href="#catalog">
+      <i class="fa-solid fa-grid-2"></i>
+      تصفح الكتالوج الآن
+    </a>
+    <a class="btn-secondary" href="https://wa.me/201224561525?text=مرحباً،%20أرغب%20في%20الاستفسار" target="_blank">
+      <i class="fa-brands fa-whatsapp"></i>
+      تواصل معنا
+    </a>
+  </div>
+ 
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-num">+500</div>
+      <div class="hstat-lbl">منتج متاح</div>
+    </div>
+    <div class="hstat-div"></div>
+    <div class="hstat">
+      <div class="hstat-num">+200</div>
+      <div class="hstat-lbl">دكتور يثق بنا</div>
+    </div>
+    <div class="hstat-div"></div>
+    <div class="hstat">
+      <div class="hstat-num">24h</div>
+      <div class="hstat-lbl">توصيل داخل القاهرة</div>
+    </div>
+    <div class="hstat-div"></div>
+    <div class="hstat">
+      <div class="hstat-num">100%</div>
+      <div class="hstat-lbl">منتجات أصلية معتمدة</div>
+    </div>
+  </div>
+ 
+  <div class="scroll-hint"><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+ 
+<!-- WHY US -->
+<section class="why-section" id="why">
+  <div class="section-inner">
+    <p class="eyebrow reveal">ليه دليل الشروق؟</p>
+    <h2 class="section-title reveal">اختيار الأطباء الذكيين في القاهرة</h2>
+    <p class="section-desc reveal">مش بس موردين — شركاء في نجاح عيادتك اليومي.</p>
+ 
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fa-solid fa-tag"></i></div>
+        <h3>أسعار تنافسية</h3>
+        <p>نراقب السوق يومياً عشان تاخد أفضل سعر من غير مساومة أو وقت ضايع.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>منتجات أصلية 100%</h3>
+        <p>كل منتج معه شهادة اعتماد ومصدر موثق — مفيش مجال للشك في الجودة.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <h3>توصيل سريع</h3>
+        <p>طلبك خلال 24 ساعة في القاهرة، وأسرع توصيل للمحافظات في السوق.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <h3>طلب بنقرة واحدة</h3>
+        <p>اختار من الكتالوج واطلب على واتساب في ثواني — مفيش فورم معقد أو انتظار.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CATEGORIES -->
+<section class="cats-section" id="catalog">
+  <div class="section-inner">
+    <p class="eyebrow reveal">الكتالوج</p>
+    <h2 class="section-title reveal">كل تخصصاتك في مكان واحد</h2>
+    <p class="section-desc reveal">تشكيلة شاملة تغطي احتياجات جميع تخصصات طب الأسنان.</p>
+ 
+    <div class="cats-grid">
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#e0e8ff,#c7d6ff);border-color:#b0c4f8;">
+        <span class="cat-card-icon">🦷</span>
+        <div class="cat-card-name" style="color:#1a3268;">تقويم</div>
+        <div class="cat-card-cnt" style="color:#2a4a9e;">براكيت · أسلاك · كيتات</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#fce8e8,#f9cccc);border-color:#f0b0b0;">
+        <span class="cat-card-icon">📌</span>
+        <div class="cat-card-name" style="color:#8b1010;">أندو</div>
+        <div class="cat-card-cnt" style="color:#b82020;">فايلات · أوبتشورايتر</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-color:#a5d6a7;">
+        <span class="cat-card-icon">🧤</span>
+        <div class="cat-card-name" style="color:#1b5e20;">جلدز</div>
+        <div class="cat-card-cnt" style="color:#2e7d32;">لاتكس · نيتريل</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#fff8e0,#ffeeb0);border-color:#ffe082;">
+        <span class="cat-card-icon">💎</span>
+        <div class="cat-card-name" style="color:#6d4c00;">كمبوزيت</div>
+        <div class="cat-card-cnt" style="color:#a07828;">روبي · 3M · بوند</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#f3e8ff,#e0c8ff);border-color:#ce93d8;">
+        <span class="cat-card-icon">🔧</span>
+        <div class="cat-card-name" style="color:#4a148c;">مستهلكات</div>
+        <div class="cat-card-cnt" style="color:#7b3fa0;">إبر · قطن · أمالغام</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#e8f4fd,#c2e2f8);border-color:#90caf9;">
+        <span class="cat-card-icon">🏅</span>
+        <div class="cat-card-name" style="color:#0d3c61;">زراعة</div>
+        <div class="cat-card-cnt" style="color:#1565c0;">إمبلانت · أبتمنت</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#e0faf4,#b0f0e0);border-color:#80cbc4;">
+        <span class="cat-card-icon">🔬</span>
+        <div class="cat-card-name" style="color:#004d40;">تشخيص</div>
+        <div class="cat-card-cnt" style="color:#00796b;">كاميرا · مرايا</div>
+      </div>
+      <div class="cat-card reveal" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);border-color:#f48fb1;cursor:default;">
+        <span class="cat-card-icon">➕</span>
+        <div class="cat-card-name" style="color:#880e4f;">والمزيد</div>
+        <div class="cat-card-cnt" style="color:#c2185b;">يتوسع باستمرار</div>
+      </div>
+    </div>
+ 
+    <div style="text-align:center;margin-top:36px;" class="reveal">
+      <a class="btn-primary" href="https://wa.me/201224561525?text=مرحباً،%20أريد%20تصفح%20الكتالوج%20الكامل" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        اطلب الكتالوج الكامل على واتساب
+      </a>
+    </div>
+  </div>
+</section>
+ 
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <p class="eyebrow reveal">الطريقة</p>
+    <h2 class="section-title reveal">من الاختيار للتوصيل في 3 خطوات</h2>
+    <p class="section-desc reveal">عملية بسيطة تأخذ أقل من 5 دقائق من وقتك.</p>
+ 
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="fa-solid fa-grid-2"></i></div>
+        <h3>تصفح الكتالوج</h3>
+        <p>اختار المنتجات اللي تحتاجها بالاسم أو الكود أو الفئة — سهل وسريع.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+        <h3>اجمع طلبك</h3>
+        <p>أضف أكتر من صنف في سلة واحدة وشوف الإجمالي قبل الطلب.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <h3>ابعت على واتساب</h3>
+        <p>طلبك يوصلنا منسق ومفصل وبيتم تأكيده وتوصيله بسرعة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- TESTIMONIALS -->
+<section class="testi-section" id="reviews">
+  <div class="section-inner">
+    <p class="eyebrow reveal">آراء الأطباء</p>
+    <h2 class="section-title reveal">بيثقوا فينا كل يوم</h2>
+ 
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"أسعارهم فعلاً أحسن في السوق وبيدوا فاتورة وكل حاجة تبان، مشيت معاهم من أول ما افتحت عيادتي."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">م.أ</div>
+          <div>
+            <div class="testi-name">د. محمد أحمد</div>
+            <div class="testi-title">أخصائي تقويم · مدينة نصر</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"الكتالوج الرقمي وفر عليا وقت كتير، بدل ما أدور في كل مكان بلاقي كل اللي محتاجاه في مكان واحد."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#2e7d32;">س.م</div>
+          <div>
+            <div class="testi-name">د. سارة محمود</div>
+            <div class="testi-title">طب أسنان عام · المعادي</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"التوصيل في نفس اليوم ده أكبر ميزة ليهم، وما طلبتش حاجة مغشوشة قط — دايماً منتجات أصلية."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#fff8e0,#ffeeb0);color:#a07828;">ع.ك</div>
+          <div>
+            <div class="testi-name">د. عمرو كمال</div>
+            <div class="testi-title">زراعة وتجميل · هليوبوليس</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CTA FINAL -->
+<section class="cta-section" id="contact">
+  <div class="section-inner" style="text-align:center;">
+    <p class="eyebrow reveal" style="color:var(--gold);margin-bottom:10px;">ابدأ دلوقتي</p>
+    <h2 class="section-title reveal" style="max-width:540px;margin:0 auto 14px;">مستني إيه؟ الكتالوج الكامل على واتساب في ثانية</h2>
+    <p class="section-desc reveal" style="margin:0 auto 36px;">تواصل معنا دلوقتي وهنبعتلك الكتالوج الكامل بالأسعار ونرد عليك في أقل من 5 دقائق.</p>
+    <div class="reveal">
+      <a class="cta-wa" href="https://wa.me/201224561525?text=مرحباً%20دليل%20الشروق،%20أريد%20تصفح%20الكتالوج%20والتعرف%20على%20أسعاركم" target="_blank">
+        <i class="fa-brands fa-whatsapp" style="font-size:22px;"></i>
+        ابدأ الطلب على واتساب
+      </a>
+      <p class="cta-note">الرد خلال 5 دقائق · توصيل لجميع المحافظات</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🦷 دليل الشروق</div>
+  <div class="footer-sub">Dr. Bilal Al-Najashi · مستلزمات طب الأسنان · القاهرة</div>
+  <div class="footer-links">
+    <a class="footer-link" href="#why">لماذا نحن</a>
+    <a class="footer-link" href="#catalog">الكتالوج</a>
+    <a class="footer-link" href="#how">كيف يعمل</a>
+    <a class="footer-link" href="#reviews">آراء الأطباء</a>
+    <a class="footer-link" href="#contact">تواصل معنا</a>
+  </div>
+  <div class="footer-copy">© 2025 دليل الشروق · جميع الحقوق محفوظة</div>
+</footer>
+ 
+<script> 
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+ 
+// Stagger child reveals in grids
+document.querySelectorAll('.why-grid, .cats-grid, .steps, .testi-grid').forEach(grid => {
+  grid.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.08) + 's';
+  });
+});
+</script>
+</body>
+</html>
+
