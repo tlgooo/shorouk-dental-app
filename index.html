@@ -58,26 +58,17 @@ body {
 #splash.out { opacity: 0; pointer-events: none; }
  
 .splash-ring {
-  width: 110px; height: 110px;
-  border-radius: 50%;
+  width: 110px; height: 110px; border-radius: 50%;
   background: linear-gradient(135deg, #c9a84c22, #c9a84c44);
   border: 2px solid rgba(201,168,76,0.35);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 28px;
-  animation: pulse-ring 2s infinite;
-  position: relative;
+  margin-bottom: 28px; animation: pulse-ring 2s infinite; position: relative;
 }
 .splash-ring::before {
-  content: '';
-  position: absolute; inset: -8px;
-  border-radius: 50%;
-  border: 1px solid rgba(201,168,76,0.15);
-  animation: pulse-ring 2s infinite 0.3s;
+  content: ''; position: absolute; inset: -8px; border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.15); animation: pulse-ring 2s infinite 0.3s;
 }
-@keyframes pulse-ring {
-  0%,100%{transform:scale(1);opacity:1}
-  50%{transform:scale(1.06);opacity:0.7}
-}
+@keyframes pulse-ring { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.06);opacity:0.7} }
 .splash-icon { font-size: 48px; color: var(--gold); }
 .splash-name { font-size: 32px; font-weight: 900; color: #fff; letter-spacing: 0.5px; margin-bottom: 6px; }
 .splash-sub { font-size: 14px; color: rgba(201,168,76,0.9); font-weight: 400; margin-bottom: 48px; }
@@ -105,17 +96,14 @@ body {
 .topbar-actions { display: flex; gap: 8px; align-items: center; }
 .icon-btn {
   width: 40px; height: 40px; border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(201,168,76,0.25);
-  color: #fff; font-size: 15px;
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.25);
+  color: #fff; font-size: 15px; display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: background 0.2s; position: relative;
 }
 .icon-btn:hover { background: rgba(201,168,76,0.18); }
 .cart-badge {
   position: absolute; top: -3px; left: -3px;
-  background: var(--gold); color: var(--navy);
-  font-size: 9px; font-weight: 900;
+  background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 900;
   width: 17px; height: 17px; border-radius: 50%;
   display: none; align-items: center; justify-content: center;
 }
@@ -126,9 +114,8 @@ body {
 .search-input {
   width: 100%; padding: 11px 44px 11px 44px;
   border: 1.5px solid var(--border-2); border-radius: 50px;
-  font-family: 'Tajawal', sans-serif; font-size: 14px;
-  color: var(--text); background: var(--off);
-  outline: none; direction: rtl; transition: all 0.2s;
+  font-family: 'Tajawal', sans-serif; font-size: 14px; color: var(--text);
+  background: var(--off); outline: none; direction: rtl; transition: all 0.2s;
 }
 .search-input:focus { border-color: var(--navy-light); background: #fff; box-shadow: 0 0 0 3px rgba(42,74,158,0.1); }
 .search-input::placeholder { color: var(--text-3); }
@@ -140,9 +127,8 @@ body {
 .cats-scroll { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .cats-scroll::-webkit-scrollbar { display: none; }
 .cat-chip {
-  white-space: nowrap; padding: 6px 15px;
-  border-radius: 50px; border: 1.5px solid var(--border-2);
-  background: var(--off); color: var(--text-2);
+  white-space: nowrap; padding: 6px 15px; border-radius: 50px;
+  border: 1.5px solid var(--border-2); background: var(--off); color: var(--text-2);
   font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: all 0.18s; flex-shrink: 0;
 }
@@ -155,7 +141,7 @@ body {
 .sec-title { font-size: 16px; font-weight: 800; color: var(--navy); }
 .sec-cnt { font-size: 13px; color: var(--text-3); background: var(--off); padding: 3px 10px; border-radius: 50px; }
  
-/* ===== GRID LIST TOGGLE ===== */
+/* ===== VIEW TOGGLE ===== */
 .view-toggle { display: flex; gap: 4px; }
 .view-btn {
   width: 32px; height: 32px; border-radius: var(--r-xs);
@@ -165,26 +151,69 @@ body {
 }
 .view-btn.on { background: var(--navy); border-color: var(--navy); color: #fff; }
  
-/* ===== PRODUCT CARD – GRID ===== */
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; }
- 
-.pcard {
-  background: #fff; border-radius: var(--r);
-  border: 1.5px solid var(--border);
-  overflow: hidden; cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  position: relative;
+/* ===========================
+   ANIMATED CARD GRID (NEW)
+=========================== */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
 }
-.pcard:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,30,61,0.13); border-color: var(--navy-light); }
  
+/* Card base */
+.pcard {
+  background: #fff;
+  border-radius: 18px;
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.35s cubic-bezier(.22,.68,0,1.2),
+              box-shadow 0.35s ease,
+              border-color 0.25s ease;
+  animation: cardIn 0.45s ease both;
+}
+.pcard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 48px rgba(15,30,61,0.16), 0 4px 12px rgba(15,30,61,0.08);
+  border-color: var(--navy-light);
+}
+.pcard:hover .pcard-shine { opacity: 1; }
+ 
+/* Shimmer overlay on hover */
+.pcard-shine {
+  pointer-events: none;
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0) 80%);
+  opacity: 0; transition: opacity 0.35s ease; z-index: 2; border-radius: inherit;
+}
+ 
+/* Staggered entrance */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+.pcard:nth-child(1)  { animation-delay: 0.03s }
+.pcard:nth-child(2)  { animation-delay: 0.06s }
+.pcard:nth-child(3)  { animation-delay: 0.09s }
+.pcard:nth-child(4)  { animation-delay: 0.12s }
+.pcard:nth-child(5)  { animation-delay: 0.15s }
+.pcard:nth-child(6)  { animation-delay: 0.18s }
+.pcard:nth-child(7)  { animation-delay: 0.21s }
+.pcard:nth-child(8)  { animation-delay: 0.24s }
+.pcard:nth-child(n+9){ animation-delay: 0.27s }
+ 
+/* Image area */
 .pimg {
-  width: 100%; height: 130px;
-  background: linear-gradient(135deg, #eef2ff 0%, #e0e8ff 100%);
+  width: 100%; height: 128px;
   display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
 }
-.pimg img { width: 100%; height: 100%; object-fit: cover; }
-.pimg-art { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.pimg img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.pcard:hover .pimg img { transform: scale(1.07); }
+.pimg-art { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; transition: transform 0.4s ease; }
+.pcard:hover .pimg-art { transform: scale(1.06); }
  
 .cat-label {
   position: absolute; bottom: 7px; right: 7px;
@@ -213,17 +242,23 @@ body {
   display: flex; align-items: center; gap: 3px;
 }
  
+/* Card body */
 .pbody { padding: 10px 12px 12px; }
 .pname {
-  font-size: 13px; font-weight: 700; color: var(--text);
-  line-height: 1.4; margin-bottom: 2px;
+  font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 2px;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .pcode { font-size: 11px; color: var(--text-3); margin-bottom: 7px; }
 .pprice { font-size: 16px; font-weight: 900; color: var(--gold-dark); }
 .pprice span { font-size: 11px; font-weight: 500; color: var(--text-3); }
  
-.pactions { display: flex; gap: 6px; margin-top: 9px; }
+/* Hover-reveal action strip */
+.pactions {
+  display: flex; gap: 6px; margin-top: 9px;
+  transform: translateY(4px); opacity: 0.85;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.pcard:hover .pactions { transform: translateY(0); opacity: 1; }
 .btn-details {
   flex: 1; padding: 7px 6px;
   border: 1.5px solid var(--navy); border-radius: var(--r-xs);
@@ -235,21 +270,20 @@ body {
 .btn-addcart {
   width: 32px; height: 32px; border-radius: var(--r-xs);
   background: var(--gold); border: none; color: var(--navy);
-  font-size: 13px; cursor: pointer; transition: all 0.18s;
+  font-size: 13px; cursor: pointer; transition: all 0.2s;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.btn-addcart:hover { background: var(--gold-dark); color: #fff; }
+.btn-addcart:hover { background: var(--gold-dark); color: #fff; transform: scale(1.1); }
+.btn-addcart:active { transform: scale(0.92); }
  
 /* ===== LIST VIEW ===== */
 .products-list { display: flex; flex-direction: column; gap: 10px; }
 .prow {
-  background: #fff; border-radius: var(--r-sm);
-  border: 1.5px solid var(--border);
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 14px; cursor: pointer;
-  transition: all 0.18s;
+  background: #fff; border-radius: var(--r-sm); border: 1.5px solid var(--border);
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer;
+  transition: all 0.18s; animation: cardIn 0.35s ease both;
 }
-.prow:hover { border-color: var(--navy-light); box-shadow: 0 4px 14px rgba(15,30,61,0.09); }
+.prow:hover { border-color: var(--navy-light); box-shadow: 0 4px 14px rgba(15,30,61,0.09); transform: translateX(-4px); }
 .prow-img {
   width: 60px; height: 60px; border-radius: var(--r-xs);
   background: linear-gradient(135deg, #eef2ff, #e0e8ff);
@@ -265,19 +299,19 @@ body {
   width: 34px; height: 34px; border-radius: var(--r-xs);
   background: var(--gold); border: none; color: var(--navy);
   font-size: 14px; cursor: pointer; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; transition: all 0.18s;
 }
+.prow-btn:hover { background: var(--gold-dark); color: #fff; }
  
-/* ===== DETAIL PAGE ===== */
+/* ===== PAGE SYSTEM ===== */
 .page { display: none; }
 .page.active { display: block; }
  
+/* ===== DETAIL PAGE ===== */
 .detail-topbar {
   background: linear-gradient(135deg, #0a1428, #0f1e3d);
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 10px;
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 1px 0 rgba(201,168,76,0.2);
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+  position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 0 rgba(201,168,76,0.2);
 }
 .back-btn {
   width: 36px; height: 36px; border-radius: 50%;
@@ -286,22 +320,17 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 .detail-topbar-title { color: #fff; font-size: 15px; font-weight: 700; }
- 
 .detail-wrap { max-width: 620px; margin: 0 auto; padding: 16px; }
- 
 .detail-img-box {
   width: 100%; height: 260px; border-radius: var(--r);
   background: linear-gradient(135deg, #eef2ff, #d5e3ff);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden; margin-bottom: 18px;
-  box-shadow: 0 4px 20px rgba(15,30,61,0.1);
-  position: relative;
+  box-shadow: 0 4px 20px rgba(15,30,61,0.1); position: relative;
 }
 .detail-img-box img { width: 100%; height: 100%; object-fit: cover; }
- 
 .detail-card {
-  background: #fff; border-radius: var(--r);
-  border: 1.5px solid var(--border);
+  background: #fff; border-radius: var(--r); border: 1.5px solid var(--border);
   padding: 20px; margin-bottom: 14px;
 }
 .detail-prod-name { font-size: 22px; font-weight: 900; color: var(--navy); margin-bottom: 14px; }
@@ -310,66 +339,49 @@ body {
 .dlabel { font-size: 13px; color: var(--text-3); }
 .dval { font-size: 14px; font-weight: 700; }
 .dprice-val { font-size: 24px; font-weight: 900; color: var(--gold-dark); }
- 
 .detail-btns { display: flex; flex-direction: column; gap: 10px; }
 .btn-wa {
   padding: 14px; border: none; border-radius: var(--r);
   background: linear-gradient(135deg, #25D366, #128C7E);
-  color: #fff; font-family: 'Tajawal', sans-serif;
-  font-size: 16px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: opacity 0.2s;
+  color: #fff; font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.2s;
   box-shadow: 0 4px 16px rgba(37,211,102,0.28);
 }
 .btn-wa:hover { opacity: 0.9; }
 .btn-gold {
   padding: 14px; border: none; border-radius: var(--r);
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-  color: var(--navy); font-family: 'Tajawal', sans-serif;
-  font-size: 16px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: opacity 0.2s;
+  color: var(--navy); font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.2s;
   box-shadow: 0 4px 16px rgba(201,168,76,0.28);
 }
 .btn-gold:hover { opacity: 0.9; }
  
-/* ===== MODAL OVERLAY ===== */
+/* ===== MODAL / OVERLAY ===== */
 .overlay {
-  position: fixed; inset: 0;
-  background: rgba(10,20,40,0.65);
-  backdrop-filter: blur(5px);
-  z-index: 200; display: none;
-  align-items: flex-end; justify-content: center;
+  position: fixed; inset: 0; background: rgba(10,20,40,0.65); backdrop-filter: blur(5px);
+  z-index: 200; display: none; align-items: flex-end; justify-content: center;
 }
 .overlay.open { display: flex; }
- 
 .sheet {
-  background: #fff; border-radius: 20px 20px 0 0;
-  width: 100%; max-width: 620px; max-height: 88vh;
-  display: flex; flex-direction: column;
-  animation: slideUp 0.28s ease;
+  background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-width: 620px; max-height: 88vh;
+  display: flex; flex-direction: column; animation: slideUp 0.28s ease;
 }
 @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
- 
 .sheet-hdr {
   padding: 14px 18px; border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
 }
 .sheet-title { font-size: 17px; font-weight: 800; color: var(--navy); }
 .close-btn {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--off); border: none; cursor: pointer;
-  font-size: 14px; color: var(--text-3);
-  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--off); border: none; cursor: pointer;
+  font-size: 14px; color: var(--text-3); display: flex; align-items: center; justify-content: center;
 }
 .sheet-body { flex: 1; overflow-y: auto; padding: 14px 18px; }
 .sheet-foot { padding: 14px 18px; border-top: 1px solid var(--border); flex-shrink: 0; }
  
 /* ===== CART ===== */
-.citem {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 0; border-bottom: 1px solid var(--border);
-}
+.citem { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .citem-img {
   width: 52px; height: 52px; border-radius: var(--r-xs);
   background: linear-gradient(135deg, #eef2ff, #d5e3ff);
@@ -382,26 +394,21 @@ body {
 .citem-price { font-size: 12px; color: var(--gold-dark); font-weight: 600; }
 .qty-ctrl { display: flex; align-items: center; gap: 8px; }
 .qty-btn {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 1.5px solid var(--border-2); background: #fff;
-  color: var(--navy); font-size: 14px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border-2); background: #fff;
+  color: var(--navy); font-size: 14px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
 }
 .qty-n { font-size: 14px; font-weight: 800; min-width: 22px; text-align: center; }
- 
 .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .total-lbl { font-size: 15px; font-weight: 600; color: var(--text-2); }
 .total-val { font-size: 22px; font-weight: 900; color: var(--gold-dark); }
- 
 .btn-checkout {
   width: 100%; padding: 14px; border: none; border-radius: var(--r);
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-  color: #fff; font-family: 'Tajawal', sans-serif;
-  font-size: 16px; font-weight: 700; cursor: pointer;
+  color: #fff; font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   box-shadow: 0 4px 16px rgba(15,30,61,0.25);
 }
- 
 .empty-cart { text-align: center; padding: 50px 20px; color: var(--text-3); }
 .empty-cart i { font-size: 52px; margin-bottom: 12px; display: block; }
 .empty-cart p { font-size: 15px; font-weight: 600; }
@@ -410,8 +417,7 @@ body {
 .fg { margin-bottom: 14px; }
 .fl { display: block; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
 .fi, .fs {
-  width: 100%; padding: 11px 13px;
-  border: 1.5px solid var(--border-2); border-radius: var(--r-xs);
+  width: 100%; padding: 11px 13px; border: 1.5px solid var(--border-2); border-radius: var(--r-xs);
   font-family: 'Tajawal', sans-serif; font-size: 14px; color: var(--text);
   background: var(--off); outline: none; direction: rtl; transition: border 0.2s;
 }
@@ -419,8 +425,7 @@ body {
 .btn-send {
   width: 100%; padding: 14px; border: none; border-radius: var(--r);
   background: linear-gradient(135deg, #25D366, #128C7E);
-  color: #fff; font-family: 'Tajawal', sans-serif;
-  font-size: 16px; font-weight: 700; cursor: pointer;
+  color: #fff; font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   margin-top: 6px; box-shadow: 0 4px 14px rgba(37,211,102,0.25);
 }
@@ -432,8 +437,7 @@ body {
 .tab-btn {
   padding: 11px 12px; border: none; background: none;
   font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700;
-  color: var(--text-3); cursor: pointer;
-  border-bottom: 2.5px solid transparent; transition: all 0.2s; white-space: nowrap;
+  color: var(--text-3); cursor: pointer; border-bottom: 2.5px solid transparent; transition: all 0.2s; white-space: nowrap;
 }
 .tab-btn.on { color: var(--navy); border-color: var(--navy); }
 .tab-pane { display: none; }
@@ -441,16 +445,12 @@ body {
  
 /* ADMIN STATS */
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
-.stat-card {
-  background: var(--off); border-radius: var(--r-sm);
-  padding: 14px; text-align: center;
-}
+.stat-card { background: var(--off); border-radius: var(--r-sm); padding: 14px; text-align: center; }
 .stat-num { font-size: 24px; font-weight: 900; color: var(--navy); }
 .stat-lbl { font-size: 12px; color: var(--text-3); margin-top: 2px; }
  
 .img-drop {
-  width: 100%; height: 130px;
-  border: 2px dashed var(--border-2); border-radius: var(--r);
+  width: 100%; height: 130px; border: 2px dashed var(--border-2); border-radius: var(--r);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   cursor: pointer; gap: 6px; color: var(--text-3); margin-bottom: 14px;
   transition: border-color 0.2s; position: relative; overflow: hidden;
@@ -464,14 +464,10 @@ body {
 .btn-save {
   width: 100%; padding: 13px; border: none; border-radius: var(--r);
   background: linear-gradient(135deg, var(--navy), var(--navy-light));
-  color: #fff; font-family: 'Tajawal', sans-serif;
-  font-size: 15px; font-weight: 700; cursor: pointer;
+  color: #fff; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer;
 }
  
-.ap-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0; border-bottom: 1px solid var(--border);
-}
+.ap-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .ap-img {
   width: 44px; height: 44px; border-radius: var(--r-xs);
   background: linear-gradient(135deg, #eef2ff, #d5e3ff);
@@ -484,50 +480,39 @@ body {
 .ap-meta { font-size: 11px; color: var(--text-3); }
 .btn-edit {
   width: 30px; height: 30px; border-radius: var(--r-xs);
-  background: rgba(15,30,61,0.07); border: none;
-  color: var(--navy); cursor: pointer; font-size: 12px;
+  background: rgba(15,30,61,0.07); border: none; color: var(--navy); cursor: pointer; font-size: 12px;
   display: flex; align-items: center; justify-content: center;
 }
 .btn-del {
   width: 30px; height: 30px; border-radius: var(--r-xs);
-  background: rgba(220,53,69,0.08); border: none;
-  color: #dc3545; cursor: pointer; font-size: 12px;
+  background: rgba(220,53,69,0.08); border: none; color: #dc3545; cursor: pointer; font-size: 12px;
   display: flex; align-items: center; justify-content: center;
 }
- 
-.cat-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 0; border-bottom: 1px solid var(--border);
-}
+.cat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .add-cat-row { display: flex; gap: 8px; margin-top: 12px; }
 .add-cat-input {
-  flex: 1; padding: 10px 12px;
-  border: 1.5px solid var(--border-2); border-radius: var(--r-xs);
+  flex: 1; padding: 10px 12px; border: 1.5px solid var(--border-2); border-radius: var(--r-xs);
   font-family: 'Tajawal', sans-serif; font-size: 13px; outline: none; direction: rtl;
 }
 .add-cat-input:focus { border-color: var(--navy-light); }
 .btn-add-cat {
-  padding: 10px 14px; background: var(--navy); border: none;
-  border-radius: var(--r-xs); color: #fff;
-  font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
+  padding: 10px 14px; background: var(--navy); border: none; border-radius: var(--r-xs);
+  color: #fff; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
 }
  
-/* ===== BACKUP BUTTONS ===== */
+/* ===== BACKUP ===== */
 .backup-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .btn-backup {
-  flex: 1; min-width: 120px; padding: 11px 10px;
-  border: none; border-radius: var(--r-xs);
-  font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
-  transition: opacity 0.2s;
+  flex: 1; min-width: 120px; padding: 11px 10px; border: none; border-radius: var(--r-xs);
+  font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px; transition: opacity 0.2s;
 }
 .btn-backup:hover { opacity: 0.88; }
 .btn-backup-export { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; }
 .btn-backup-import { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--navy); }
 .backup-info {
-  background: var(--off); border-radius: var(--r-sm);
-  padding: 12px 14px; font-size: 12px; color: var(--text-2);
-  line-height: 1.7; margin-bottom: 16px;
+  background: var(--off); border-radius: var(--r-sm); padding: 12px 14px;
+  font-size: 12px; color: var(--text-2); line-height: 1.7; margin-bottom: 16px;
   border-right: 3px solid var(--gold);
 }
 #importFileIn { display: none; }
@@ -535,8 +520,7 @@ body {
 /* ===== SALES / COMMISSION TAB ===== */
 .commission-card {
   background: linear-gradient(135deg, #0a1428, #0f1e3d);
-  border-radius: var(--r);
-  padding: 20px; margin-bottom: 16px; text-align: center;
+  border-radius: var(--r); padding: 20px; margin-bottom: 16px; text-align: center;
 }
 .commission-label { font-size: 13px; color: rgba(201,168,76,0.8); margin-bottom: 6px; }
 .commission-total { font-size: 36px; font-weight: 900; color: var(--gold-light); }
@@ -547,63 +531,48 @@ body {
   color: var(--gold-light); font-size: 14px; font-weight: 700;
   padding: 8px 18px; border-radius: 50px; margin-top: 12px;
 }
- 
 .sales-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-.sales-stat {
-  background: var(--off); border-radius: var(--r-sm);
-  padding: 12px 8px; text-align: center;
-}
+.sales-stat { background: var(--off); border-radius: var(--r-sm); padding: 12px 8px; text-align: center; }
 .sales-stat-num { font-size: 18px; font-weight: 900; color: var(--navy); }
 .sales-stat-lbl { font-size: 11px; color: var(--text-3); margin-top: 2px; }
- 
-.sale-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0; border-bottom: 1px solid var(--border);
-}
+.sale-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .sale-icon {
   width: 36px; height: 36px; border-radius: 50%;
   background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--green); font-size: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 14px; flex-shrink: 0;
 }
 .sale-info { flex: 1; }
 .sale-name { font-size: 13px; font-weight: 700; }
 .sale-date { font-size: 11px; color: var(--text-3); }
 .sale-amount { font-size: 14px; font-weight: 900; color: var(--gold-dark); flex-shrink: 0; }
 .sale-commission { font-size: 10px; color: var(--green); font-weight: 600; white-space: nowrap; }
- 
 .no-sales { text-align: center; padding: 40px 20px; color: var(--text-3); }
 .no-sales i { font-size: 40px; margin-bottom: 10px; display: block; }
 .no-sales p { font-size: 14px; font-weight: 600; }
- 
 .btn-clear-sales {
   width: 100%; padding: 11px; margin-top: 16px;
   border: 1.5px solid rgba(220,53,69,0.3); border-radius: var(--r-xs);
   background: rgba(220,53,69,0.05); color: #dc3545;
-  font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
 }
  
 /* ===== PASSWORD MODAL ===== */
 .pass-veil {
-  position: fixed; inset: 0; background: rgba(10,20,40,0.7);
-  backdrop-filter: blur(6px); z-index: 300;
-  display: none; align-items: center; justify-content: center; padding: 20px;
+  position: fixed; inset: 0; background: rgba(10,20,40,0.7); backdrop-filter: blur(6px);
+  z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px;
 }
 .pass-veil.open { display: flex; }
 .pass-box {
-  background: #fff; border-radius: var(--r);
-  padding: 32px 26px; width: 100%; max-width: 350px;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(10,20,40,0.3);
+  background: #fff; border-radius: var(--r); padding: 32px 26px; width: 100%; max-width: 350px;
+  text-align: center; box-shadow: 0 20px 60px rgba(10,20,40,0.3);
 }
 .pass-box i { font-size: 40px; color: var(--navy); margin-bottom: 10px; }
 .pass-box h2 { font-size: 19px; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
 .pass-box p { font-size: 13px; color: var(--text-3); margin-bottom: 18px; }
 .pass-in {
-  width: 100%; padding: 12px; border: 1.5px solid var(--border-2);
-  border-radius: var(--r-xs); font-family: 'Tajawal', sans-serif;
-  font-size: 20px; text-align: center; letter-spacing: 5px;
+  width: 100%; padding: 12px; border: 1.5px solid var(--border-2); border-radius: var(--r-xs);
+  font-family: 'Tajawal', sans-serif; font-size: 20px; text-align: center; letter-spacing: 5px;
   margin-bottom: 8px; outline: none;
 }
 .pass-in:focus { border-color: var(--navy); }
@@ -614,22 +583,17 @@ body {
 /* ===== ADMIN BAR ===== */
 .admin-bar { background: var(--off); border-bottom: 1px solid var(--border); padding: 7px 16px; display: flex; justify-content: flex-end; }
 .admin-link {
-  font-size: 12px; color: var(--text-3); background: none;
-  border: none; cursor: pointer; font-family: 'Tajawal', sans-serif;
-  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--text-3); background: none; border: none; cursor: pointer;
+  font-family: 'Tajawal', sans-serif; display: flex; align-items: center; gap: 4px;
 }
 .admin-link:hover { color: var(--navy); }
  
 /* ===== TOAST ===== */
 .toast {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--navy); color: #fff;
-  padding: 11px 22px; border-radius: 50px;
-  font-size: 13px; font-weight: 600; z-index: 999;
-  transition: transform 0.3s; white-space: nowrap;
-  box-shadow: 0 8px 24px rgba(10,20,40,0.3);
-  border: 1px solid rgba(201,168,76,0.25);
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--navy); color: #fff; padding: 11px 22px; border-radius: 50px;
+  font-size: 13px; font-weight: 600; z-index: 999; transition: transform 0.3s; white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(10,20,40,0.3); border: 1px solid rgba(201,168,76,0.25);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
  
@@ -640,18 +604,16 @@ body {
 .empty-state p { font-size: 13px; }
  
 /* ===== MONTHLY CHART BOX ===== */
-.chart-box {
-  background: var(--off); border-radius: var(--r-sm);
-  padding: 14px; margin-bottom: 16px;
-}
+.chart-box { background: var(--off); border-radius: var(--r-sm); padding: 14px; margin-bottom: 16px; }
 .chart-box-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
  
 @media (min-width: 600px) {
-  .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-  .pimg { height: 155px; }
+  .products-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+  .pimg { height: 148px; }
 }
 @media (min-width: 900px) {
   .topbar, .search-bar, .cats-bar, .products-area { padding-left: 24px; padding-right: 24px; }
+  .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 }
 </style>
 </head>
@@ -659,9 +621,7 @@ body {
  
 <!-- SPLASH SCREEN -->
 <div id="splash">
-  <div class="splash-ring">
-    <i class="fa-solid fa-tooth splash-icon"></i>
-  </div>
+  <div class="splash-ring"><i class="fa-solid fa-tooth splash-icon"></i></div>
   <div class="splash-name">دليل الشروق</div>
   <div class="splash-sub">Dr. Bilal Al-Najashi · مستلزمات طب الأسنان</div>
   <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
@@ -671,10 +631,7 @@ body {
 <div class="topbar">
   <div class="logo-area">
     <div class="logo-icon"><i class="fa-solid fa-tooth"></i></div>
-    <div class="logo-text">
-      <h1>دليل الشروق</h1>
-      <p>Dr. Bilal Al-Najashi</p>
-    </div>
+    <div class="logo-text"><h1>دليل الشروق</h1><p>Dr. Bilal Al-Najashi</p></div>
   </div>
   <div class="topbar-actions">
     <button class="icon-btn" onclick="openCart()">
@@ -686,9 +643,7 @@ body {
  
 <!-- ADMIN BAR -->
 <div class="admin-bar">
-  <button class="admin-link" onclick="openPassModal()">
-    <i class="fa-solid fa-lock"></i> لوحة الإدارة
-  </button>
+  <button class="admin-link" onclick="openPassModal()"><i class="fa-solid fa-lock"></i> لوحة الإدارة</button>
 </div>
  
 <!-- HOME PAGE -->
@@ -700,11 +655,7 @@ body {
       <i class="fa-solid fa-xmark search-x" id="searchX" onclick="clearSearch()"></i>
     </div>
   </div>
- 
-  <div class="cats-bar">
-    <div class="cats-scroll" id="catsScroll"></div>
-  </div>
- 
+  <div class="cats-bar"><div class="cats-scroll" id="catsScroll"></div></div>
   <div class="products-area">
     <div class="sec-hdr">
       <span class="sec-title" id="secTitle">جميع المنتجات</span>
@@ -816,44 +767,28 @@ body {
           <div class="commission-sub">عدد الطلبات: <span id="commOrdersCount">0</span></div>
           <div class="commission-pill">
             <i class="fa-solid fa-percentage"></i>
-            نسبتك (2%): <span id="commValue" style="font-size:18px;">0 جنيه</span>
+            نسبتك (5%): <span id="commValue" style="font-size:18px;">0 جنيه</span>
           </div>
         </div>
- 
         <div class="sales-stats">
-          <div class="sales-stat">
-            <div class="sales-stat-num" id="salesThisMonth">0</div>
-            <div class="sales-stat-lbl">طلبات هذا الشهر</div>
-          </div>
-          <div class="sales-stat">
-            <div class="sales-stat-num" id="salesTotalThisMonth">0</div>
-            <div class="sales-stat-lbl">مبيعات الشهر (جنيه)</div>
-          </div>
-          <div class="sales-stat">
-            <div class="sales-stat-num" id="salesCommThisMonth">0</div>
-            <div class="sales-stat-lbl">نسبتك هذا الشهر</div>
-          </div>
+          <div class="sales-stat"><div class="sales-stat-num" id="salesThisMonth">0</div><div class="sales-stat-lbl">طلبات هذا الشهر</div></div>
+          <div class="sales-stat"><div class="sales-stat-num" id="salesTotalThisMonth">0</div><div class="sales-stat-lbl">مبيعات الشهر (جنيه)</div></div>
+          <div class="sales-stat"><div class="sales-stat-num" id="salesCommThisMonth">0</div><div class="sales-stat-lbl">نسبتك هذا الشهر</div></div>
         </div>
- 
         <div class="chart-box">
           <div class="chart-box-title"><i class="fa-solid fa-chart-line" style="margin-left:6px;color:var(--gold-dark);"></i> المبيعات الشهرية (آخر 6 أشهر)</div>
           <canvas id="salesChart" style="max-height:200px;"></canvas>
         </div>
- 
         <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">سجل الطلبات</div>
         <div id="salesLog"></div>
- 
-        <button class="btn-clear-sales" onclick="clearSalesLog()">
-          <i class="fa-solid fa-trash"></i> مسح سجل المبيعات
-        </button>
+        <button class="btn-clear-sales" onclick="clearSalesLog()"><i class="fa-solid fa-trash"></i> مسح سجل المبيعات</button>
       </div>
  
       <!-- ADD TAB -->
       <div class="tab-pane" id="tab-add">
         <div style="padding:8px 0;">
           <div class="img-drop" id="imgDrop">
-            <i class="fa-solid fa-image"></i>
-            <p>اضغط لاختيار صورة</p>
+            <i class="fa-solid fa-image"></i><p>اضغط لاختيار صورة</p>
             <input type="file" accept="image/*" onchange="previewImg(this)" id="adminImgIn">
           </div>
           <div class="fg"><label class="fl">اسم المنتج *</label><input class="fi" type="text" id="pName" placeholder="مثال: كمبوزيت روبي A2"></div>
@@ -874,9 +809,7 @@ body {
       </div>
  
       <!-- MANAGE TAB -->
-      <div class="tab-pane" id="tab-manage">
-        <div id="adminList"></div>
-      </div>
+      <div class="tab-pane" id="tab-manage"><div id="adminList"></div></div>
  
       <!-- CATS TAB -->
       <div class="tab-pane" id="tab-cats">
@@ -893,31 +826,22 @@ body {
           <i class="fa-solid fa-circle-info" style="color:var(--gold-dark);margin-left:6px;"></i>
           يمكنك تصدير جميع بيانات التطبيق (المنتجات، الفئات، الإحصائيات، سجل المبيعات) كملف JSON لحفظها، ثم استيرادها لاحقاً على أي جهاز أو عند إعادة التثبيت.
         </div>
- 
         <div class="backup-row">
-          <button class="btn-backup btn-backup-export" onclick="exportBackup()">
-            <i class="fa-solid fa-download"></i> تصدير نسخة احتياطية
-          </button>
-          <button class="btn-backup btn-backup-import" onclick="document.getElementById('importFileIn').click()">
-            <i class="fa-solid fa-upload"></i> استيراد / استرجاع
-          </button>
+          <button class="btn-backup btn-backup-export" onclick="exportBackup()"><i class="fa-solid fa-download"></i> تصدير نسخة احتياطية</button>
+          <button class="btn-backup btn-backup-import" onclick="document.getElementById('importFileIn').click()"><i class="fa-solid fa-upload"></i> استيراد / استرجاع</button>
           <input type="file" id="importFileIn" accept=".json" onchange="importBackup(this)">
         </div>
- 
         <div id="backupInfo" style="margin-bottom:16px;"></div>
- 
         <div style="background:var(--off);border-radius:var(--r-sm);padding:14px;">
           <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">
-            <i class="fa-solid fa-database" style="margin-left:6px;color:var(--gold-dark);"></i>
-            ملخص البيانات الحالية
+            <i class="fa-database fa-solid" style="margin-left:6px;color:var(--gold-dark);"></i> ملخص البيانات الحالية
           </div>
           <div id="backupSummary"></div>
         </div>
- 
         <div style="margin-top:16px;background:#fff3cd;border-radius:var(--r-sm);padding:12px;border:1px solid #ffc107;">
           <div style="font-size:12px;color:#856404;line-height:1.8;">
             <i class="fa-solid fa-triangle-exclamation" style="margin-left:6px;"></i>
-            <strong>تنبيه:</strong> الاستيراد سيستبدل جميع البيانات الحالية بالبيانات الموجودة في الملف. تأكد من تصدير نسخة احتياطية أولاً قبل الاستيراد.
+            <strong>تنبيه:</strong> الاستيراد سيستبدل جميع البيانات الحالية بالبيانات الموجودة في الملف.
           </div>
         </div>
       </div>
@@ -945,7 +869,7 @@ body {
 <script> 
 const WANUM = '201224561525';
 const PASS_HASH = '50f8ec6e8468c2ed7cf4de94c459663c46a860fa67f17114e35652953386ecb4';
-const COMMISSION_RATE = 0.02; // 2%
+const COMMISSION_RATE = 0.05; // ✅ 5%
  
 const CAT_THEMES = {
   'تقويم':   { bg: 'linear-gradient(135deg,#e0e8ff,#c7d6ff)', icon: '🦷', color: '#2a4a9e' },
@@ -959,7 +883,6 @@ const CAT_THEMES = {
 const DEFAULT_THEME = { bg: 'linear-gradient(135deg,#eef2ff,#dce8ff)', icon: '📦', color: '#334155' };
  
 function getPlaceholderSVG(cat, size=120) {
-  const t = CAT_THEMES[cat] || DEFAULT_THEME;
   const svgs = {
     'تقويم': `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" fill="none"/><ellipse cx="60" cy="75" rx="28" ry="22" fill="#c7d6ff" stroke="#2a4a9e" stroke-width="2.5"/><path d="M38 75 Q42 55 55 52 Q60 50 65 52 Q78 55 82 75" fill="#e8eeff" stroke="#2a4a9e" stroke-width="2"/><circle cx="52" cy="65" r="4" fill="#2a4a9e" opacity="0.5"/><circle cx="68" cy="65" r="4" fill="#2a4a9e" opacity="0.5"/><rect x="44" y="40" width="3" height="14" rx="1.5" fill="#2a4a9e" transform="rotate(-10,44,40)"/><rect x="73" y="40" width="3" height="14" rx="1.5" fill="#2a4a9e" transform="rotate(10,73,40)"/></svg>`,
     'أندو': `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" fill="none"/><rect x="56" y="20" width="8" height="70" rx="4" fill="#f0b0b0" stroke="#b82020" stroke-width="1.5"/><polygon points="60,95 54,90 66,90" fill="#b82020"/><line x1="56" y1="35" x2="64" y2="35" stroke="#b82020" stroke-width="1.2"/><line x1="56" y1="45" x2="64" y2="45" stroke="#b82020" stroke-width="1.2"/><line x1="56" y1="55" x2="64" y2="55" stroke="#b82020" stroke-width="1.2"/><rect x="40" y="22" width="16" height="22" rx="4" fill="#fce8e8" stroke="#b82020" stroke-width="1.5"/><text x="48" y="38" font-size="10" text-anchor="middle" fill="#b82020" font-family="Arial">Rx</text></svg>`,
@@ -972,29 +895,87 @@ function getPlaceholderSVG(cat, size=120) {
   return svgs[cat] || `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" fill="none"/><rect x="35" y="28" width="50" height="60" rx="8" fill="#dce8ff" stroke="#334155" stroke-width="2"/><rect x="44" y="45" width="32" height="5" rx="2.5" fill="#334155" opacity="0.3"/><rect x="44" y="56" width="24" height="5" rx="2.5" fill="#334155" opacity="0.3"/><rect x="44" y="67" width="28" height="5" rx="2.5" fill="#334155" opacity="0.3"/></svg>`;
 }
  
-// ---- DATA ----
+// ---- DEFAULT DATA (مدمجة في الكود - تظهر لجميع المستخدمين) ----
 const DEFAULT_CATS = ['الكل','تقويم','أندو','جلدز','كمبوزيت','مستهلكات','زراعة','تشخيص'];
+ 
 const DEFAULT_PRODS = [
-  {id:1,name:'كيت تقويم سيراميكي كامل',code:'ORTH-001',price:1850,category:'تقويم',badge:'best'},
-  {id:2,name:'أسلاك نيتي تقويم 0.016',code:'ORTH-002',price:320,category:'تقويم',badge:''},
-  {id:3,name:'براكيت ميتال MBT 022',code:'ORTH-003',price:750,category:'تقويم',badge:''},
-  {id:4,name:'كيت فلور إيدج تقويم شفاف',code:'ORTH-004',price:5500,category:'تقويم',badge:'featured'},
-  {id:5,name:'فايلات ProTaper Gold',code:'ENDO-001',price:980,category:'أندو',badge:'best'},
-  {id:6,name:'أوبتشورايتر جودة عالية',code:'ENDO-002',price:1200,category:'أندو',badge:''},
-  {id:7,name:'جلدز لاتكس خالي من البودرة M',code:'GLOVE-001',price:185,category:'جلدز',badge:''},
-  {id:8,name:'جلدز نيتريل أسود L',code:'GLOVE-002',price:220,category:'جلدز',badge:'new'},
-  {id:9,name:'كمبوزيت روبي سيرام A2',code:'COMP-001',price:650,category:'كمبوزيت',badge:'best'},
-  {id:10,name:'كمبوزيت 3M Filtek Z350 A3',code:'COMP-002',price:890,category:'كمبوزيت',badge:''},
-  {id:11,name:'بوند سيلفي سيلف إيتش',code:'COMP-003',price:420,category:'كمبوزيت',badge:''},
-  {id:12,name:'إبر تخدير كارب مع سرنجة',code:'CONS-001',price:95,category:'مستهلكات',badge:''},
-  {id:13,name:'أمالغام كبسولات GS-80',code:'CONS-002',price:1100,category:'مستهلكات',badge:''},
-  {id:14,name:'قطن رولز طبي معقم',code:'CONS-003',price:45,category:'مستهلكات',badge:''},
-  {id:15,name:'مبارد تشكيل كمبوزيت',code:'CONS-004',price:290,category:'مستهلكات',badge:''},
-  {id:16,name:'مزيل جير بالتراسونيك NSK',code:'CONS-005',price:3200,category:'مستهلكات',badge:'featured'},
-  {id:17,name:'إمبلانت ستراومان SLA 4.1mm',code:'IMP-001',price:8500,category:'زراعة',badge:'featured'},
-  {id:18,name:'أبتمنت زراعة أفيلا 3.5mm',code:'IMP-002',price:2200,category:'زراعة',badge:''},
-  {id:19,name:'كاميرا داخل الفم WIFI',code:'DIAG-001',price:4500,category:'تشخيص',badge:'new'},
-  {id:20,name:'مرايا تشخيص ستاينلس ستيل',code:'DIAG-002',price:150,category:'تشخيص',badge:''},
+  // تقويم
+  {id:1,  name:'كيت تقويم سيراميكي كامل',         code:'ORTH-001', price:1850, category:'تقويم',     badge:'best'},
+  {id:2,  name:'أسلاك نيتي تقويم 0.016',            code:'ORTH-002', price:320,  category:'تقويم',     badge:''},
+  {id:3,  name:'براكيت ميتال MBT 022',              code:'ORTH-003', price:750,  category:'تقويم',     badge:''},
+  {id:4,  name:'كيت فلور إيدج تقويم شفاف',          code:'ORTH-004', price:5500, category:'تقويم',     badge:'featured'},
+  {id:5,  name:'أسلاك ستانلس ستيل 0.018',           code:'ORTH-005', price:280,  category:'تقويم',     badge:''},
+  {id:6,  name:'مواد لصق براكيت لايت كيور',          code:'ORTH-006', price:420,  category:'تقويم',     badge:''},
+  {id:7,  name:'بند أورثو إليسيتك ستاندرد',         code:'ORTH-007', price:95,   category:'تقويم',     badge:''},
+  {id:8,  name:'كيت توتال أورثو بريميوم',           code:'ORTH-008', price:2800, category:'تقويم',     badge:'new'},
+  {id:9,  name:'براكيت توربو أنتيريور',             code:'ORTH-009', price:650,  category:'تقويم',     badge:''},
+  {id:10, name:'ريتينر وير كامل سيليكون',           code:'ORTH-010', price:180,  category:'تقويم',     badge:''},
+  // أندو
+  {id:11, name:'فايلات ProTaper Gold',              code:'ENDO-001', price:980,  category:'أندو',      badge:'best'},
+  {id:12, name:'أوبتشورايتر جودة عالية',            code:'ENDO-002', price:1200, category:'أندو',      badge:''},
+  {id:13, name:'فايلات روتاري ويف ون',              code:'ENDO-003', price:850,  category:'أندو',      badge:'new'},
+  {id:14, name:'بابر بوينت ستيريل 04',              code:'ENDO-004', price:65,   category:'أندو',      badge:''},
+  {id:15, name:'إيريجيشن نيدل 30G',                code:'ENDO-005', price:45,   category:'أندو',      badge:''},
+  {id:16, name:'جتا-فيلا بوكس كامل',               code:'ENDO-006', price:1600, category:'أندو',      badge:'featured'},
+  {id:17, name:'فايلات هاند K-Files #15-40',        code:'ENDO-007', price:120,  category:'أندو',      badge:''},
+  {id:18, name:'سيلر AH Plus أندو',                code:'ENDO-008', price:680,  category:'أندو',      badge:''},
+  {id:19, name:'سوداليس EDTA 17%',                 code:'ENDO-009', price:95,   category:'أندو',      badge:''},
+  {id:20, name:'أبكس لوكيتر رقمي Root ZX',          code:'ENDO-010', price:3400, category:'أندو',      badge:'featured'},
+  // جلدز
+  {id:21, name:'جلدز لاتكس خالي من البودرة M',      code:'GLOVE-001',price:185,  category:'جلدز',      badge:''},
+  {id:22, name:'جلدز نيتريل أسود L',               code:'GLOVE-002',price:220,  category:'جلدز',      badge:'new'},
+  {id:23, name:'جلدز لاتكس معقمة جراحية 7.5',       code:'GLOVE-003',price:350,  category:'جلدز',      badge:''},
+  {id:24, name:'جلدز نيتريل شفاف S',               code:'GLOVE-004',price:200,  category:'جلدز',      badge:''},
+  {id:25, name:'جلدز نيتريل XL مقاوم',             code:'GLOVE-005',price:240,  category:'جلدز',      badge:''},
+  {id:26, name:'جلدز فينيل اقتصادي M',             code:'GLOVE-006',price:130,  category:'جلدز',      badge:''},
+  {id:27, name:'جلدز نيتريل كيمياء مقاومة',         code:'GLOVE-007',price:290,  category:'جلدز',      badge:''},
+  // كمبوزيت
+  {id:28, name:'كمبوزيت روبي سيرام A2',             code:'COMP-001', price:650,  category:'كمبوزيت',   badge:'best'},
+  {id:29, name:'كمبوزيت 3M Filtek Z350 A3',         code:'COMP-002', price:890,  category:'كمبوزيت',   badge:''},
+  {id:30, name:'بوند سيلفي سيلف إيتش',             code:'COMP-003', price:420,  category:'كمبوزيت',   badge:''},
+  {id:31, name:'كمبوزيت فيلتيك سوبريم XTE',        code:'COMP-004', price:950,  category:'كمبوزيت',   badge:'featured'},
+  {id:32, name:'كمبوزيت Herculite Ultra A1',        code:'COMP-005', price:780,  category:'كمبوزيت',   badge:''},
+  {id:33, name:'بوند أدبير سيلف إيتش 2',            code:'COMP-006', price:380,  category:'كمبوزيت',   badge:''},
+  {id:34, name:'فلو كمبوزيت A2 سيرنج',             code:'COMP-007', price:490,  category:'كمبوزيت',   badge:''},
+  {id:35, name:'إيتش جيل 37% سيرنج',              code:'COMP-008', price:85,   category:'كمبوزيت',   badge:''},
+  {id:36, name:'بوليشينج كيت كمبوزيت سوفليكس',     code:'COMP-009', price:560,  category:'كمبوزيت',   badge:''},
+  {id:37, name:'كمبوزيت ناانوهايبريد B1',           code:'COMP-010', price:720,  category:'كمبوزيت',   badge:'new'},
+  // مستهلكات
+  {id:38, name:'إبر تخدير كارب مع سرنجة',           code:'CONS-001', price:95,   category:'مستهلكات',  badge:''},
+  {id:39, name:'أمالغام كبسولات GS-80',             code:'CONS-002', price:1100, category:'مستهلكات',  badge:''},
+  {id:40, name:'قطن رولز طبي معقم',                code:'CONS-003', price:45,   category:'مستهلكات',  badge:''},
+  {id:41, name:'مبارد تشكيل كمبوزيت',              code:'CONS-004', price:290,  category:'مستهلكات',  badge:''},
+  {id:42, name:'مزيل جير بالتراسونيك NSK',          code:'CONS-005', price:3200, category:'مستهلكات',  badge:'featured'},
+  {id:43, name:'كمامات N95 طبية علبة 20',           code:'CONS-006', price:140,  category:'مستهلكات',  badge:''},
+  {id:44, name:'مناديل تعقيم كحول 70%',            code:'CONS-007', price:65,   category:'مستهلكات',  badge:''},
+  {id:45, name:'أكياس تعقيم بخار علبة 200',        code:'CONS-008', price:110,  category:'مستهلكات',  badge:''},
+  {id:46, name:'مواد حشو جلاس أيونومر كيماوي',      code:'CONS-009', price:340,  category:'مستهلكات',  badge:''},
+  {id:47, name:'كرات قطن معقمة بوكس',              code:'CONS-010', price:55,   category:'مستهلكات',  badge:''},
+  {id:48, name:'بكرة حرير طبي معقمة',              code:'CONS-011', price:38,   category:'مستهلكات',  badge:''},
+  {id:49, name:'صواني فحص معقمة ستيريل',           code:'CONS-012', price:185,  category:'مستهلكات',  badge:''},
+  {id:50, name:'سرنجات مياه بلاستيك معقمة',        code:'CONS-013', price:42,   category:'مستهلكات',  badge:''},
+  {id:51, name:'ضوء كيور LED لايت 1200mW',          code:'CONS-014', price:1800, category:'مستهلكات',  badge:'best'},
+  {id:52, name:'طبق خلط سيليكون مزدوج',            code:'CONS-015', price:75,   category:'مستهلكات',  badge:''},
+  {id:53, name:'مجرفة سيمنت ستيريل ستيل',          code:'CONS-016', price:120,  category:'مستهلكات',  badge:''},
+  {id:54, name:'فرشاة ميكروتيب أصفر 100',          code:'CONS-017', price:50,   category:'مستهلكات',  badge:''},
+  {id:55, name:'فلاشر بيروكسيد للتنظيف',           code:'CONS-018', price:90,   category:'مستهلكات',  badge:''},
+  {id:56, name:'مطاط داي 5×5 حزمة',               code:'CONS-019', price:115,  category:'مستهلكات',  badge:''},
+  {id:57, name:'كلامب رابر داي فريمي',              code:'CONS-020', price:850,  category:'مستهلكات',  badge:''},
+  // زراعة
+  {id:58, name:'إمبلانت ستراومان SLA 4.1mm',        code:'IMP-001',  price:8500, category:'زراعة',     badge:'featured'},
+  {id:59, name:'أبتمنت زراعة أفيلا 3.5mm',          code:'IMP-002',  price:2200, category:'زراعة',     badge:''},
+  {id:60, name:'إمبلانت تيتانيوم نوبل بيوكير',      code:'IMP-003',  price:7200, category:'زراعة',     badge:'featured'},
+  {id:61, name:'بون جراف Bio-Oss 0.5g',             code:'IMP-004',  price:1800, category:'زراعة',     badge:''},
+  {id:62, name:'غشاء Bio-Gide لإعادة تشكيل العظم', code:'IMP-005',  price:2400, category:'زراعة',     badge:''},
+  {id:63, name:'هيل كاب سيليكون مؤقت',             code:'IMP-006',  price:350,  category:'زراعة',     badge:''},
+  {id:64, name:'موتور زراعة إيمبلانت فيزيولوجي',    code:'IMP-007',  price:18000,category:'زراعة',     badge:'featured'},
+  // تشخيص
+  {id:65, name:'كاميرا داخل الفم WIFI',            code:'DIAG-001', price:4500, category:'تشخيص',     badge:'new'},
+  {id:66, name:'مرايا تشخيص ستاينلس ستيل',         code:'DIAG-002', price:150,  category:'تشخيص',     badge:''},
+  {id:67, name:'مجساس بيريودونتال UNC-15',          code:'DIAG-003', price:280,  category:'تشخيص',     badge:''},
+  {id:68, name:'مجموعة فحص أساسية 5 قطع',          code:'DIAG-004', price:420,  category:'تشخيص',     badge:''},
+  {id:69, name:'مصور رقمي RVG سينسور',              code:'DIAG-005', price:12000,category:'تشخيص',     badge:'featured'},
+  {id:70, name:'شارة إكسراي حامية من الأشعة',       code:'DIAG-006', price:95,   category:'تشخيص',     badge:''},
 ];
  
 // ---- STATE ----
@@ -1003,26 +984,41 @@ let activeCat = 'الكل', query = '', viewMode = 'grid';
 let currentProd = null, editId = null, adminImgData = null;
 let viewCounts = {}, adminChart = null, salesChartInst = null;
 let ordersToday = 0;
-let salesLog = []; // NEW: array of {id, date, customer, phone, total, items, commission}
+let salesLog = [];
  
 function init() {
+  const sc2 = localStorage.getItem('ds_cart');
+  const sv  = localStorage.getItem('ds_views');
+  const so  = localStorage.getItem('ds_orders');
+  const sl  = localStorage.getItem('ds_sales_log');
+ 
+  // ✅ المنتجات والفئات: نبدأ دائماً من الـ defaults المدمجة في الكود
+  // ثم نطبّق التعديلات المحفوظة في localStorage فوقها (إن وجدت)
   const sp = localStorage.getItem('ds_prods');
   const sc = localStorage.getItem('ds_cats');
-  const sc2 = localStorage.getItem('ds_cart');
-  const sv = localStorage.getItem('ds_views');
-  const so = localStorage.getItem('ds_orders');
-  const sl = localStorage.getItem('ds_sales_log');
  
-  cats = sc ? JSON.parse(sc) : [...DEFAULT_CATS];
-  prods = sp ? JSON.parse(sp) : DEFAULT_PRODS.map(p=>({...p,image:null}));
-  cart = sc2 ? JSON.parse(sc2) : [];
-  viewCounts = sv ? JSON.parse(sv) : {};
-  ordersToday = so ? parseInt(so) : 0;
-  salesLog = sl ? JSON.parse(sl) : [];
+  // إذا كانت هناك بيانات محفوظة ولها نفس عدد المنتجات أو أكثر → استخدمها
+  // إذا لا → استخدم الافتراضي المدمج
+  if (sp) {
+    const saved = JSON.parse(sp);
+    // دمج: الافتراضي أساس، والمحفوظ يُضاف فوقه (المنتجات المضافة من الأدمن)
+    const savedIds = new Set(saved.map(p => p.id));
+    const defaultFiltered = DEFAULT_PRODS.filter(p => !savedIds.has(p.id));
+    prods = [...DEFAULT_PRODS.map(dp => {
+      const s = saved.find(x => x.id === dp.id);
+      return s ? s : dp; // إذا تم تعديل منتج أصلي خذ النسخة المعدّلة
+    }), ...saved.filter(p => !DEFAULT_PRODS.find(d => d.id === p.id))];
+  } else {
+    prods = DEFAULT_PRODS.map(p => ({...p, image: null}));
+  }
  
-  if(!sp) saveProd();
-  if(!sc) saveCats();
+  cats        = sc  ? JSON.parse(sc)   : [...DEFAULT_CATS];
+  cart        = sc2 ? JSON.parse(sc2)  : [];
+  viewCounts  = sv  ? JSON.parse(sv)   : {};
+  ordersToday = so  ? parseInt(so)     : 0;
+  salesLog    = sl  ? JSON.parse(sl)   : [];
  
+  saveProd(); saveCats();
   renderCats(); renderProds(); updateBadge();
  
   setTimeout(() => {
@@ -1033,10 +1029,10 @@ function init() {
 }
  
 function saveProd() { localStorage.setItem('ds_prods', JSON.stringify(prods)); }
-function saveCats() { localStorage.setItem('ds_cats', JSON.stringify(cats)); }
-function saveCart() { localStorage.setItem('ds_cart', JSON.stringify(cart)); }
-function saveViews() { localStorage.setItem('ds_views', JSON.stringify(viewCounts)); }
-function saveSalesLog() { localStorage.setItem('ds_sales_log', JSON.stringify(salesLog)); }
+function saveCats() { localStorage.setItem('ds_cats',  JSON.stringify(cats));  }
+function saveCart() { localStorage.setItem('ds_cart',  JSON.stringify(cart));  }
+function saveViews(){ localStorage.setItem('ds_views', JSON.stringify(viewCounts)); }
+function saveSalesLog(){ localStorage.setItem('ds_sales_log', JSON.stringify(salesLog)); }
  
 // ---- CATEGORIES ----
 function renderCats() {
@@ -1077,8 +1073,8 @@ function getFiltered() {
  
 // ---- BADGE HTML ----
 function badgeHTML(b) {
-  if(b==='best') return `<span class="badge-best"><i class="fa-solid fa-fire" style="font-size:9px;"></i> الأكثر مبيعاً</span>`;
-  if(b==='new') return `<span class="badge-new">✦ جديد</span>`;
+  if(b==='best')     return `<span class="badge-best"><i class="fa-solid fa-fire" style="font-size:9px;"></i> الأكثر مبيعاً</span>`;
+  if(b==='new')      return `<span class="badge-new">✦ جديد</span>`;
   if(b==='featured') return `<span class="badge-featured"><i class="fa-solid fa-star" style="font-size:9px;"></i> مميز</span>`;
   return '';
 }
@@ -1109,6 +1105,7 @@ function cardHTML(p) {
     : `<div class="pimg-art">${getPlaceholderSVG(p.category, 90)}</div>`;
   return `
     <div class="pcard" onclick="openDetail(${p.id})">
+      <div class="pcard-shine"></div>
       <div class="pimg" style="background:${t.bg};">
         ${imgContent}
         <span class="cat-label">${p.category}</span>
@@ -1158,9 +1155,9 @@ function openDetail(id) {
     ? `<img src="${p.image}" alt="${p.name}">`
     : getPlaceholderSVG(p.category, 160);
  
-  document.getElementById('dName').textContent = p.name;
-  document.getElementById('dCode').textContent = p.code;
-  document.getElementById('dCat').textContent = p.category;
+  document.getElementById('dName').textContent  = p.name;
+  document.getElementById('dCode').textContent  = p.code;
+  document.getElementById('dCat').textContent   = p.category;
   document.getElementById('dPrice').textContent = `${Number(p.price).toLocaleString('ar-EG')} جنيه`;
  
   document.getElementById('homePage').classList.remove('active');
@@ -1192,7 +1189,7 @@ function updateBadge() {
   const el = document.getElementById('cartBadge');
   el.textContent = t; el.style.display = t>0?'flex':'none';
 }
-function openCart() { renderCart(); document.getElementById('cartOverlay').classList.add('open'); }
+function openCart()  { renderCart(); document.getElementById('cartOverlay').classList.add('open'); }
 function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
 function renderCart() {
   const body = document.getElementById('cartBody');
@@ -1230,35 +1227,33 @@ function chQty(id, d) {
 }
  
 // ---- CHECKOUT ----
-function openCheckout() { closeCart(); document.getElementById('checkoutOverlay').classList.add('open'); }
+function openCheckout()  { closeCart(); document.getElementById('checkoutOverlay').classList.add('open'); }
 function closeCheckout() { document.getElementById('checkoutOverlay').classList.remove('open'); }
 function sendOrder() {
-  const name = document.getElementById('cName').value.trim();
+  const name  = document.getElementById('cName').value.trim();
   const phone = document.getElementById('cPhone').value.trim();
-  const addr = document.getElementById('cAddr').value.trim();
-  const pay = document.getElementById('cPay').value;
+  const addr  = document.getElementById('cAddr').value.trim();
+  const pay   = document.getElementById('cPay').value;
   if(!name||!phone) { toast('يرجى إدخال الاسم ورقم الهاتف'); return; }
  
   const items = cart.map(c=>`• ${c.name} (${c.code}) × ${c.qty} = ${Number(c.price*c.qty).toLocaleString('ar-EG')} جنيه`).join('\n');
   const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
-  const msg = `🛒 *طلب جديد من دليل الشروق*\n\n👤 ${name}\n📱 ${phone}\n📍 ${addr||'غير محدد'}\n💳 ${pay}\n\n📦 *المنتجات:*\n${items}\n\n💰 *الإجمالي: ${Number(total).toLocaleString('ar-EG')} جنيه*\n\nشكراً لتعاملكم مع دليل الشروق 🦷`;
+  const msg   = `🛒 *طلب جديد من دليل الشروق*\n\n👤 ${name}\n📱 ${phone}\n📍 ${addr||'غير محدد'}\n💳 ${pay}\n\n📦 *المنتجات:*\n${items}\n\n💰 *الإجمالي: ${Number(total).toLocaleString('ar-EG')} جنيه*\n\nشكراً لتعاملكم مع دليل الشروق 🦷`;
   window.open(`https://wa.me/${WANUM}?text=${encodeURIComponent(msg)}`, '_blank');
  
-  // ---- RECORD SALE ----
   const saleEntry = {
-    orderId: Date.now(),
-    date: new Date().toISOString(),
-    customer: name,
-    phone: phone,
-    address: addr || '',
-    payment: pay,
-    items: cart.map(c=>({name:c.name, code:c.code, qty:c.qty, price:c.price})),
-    total: total,
+    orderId:    Date.now(),
+    date:       new Date().toISOString(),
+    customer:   name,
+    phone:      phone,
+    address:    addr || '',
+    payment:    pay,
+    items:      cart.map(c=>({name:c.name, code:c.code, qty:c.qty, price:c.price})),
+    total:      total,
     commission: Math.round(total * COMMISSION_RATE)
   };
-  salesLog.unshift(saleEntry); // newest first
+  salesLog.unshift(saleEntry);
   saveSalesLog();
- 
   ordersToday++;
   localStorage.setItem('ds_orders', ordersToday);
   cart=[]; saveCart(); updateBadge(); closeCheckout();
@@ -1287,8 +1282,7 @@ async function checkPass() {
   }
 }
 function openAdmin() {
-  renderStats(); renderAdminList(); renderAdminCats(); populateCatSel();
-  resetAddForm();
+  renderStats(); renderAdminList(); renderAdminCats(); populateCatSel(); resetAddForm();
   document.getElementById('adminOverlay').classList.add('open');
 }
 function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
@@ -1298,16 +1292,15 @@ function switchTab(t) {
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('on', tabs[i]===t));
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('on'));
   document.getElementById(`tab-${t}`).classList.add('on');
-  if(t==='stats') renderStats();
-  if(t==='sales') renderSalesTab();
+  if(t==='stats')  renderStats();
+  if(t==='sales')  renderSalesTab();
   if(t==='manage') renderAdminList();
-  if(t==='cats') renderAdminCats();
+  if(t==='cats')   renderAdminCats();
   if(t==='backup') renderBackupTab();
 }
  
 function renderStats() {
-  const total = prods.reduce((s,p)=>s+p.price,0);
-  const avgP = prods.length ? Math.round(total/prods.length) : 0;
+  const total      = prods.reduce((s,p)=>s+p.price,0);
   const totalSales = salesLog.reduce((s,o)=>s+o.total,0);
   document.getElementById('statsGrid').innerHTML = `
     <div class="stat-card"><div class="stat-num">${prods.length}</div><div class="stat-lbl">إجمالي المنتجات</div></div>
@@ -1318,20 +1311,14 @@ function renderStats() {
   const catCounts = {};
   prods.forEach(p=>{ catCounts[p.category]=(catCounts[p.category]||0)+1; });
   const labels = Object.keys(catCounts);
-  const data = Object.values(catCounts);
+  const data   = Object.values(catCounts);
  
   if(adminChart) adminChart.destroy();
   const ctx = document.getElementById('adminChart').getContext('2d');
   adminChart = new Chart(ctx, {
     type: 'doughnut',
-    data: {
-      labels,
-      datasets:[{ data, backgroundColor:['#2a4a9e','#b82020','#2e7d32','#a07828','#7b3fa0','#1565c0','#00796b','#455a64'], borderWidth: 2, borderColor: '#fff' }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:true,
-      plugins:{ legend:{ position:'right', labels:{ font:{family:'Tajawal',size:12}, color:'#334155', boxWidth:12 } } }
-    }
+    data: { labels, datasets:[{ data, backgroundColor:['#2a4a9e','#b82020','#2e7d32','#a07828','#7b3fa0','#1565c0','#00796b','#455a64'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:true, plugins:{ legend:{ position:'right', labels:{ font:{family:'Tajawal',size:12}, color:'#334155', boxWidth:12 } } } }
   });
  
   const sorted = Object.entries(viewCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
@@ -1340,8 +1327,7 @@ function renderStats() {
     return;
   }
   document.getElementById('topViewed').innerHTML = sorted.map(([id,v])=>{
-    const p = prods.find(x=>x.id==id);
-    if(!p) return '';
+    const p = prods.find(x=>x.id==id); if(!p) return '';
     return `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);">
       <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;"></div>
       <div style="flex:1;font-size:13px;font-weight:600;">${p.name}</div>
@@ -1353,35 +1339,28 @@ function renderStats() {
 // ---- SALES TAB ----
 function renderSalesTab() {
   const totalSales = salesLog.reduce((s,o)=>s+o.total, 0);
-  const totalComm = Math.round(totalSales * COMMISSION_RATE);
+  const totalComm  = Math.round(totalSales * COMMISSION_RATE);
  
   document.getElementById('commTotalSales').textContent = Number(totalSales).toLocaleString('ar-EG') + ' جنيه';
   document.getElementById('commOrdersCount').textContent = salesLog.length;
   document.getElementById('commValue').textContent = Number(totalComm).toLocaleString('ar-EG') + ' جنيه';
  
-  // This month stats
   const now = new Date();
   const thisMonth = now.getMonth(); const thisYear = now.getFullYear();
-  const thisMonthOrders = salesLog.filter(o => {
-    const d = new Date(o.date);
-    return d.getMonth()===thisMonth && d.getFullYear()===thisYear;
-  });
-  const thisMonthTotal = thisMonthOrders.reduce((s,o)=>s+o.total, 0);
-  document.getElementById('salesThisMonth').textContent = thisMonthOrders.length;
+  const thisMonthOrders = salesLog.filter(o => { const d=new Date(o.date); return d.getMonth()===thisMonth && d.getFullYear()===thisYear; });
+  const thisMonthTotal  = thisMonthOrders.reduce((s,o)=>s+o.total, 0);
+  document.getElementById('salesThisMonth').textContent      = thisMonthOrders.length;
   document.getElementById('salesTotalThisMonth').textContent = Number(thisMonthTotal).toLocaleString('ar-EG');
-  document.getElementById('salesCommThisMonth').textContent = Number(Math.round(thisMonthTotal * COMMISSION_RATE)).toLocaleString('ar-EG');
+  document.getElementById('salesCommThisMonth').textContent  = Number(Math.round(thisMonthTotal * COMMISSION_RATE)).toLocaleString('ar-EG');
  
-  // Monthly chart - last 6 months
-  const monthLabels = [];
-  const monthTotals = [];
-  const monthComms = [];
+  const arMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const monthLabels=[], monthTotals=[], monthComms=[];
   for(let i=5; i>=0; i--) {
-    const d = new Date(thisYear, thisMonth - i, 1);
-    const mn = d.getMonth(); const yr = d.getFullYear();
-    const arMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    const d=new Date(thisYear, thisMonth - i, 1);
+    const mn=d.getMonth(); const yr=d.getFullYear();
     monthLabels.push(arMonths[mn]);
-    const mOrders = salesLog.filter(o => { const od=new Date(o.date); return od.getMonth()===mn && od.getFullYear()===yr; });
-    const mTotal = mOrders.reduce((s,o)=>s+o.total, 0);
+    const mOrders = salesLog.filter(o=>{ const od=new Date(o.date); return od.getMonth()===mn && od.getFullYear()===yr; });
+    const mTotal  = mOrders.reduce((s,o)=>s+o.total, 0);
     monthTotals.push(mTotal);
     monthComms.push(Math.round(mTotal * COMMISSION_RATE));
   }
@@ -1390,32 +1369,23 @@ function renderSalesTab() {
   const ctx2 = document.getElementById('salesChart').getContext('2d');
   salesChartInst = new Chart(ctx2, {
     type: 'bar',
-    data: {
-      labels: monthLabels,
-      datasets: [
-        { label: 'المبيعات (جنيه)', data: monthTotals, backgroundColor: 'rgba(15,30,61,0.7)', borderRadius: 6 },
-        { label: 'نسبتك 2% (جنيه)', data: monthComms, backgroundColor: 'rgba(201,168,76,0.8)', borderRadius: 6 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { labels: { font: {family:'Tajawal',size:11}, color:'#334155', boxWidth:10 } } },
-      scales: {
-        x: { ticks: { font:{family:'Tajawal',size:11}, color:'#94a3b8' }, grid:{display:false} },
-        y: { ticks: { font:{family:'Tajawal',size:10}, color:'#94a3b8' }, grid:{color:'rgba(0,0,0,0.05)'} }
-      }
+    data: { labels: monthLabels, datasets:[
+      { label:'المبيعات (جنيه)', data:monthTotals, backgroundColor:'rgba(15,30,61,0.7)', borderRadius:6 },
+      { label:'نسبتك 5% (جنيه)', data:monthComms,  backgroundColor:'rgba(201,168,76,0.8)', borderRadius:6 }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:true,
+      plugins:{ legend:{ labels:{ font:{family:'Tajawal',size:11}, color:'#334155', boxWidth:10 } } },
+      scales:{ x:{ ticks:{font:{family:'Tajawal',size:11},color:'#94a3b8'}, grid:{display:false} }, y:{ ticks:{font:{family:'Tajawal',size:10},color:'#94a3b8'}, grid:{color:'rgba(0,0,0,0.05)'} } }
     }
   });
  
-  // Sales log list
   if(salesLog.length===0) {
     document.getElementById('salesLog').innerHTML = `<div class="no-sales"><i class="fa-solid fa-receipt"></i><p>لا توجد مبيعات مسجلة بعد</p></div>`;
     return;
   }
-  const arMonths2 = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
   document.getElementById('salesLog').innerHTML = salesLog.slice(0,50).map(o => {
     const d = new Date(o.date);
-    const dateStr = `${d.getDate()} ${arMonths2[d.getMonth()]} ${d.getFullYear()} - ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+    const dateStr = `${d.getDate()} ${arMonths[d.getMonth()]} ${d.getFullYear()} - ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
     return `<div class="sale-row">
       <div class="sale-icon"><i class="fa-solid fa-check"></i></div>
       <div class="sale-info">
@@ -1432,90 +1402,49 @@ function renderSalesTab() {
  
 function clearSalesLog() {
   if(!confirm('هل أنت متأكد من مسح جميع سجلات المبيعات؟ لا يمكن التراجع.')) return;
-  salesLog = []; saveSalesLog(); renderSalesTab();
+  salesLog=[]; saveSalesLog(); renderSalesTab();
   toast('✓ تم مسح سجل المبيعات');
 }
  
-// ---- BACKUP / EXPORT / IMPORT ----
+// ---- BACKUP ----
 function exportBackup() {
-  const data = {
-    version: '2.0',
-    exportDate: new Date().toISOString(),
-    appName: 'دليل الشروق - Dr. Bilal Al-Najashi',
-    products: prods,
-    categories: cats,
-    viewCounts: viewCounts,
-    salesLog: salesLog,
-    ordersToday: ordersToday
-  };
+  const data = { version:'2.0', exportDate:new Date().toISOString(), appName:'دليل الشروق - Dr. Bilal Al-Najashi', products:prods, categories:cats, viewCounts, salesLog, ordersToday };
   const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const dateStr = new Date().toISOString().slice(0,10);
-  a.href = url;
-  a.download = `daleel-shrouk-backup-${dateStr}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const blob = new Blob([json], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `daleel-shrouk-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
   toast('✓ تم تصدير النسخة الاحتياطية');
   renderBackupTab();
 }
  
 function importBackup(input) {
-  const file = input.files[0];
-  if(!file) return;
+  const file = input.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if(!data.products || !data.categories) {
-        toast('❌ ملف غير صالح - تأكد من اختيار ملف النسخة الاحتياطية الصحيح');
-        return;
-      }
+      if(!data.products || !data.categories) { toast('❌ ملف غير صالح'); return; }
       if(!confirm(`سيتم استبدال جميع البيانات الحالية بـ:\n• ${data.products.length} منتج\n• ${(data.salesLog||[]).length} سجل مبيعات\n\nهل تريد المتابعة؟`)) return;
- 
-      prods = data.products;
-      cats = data.categories;
-      viewCounts = data.viewCounts || {};
-      salesLog = data.salesLog || [];
-      ordersToday = data.ordersToday || 0;
- 
-      saveProd(); saveCats(); saveViews(); saveSalesLog();
-      localStorage.setItem('ds_orders', ordersToday);
- 
+      prods=data.products; cats=data.categories; viewCounts=data.viewCounts||{}; salesLog=data.salesLog||[]; ordersToday=data.ordersToday||0;
+      saveProd(); saveCats(); saveViews(); saveSalesLog(); localStorage.setItem('ds_orders', ordersToday);
       renderCats(); renderProds(); updateBadge(); renderBackupTab();
       toast(`✓ تم استيراد البيانات بنجاح (${prods.length} منتج)`);
-    } catch(err) {
-      toast('❌ خطأ في قراءة الملف - تأكد من صحة الملف');
-    }
+    } catch(err) { toast('❌ خطأ في قراءة الملف'); }
   };
-  reader.readAsText(file);
-  input.value = '';
+  reader.readAsText(file); input.value='';
 }
  
 function renderBackupTab() {
-  const totalSales = salesLog.reduce((s,o)=>s+o.total, 0);
-  const estSize = Math.round(JSON.stringify({products:prods,categories:cats,salesLog,viewCounts}).length / 1024);
-  const lastExport = localStorage.getItem('ds_last_export');
- 
+  const totalSales = salesLog.reduce((s,o)=>s+o.total,0);
+  const estSize    = Math.round(JSON.stringify({products:prods,categories:cats,salesLog,viewCounts}).length / 1024);
   document.getElementById('backupSummary').innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);">
-        <div style="font-size:20px;font-weight:900;color:var(--navy);">${prods.length}</div>
-        <div style="font-size:11px;color:var(--text-3);">منتج مسجل</div>
-      </div>
-      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);">
-        <div style="font-size:20px;font-weight:900;color:var(--navy);">${salesLog.length}</div>
-        <div style="font-size:11px;color:var(--text-3);">سجل مبيعات</div>
-      </div>
-      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);">
-        <div style="font-size:20px;font-weight:900;color:var(--gold-dark);">${Number(totalSales).toLocaleString('ar-EG')}</div>
-        <div style="font-size:11px;color:var(--text-3);">إجمالي المبيعات (جنيه)</div>
-      </div>
-      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);">
-        <div style="font-size:20px;font-weight:900;color:var(--navy);">~${estSize} KB</div>
-        <div style="font-size:11px;color:var(--text-3);">حجم البيانات التقريبي</div>
-      </div>
+      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">${prods.length}</div><div style="font-size:11px;color:var(--text-3);">منتج مسجل</div></div>
+      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">${salesLog.length}</div><div style="font-size:11px;color:var(--text-3);">سجل مبيعات</div></div>
+      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--gold-dark);">${Number(totalSales).toLocaleString('ar-EG')}</div><div style="font-size:11px;color:var(--text-3);">إجمالي المبيعات (جنيه)</div></div>
+      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">~${estSize} KB</div><div style="font-size:11px;color:var(--text-3);">حجم البيانات التقريبي</div></div>
     </div>`;
 }
  
@@ -1525,36 +1454,29 @@ function renderAdminList() {
     ? `<div class="empty-state"><i class="fa-solid fa-box-open"></i><p>لا توجد منتجات</p></div>`
     : prods.map(p=>`
       <div class="ap-row">
-        <div class="ap-img" style="background:${(CAT_THEMES[p.category]||DEFAULT_THEME).bg};">
-          ${p.image ? `<img src="${p.image}">` : getPlaceholderSVG(p.category,36)}
-        </div>
-        <div class="ap-info">
-          <div class="ap-name">${p.name}</div>
-          <div class="ap-meta">${p.code} · ${p.category} · ${Number(p.price).toLocaleString('ar-EG')} جنيه</div>
-        </div>
+        <div class="ap-img" style="background:${(CAT_THEMES[p.category]||DEFAULT_THEME).bg};">${p.image ? `<img src="${p.image}">` : getPlaceholderSVG(p.category,36)}</div>
+        <div class="ap-info"><div class="ap-name">${p.name}</div><div class="ap-meta">${p.code} · ${p.category} · ${Number(p.price).toLocaleString('ar-EG')} جنيه</div></div>
         <div style="display:flex;gap:5px;">
           <button class="btn-edit" onclick="editProd(${p.id})"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn-del" onclick="delProd(${p.id})"><i class="fa-solid fa-trash"></i></button>
+          <button class="btn-del"  onclick="delProd(${p.id})"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>`).join('');
 }
  
 function editProd(id) {
-  const p = prods.find(x=>x.id===id);
-  if(!p) return;
+  const p = prods.find(x=>x.id===id); if(!p) return;
   editId=id; adminImgData=p.image||null;
   populateCatSel(p.category);
-  document.getElementById('pName').value=p.name;
-  document.getElementById('pCode').value=p.code;
-  document.getElementById('pPrice').value=p.price;
-  document.getElementById('pBadge').value=p.badge||'';
+  document.getElementById('pName').value  = p.name;
+  document.getElementById('pCode').value  = p.code;
+  document.getElementById('pPrice').value = p.price;
+  document.getElementById('pBadge').value = p.badge||'';
   const drop=document.getElementById('imgDrop');
   if(p.image) {
     const ex=drop.querySelector('img'); if(ex) ex.remove();
     const im=document.createElement('img'); im.src=p.image;
     drop.insertBefore(im, drop.querySelector('input'));
-    drop.querySelector('i').style.display='none';
-    drop.querySelector('p').style.display='none';
+    drop.querySelector('i').style.display='none'; drop.querySelector('p').style.display='none';
   }
   switchTab('add');
   document.getElementById('saveBtn').innerHTML='<i class="fa-solid fa-floppy-disk"></i> حفظ التعديلات';
@@ -1563,8 +1485,7 @@ function editProd(id) {
  
 function delProd(id) {
   if(!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
-  prods = prods.filter(p=>p.id!==id);
-  saveProd(); renderAdminList(); renderProds(); toast('✓ تم حذف المنتج');
+  prods=prods.filter(p=>p.id!==id); saveProd(); renderAdminList(); renderProds(); toast('✓ تم حذف المنتج');
 }
  
 function previewImg(input) {
@@ -1576,18 +1497,17 @@ function previewImg(input) {
     const ex=drop.querySelector('img'); if(ex) ex.remove();
     const im=document.createElement('img'); im.src=adminImgData;
     drop.insertBefore(im, drop.querySelector('input'));
-    drop.querySelector('i').style.display='none';
-    drop.querySelector('p').style.display='none';
+    drop.querySelector('i').style.display='none'; drop.querySelector('p').style.display='none';
   };
   r.readAsDataURL(file);
 }
  
 function saveProduct() {
-  const name=document.getElementById('pName').value.trim();
-  const code=document.getElementById('pCode').value.trim();
-  const price=parseFloat(document.getElementById('pPrice').value);
-  const cat=document.getElementById('pCat').value;
-  const badge=document.getElementById('pBadge').value;
+  const name  = document.getElementById('pName').value.trim();
+  const code  = document.getElementById('pCode').value.trim();
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const cat   = document.getElementById('pCat').value;
+  const badge = document.getElementById('pBadge').value;
   if(!name||!code||!price||!cat) { toast('يرجى ملء جميع الحقول'); return; }
   if(editId) {
     const p=prods.find(x=>x.id===editId);
@@ -1601,16 +1521,13 @@ function saveProduct() {
 }
  
 function resetAddForm() {
-  document.getElementById('pName').value='';
-  document.getElementById('pCode').value='';
-  document.getElementById('pPrice').value='';
-  document.getElementById('pBadge').value='';
+  document.getElementById('pName').value=''; document.getElementById('pCode').value='';
+  document.getElementById('pPrice').value=''; document.getElementById('pBadge').value='';
   adminImgData=null; editId=null;
   document.getElementById('saveBtn').innerHTML='<i class="fa-solid fa-plus"></i> حفظ المنتج';
   const drop=document.getElementById('imgDrop');
   const im=drop.querySelector('img'); if(im) im.remove();
-  drop.querySelector('i').style.display='';
-  drop.querySelector('p').style.display='';
+  drop.querySelector('i').style.display=''; drop.querySelector('p').style.display='';
   document.getElementById('adminImgIn').value='';
 }
  
@@ -1629,8 +1546,7 @@ function renderAdminCats() {
 }
  
 function addCat() {
-  const v=document.getElementById('newCat').value.trim();
-  if(!v) return;
+  const v=document.getElementById('newCat').value.trim(); if(!v) return;
   if(cats.includes(v)) { toast('هذه الفئة موجودة'); return; }
   cats.push(v); saveCats(); renderCats(); renderAdminCats(); populateCatSel();
   document.getElementById('newCat').value='';
@@ -1651,7 +1567,7 @@ function toast(msg) {
   setTimeout(()=>el.classList.remove('show'), 2500);
 }
  
-// ---- OVERLAY CLOSE ----
+// ---- OVERLAY CLOSE ON BACKDROP ----
 ['cartOverlay','checkoutOverlay','adminOverlay'].forEach(id=>{
   document.getElementById(id).addEventListener('click',e=>{ if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 });
@@ -1662,14 +1578,14 @@ init();
  
 <script> 
 const mdata = {
-  name:'دليل الشروق – Dr. Bilal Al-Najashi',short_name:'دليل الشروق',
-  display:'standalone',background_color:'#0f1e3d',theme_color:'#0f1e3d',
-  start_url:'/',orientation:'portrait',
+  name:'دليل الشروق – Dr. Bilal Al-Najashi', short_name:'دليل الشروق',
+  display:'standalone', background_color:'#0f1e3d', theme_color:'#0f1e3d',
+  start_url:'/', orientation:'portrait',
   icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%230f1e3d'/%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='120'%3E🦷%3C/text%3E%3C/svg%3E",sizes:'192x192',type:'image/svg+xml'}]
 };
 const bl=new Blob([JSON.stringify(mdata)],{type:'application/json'});
 const ml=URL.createObjectURL(bl);
-const lk=document.createElement('link');lk.rel='manifest';lk.href=ml;document.head.appendChild(lk);
+const lk=document.createElement('link'); lk.rel='manifest'; lk.href=ml; document.head.appendChild(lk);
 </script>
 </body>
 </html>
