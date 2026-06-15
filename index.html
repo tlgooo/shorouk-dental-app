@@ -1024,7 +1024,47 @@ const update = window.update;
 const remove = window.remove;
 const onValue = window.onValue;
 
-function init() {
+function function init() {
+  console.log('بدء التحميل...');
+  const prodsRef = ref(db, 'products');
+  const catsRef = ref(db, 'categories');
+  const viewsRef = ref(db, 'viewCounts');
+  const salesRef = ref(db, 'salesLog');
+  const cartRef = ref(db, 'cart');
+  
+  onValue(prodsRef, (snapshot) => {
+    console.log('بيانات المنتجات وصلت:', snapshot.val());
+    const data = snapshot.val();
+    prods = data ? Object.values(data) : [];
+    renderProds();
+  });
+  
+  onValue(catsRef, (snapshot) => {
+    console.log('بيانات الفئات وصلت:', snapshot.val());
+    const data = snapshot.val();
+    cats = data ? Object.values(data) : [...DEFAULT_CATS];
+    renderCats();
+  });
+  
+  onValue(viewsRef, (snapshot) => {
+    viewCounts = snapshot.val() || {};
+  });
+  
+  onValue(salesRef, (snapshot) => {
+    salesLog = snapshot.val() ? Object.values(snapshot.val()) : [];
+  });
+  
+  onValue(cartRef, (snapshot) => {
+    cart = snapshot.val() ? Object.values(snapshot.val()) : [];
+    updateBadge();
+  });
+  
+  setTimeout(() => {
+    const s = document.getElementById('splash');
+    s.classList.add('out');
+    setTimeout(() => s.remove(), 700);
+  }, 2000);
+} {
   // Load from Firebase
   const prodsRef = ref(db, 'products');
   const catsRef = ref(db, 'categories');
