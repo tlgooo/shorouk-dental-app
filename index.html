@@ -15,6 +15,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, get, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+window.ref = ref;
+window.set = set;
+window.get = get;
+window.push = push;
+window.update = update;
+window.remove = remove;
+window.onValue = onValue;
 const firebaseConfig = {
   apiKey: "AIzaSyCsgMuEv5KkuGwpSgH2usr0cl0_ObOG4-c",
   authDomain: "daleel-shrouk.firebaseapp.com",
@@ -1081,15 +1088,8 @@ let ordersToday = 0;
 let salesLog = [];
 
 // ---- FIREBASE REFS ----
-const db = window.db;
-const ref = window.ref;
-const set = window.set;
-const get = window.get;
-const push = window.push;
-const update = window.update;
-const remove = window.remove;
-const onValue = window.onValue;
 
+const db = window.db;
 function init() {
   // Load from Firebase
   const prodsRef = ref(db, 'products');
