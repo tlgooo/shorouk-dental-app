@@ -11,6 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 <style> 
 :root {
   --navy: #0f1e3d;
@@ -152,7 +156,7 @@ body {
 .view-btn.on { background: var(--navy); border-color: var(--navy); color: #fff; }
  
 /* ===========================
-   ANIMATED CARD GRID (NEW)
+   ANIMATED CARD GRID
 =========================== */
 .products-grid {
   display: grid;
@@ -160,7 +164,6 @@ body {
   gap: 16px;
 }
  
-/* Card base */
 .pcard {
   background: #fff;
   border-radius: 18px;
@@ -181,7 +184,6 @@ body {
 }
 .pcard:hover .pcard-shine { opacity: 1; }
  
-/* Shimmer overlay on hover */
 .pcard-shine {
   pointer-events: none;
   position: absolute; inset: 0;
@@ -189,7 +191,6 @@ body {
   opacity: 0; transition: opacity 0.35s ease; z-index: 2; border-radius: inherit;
 }
  
-/* Staggered entrance */
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(28px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0)   scale(1);    }
@@ -202,9 +203,9 @@ body {
 .pcard:nth-child(6)  { animation-delay: 0.18s }
 .pcard:nth-child(7)  { animation-delay: 0.21s }
 .pcard:nth-child(8)  { animation-delay: 0.24s }
-.pcard:nth-child(n+9){ animation-delay: 0.27s }
+.pcard:nth-child(9)  { animation-delay: 0.27s }
+.pcard:nth-child(n+10){ animation-delay: 0.30s }
  
-/* Image area */
 .pimg {
   width: 100%; height: 128px;
   display: flex; align-items: center; justify-content: center;
@@ -242,7 +243,6 @@ body {
   display: flex; align-items: center; gap: 3px;
 }
  
-/* Card body */
 .pbody { padding: 10px 12px 12px; }
 .pname {
   font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 2px;
@@ -252,7 +252,6 @@ body {
 .pprice { font-size: 16px; font-weight: 900; color: var(--gold-dark); }
 .pprice span { font-size: 11px; font-weight: 500; color: var(--text-3); }
  
-/* Hover-reveal action strip */
 .pactions {
   display: flex; gap: 6px; margin-top: 9px;
   transform: translateY(4px); opacity: 0.85;
@@ -720,6 +719,7 @@ body {
         <select class="fs" id="cPay">
           <option value="نقدي">نقدي عند الاستلام</option>
           <option value="تحويل بنكي">تحويل بنكي</option>
+          <option value="فودافون كاش">فودافون كاش</option>
           <option value="فوري">فوري</option>
           <option value="إنستا باي">إنستا باي</option>
         </select>
@@ -738,11 +738,11 @@ body {
     </div>
     <div class="tab-row">
       <button class="tab-btn on" onclick="switchTab('stats')">الإحصائيات</button>
-      <button class="tab-btn" onclick="switchTab('sales')">💰 المبيعات</button>
+      <button class="tab-btn" onclick="switchTab('sales')">المبيعات</button>
       <button class="tab-btn" onclick="switchTab('add')">إضافة</button>
       <button class="tab-btn" onclick="switchTab('manage')">المنتجات</button>
       <button class="tab-btn" onclick="switchTab('cats')">الفئات</button>
-      <button class="tab-btn" onclick="switchTab('backup')">💾 نسخ احتياطي</button>
+      <button class="tab-btn" onclick="switchTab('backup')">نسخ احتياطي</button>
     </div>
     <div class="sheet-body">
  
@@ -799,9 +799,9 @@ body {
             <label class="fl">تمييز المنتج</label>
             <select class="fs" id="pBadge">
               <option value="">بدون تمييز</option>
-              <option value="best">⭐ الأكثر مبيعاً</option>
-              <option value="new">🆕 جديد</option>
-              <option value="featured">✨ مميز</option>
+              <option value="best">الأكثر مبيعاً</option>
+              <option value="new">جديد</option>
+              <option value="featured">مميز</option>
             </select>
           </div>
           <button class="btn-save" id="saveBtn" onclick="saveProduct()"><i class="fa-solid fa-plus"></i> حفظ المنتج</button>
@@ -867,21 +867,41 @@ body {
 <div class="toast" id="toast"></div>
  
 <script> 
+// ===== CONFIGURATION =====
 const WANUM = '201224561525';
 const PASS_HASH = '50f8ec6e8468c2ed7cf4de94c459663c46a860fa67f17114e35652953386ecb4';
-const COMMISSION_RATE = 0.05; // ✅ 5%
- 
+const COMMISSION_RATE = 0.05; // 5%
+
+// ===== FIREBASE CONFIGURATION =====
+const firebaseConfig = {
+  apiKey: "AIzaSyCsgMuEv5KkuGwpSgH2usr0cl0_ObOG4-c",
+  authDomain: "daleel-shrouk.firebaseapp.com",
+  databaseURL: "https://daleel-shrouk-default-rtdb.firebaseio.com",
+  projectId: "daleel-shrouk",
+  storageBucket: "daleel-shrouk.firebasestorage.app",
+  messagingSenderId: "728060422060",
+  appId: "1:728060422060:web:dfdd795b291ee9f7b77c09",
+  measurementId: "G-3QSGVMMHV9"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const analytics = firebase.analytics();
+
+// ===== CATEGORY THEMES =====
 const CAT_THEMES = {
   'تقويم':   { bg: 'linear-gradient(135deg,#e0e8ff,#c7d6ff)', icon: '🦷', color: '#2a4a9e' },
-  'أندو':    { bg: 'linear-gradient(135deg,#fce8e8,#f9cccc)', icon: '📌', color: '#b82020' },
+  'أندو':    { bg: 'linear-gradient(135deg,#fce8e8,#f9cccc)', icon: '🦷', color: '#b82020' },
   'جلدز':   { bg: 'linear-gradient(135deg,#e8f5e9,#c8e6c9)', icon: '🧤', color: '#2e7d32' },
-  'كمبوزيت':{ bg: 'linear-gradient(135deg,#fff8e0,#ffeeb0)', icon: '💎', color: '#a07828' },
-  'مستهلكات':{ bg: 'linear-gradient(135deg,#f3e8ff,#e0c8ff)', icon: '🔧', color: '#7b3fa0' },
-  'زراعة':  { bg: 'linear-gradient(135deg,#e8f4fd,#c2e2f8)', icon: '🏅', color: '#1565c0' },
+  'كمبوزيت':{ bg: 'linear-gradient(135deg,#fff8e0,#ffeeb0)', icon: '🦷', color: '#a07828' },
+  'مستهلكات':{ bg: 'linear-gradient(135deg,#f3e8ff,#e0c8ff)', icon: '🧴', color: '#7b3fa0' },
+  'زراعة':  { bg: 'linear-gradient(135deg,#e8f4fd,#c2e2f8)', icon: '🦷', color: '#1565c0' },
   'تشخيص':  { bg: 'linear-gradient(135deg,#e0faf4,#b0f0e0)', icon: '🔬', color: '#00796b' },
 };
 const DEFAULT_THEME = { bg: 'linear-gradient(135deg,#eef2ff,#dce8ff)', icon: '📦', color: '#334155' };
- 
+
+// ===== PLACEHOLDER SVG =====
 function getPlaceholderSVG(cat, size=120) {
   const svgs = {
     'تقويم': `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" fill="none"/><ellipse cx="60" cy="75" rx="28" ry="22" fill="#c7d6ff" stroke="#2a4a9e" stroke-width="2.5"/><path d="M38 75 Q42 55 55 52 Q60 50 65 52 Q78 55 82 75" fill="#e8eeff" stroke="#2a4a9e" stroke-width="2"/><circle cx="52" cy="65" r="4" fill="#2a4a9e" opacity="0.5"/><circle cx="68" cy="65" r="4" fill="#2a4a9e" opacity="0.5"/><rect x="44" y="40" width="3" height="14" rx="1.5" fill="#2a4a9e" transform="rotate(-10,44,40)"/><rect x="73" y="40" width="3" height="14" rx="1.5" fill="#2a4a9e" transform="rotate(10,73,40)"/></svg>`,
@@ -894,10 +914,10 @@ function getPlaceholderSVG(cat, size=120) {
   };
   return svgs[cat] || `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" fill="none"/><rect x="35" y="28" width="50" height="60" rx="8" fill="#dce8ff" stroke="#334155" stroke-width="2"/><rect x="44" y="45" width="32" height="5" rx="2.5" fill="#334155" opacity="0.3"/><rect x="44" y="56" width="24" height="5" rx="2.5" fill="#334155" opacity="0.3"/><rect x="44" y="67" width="28" height="5" rx="2.5" fill="#334155" opacity="0.3"/></svg>`;
 }
- 
-// ---- DEFAULT DATA (مدمجة في الكود - تظهر لجميع المستخدمين) ----
+
+// ===== DEFAULT DATA =====
 const DEFAULT_CATS = ['الكل','تقويم','أندو','جلدز','كمبوزيت','مستهلكات','زراعة','تشخيص'];
- 
+
 const DEFAULT_PRODS = [
   // تقويم
   {id:1,  name:'كيت تقويم سيراميكي كامل',         code:'ORTH-001', price:1850, category:'تقويم',     badge:'best'},
@@ -977,72 +997,182 @@ const DEFAULT_PRODS = [
   {id:69, name:'مصور رقمي RVG سينسور',              code:'DIAG-005', price:12000,category:'تشخيص',     badge:'featured'},
   {id:70, name:'شارة إكسراي حامية من الأشعة',       code:'DIAG-006', price:95,   category:'تشخيص',     badge:''},
 ];
- 
-// ---- STATE ----
+
+// ===== STATE =====
 let prods = [], cats = [], cart = [];
 let activeCat = 'الكل', query = '', viewMode = 'grid';
 let currentProd = null, editId = null, adminImgData = null;
 let viewCounts = {}, adminChart = null, salesChartInst = null;
 let ordersToday = 0;
 let salesLog = [];
- 
-function init() {
-  const sc2 = localStorage.getItem('ds_cart');
-  const sv  = localStorage.getItem('ds_views');
-  const so  = localStorage.getItem('ds_orders');
-  const sl  = localStorage.getItem('ds_sales_log');
- 
-  // ✅ المنتجات والفئات: نبدأ دائماً من الـ defaults المدمجة في الكود
-  // ثم نطبّق التعديلات المحفوظة في localStorage فوقها (إن وجدت)
-  const sp = localStorage.getItem('ds_prods');
-  const sc = localStorage.getItem('ds_cats');
- 
-  // إذا كانت هناك بيانات محفوظة ولها نفس عدد المنتجات أو أكثر → استخدمها
-  // إذا لا → استخدم الافتراضي المدمج
-  if (sp) {
-    const saved = JSON.parse(sp);
-    // دمج: الافتراضي أساس، والمحفوظ يُضاف فوقه (المنتجات المضافة من الأدمن)
-    const savedIds = new Set(saved.map(p => p.id));
-    const defaultFiltered = DEFAULT_PRODS.filter(p => !savedIds.has(p.id));
-    prods = [...DEFAULT_PRODS.map(dp => {
-      const s = saved.find(x => x.id === dp.id);
-      return s ? s : dp; // إذا تم تعديل منتج أصلي خذ النسخة المعدّلة
-    }), ...saved.filter(p => !DEFAULT_PRODS.find(d => d.id === p.id))];
-  } else {
-    prods = DEFAULT_PRODS.map(p => ({...p, image: null}));
+let isLoading = false;
+
+// ===== INITIALIZATION =====
+async function init() {
+  // Try to load from Firebase first
+  await loadFromFirebase();
+  
+  // If no data in Firebase, load from localStorage or defaults
+  if (prods.length === 0) {
+    const sp = localStorage.getItem('ds_prods');
+    const sc = localStorage.getItem('ds_cats');
+    const sv = localStorage.getItem('ds_views');
+    const sl = localStorage.getItem('ds_sales_log');
+    const so = localStorage.getItem('ds_orders');
+    
+    if (sp) {
+      const saved = JSON.parse(sp);
+      const savedIds = new Set(saved.map(p => p.id));
+      const defaultFiltered = DEFAULT_PRODS.filter(p => !savedIds.has(p.id));
+      prods = [...DEFAULT_PRODS.map(dp => {
+        const s = saved.find(x => x.id === dp.id);
+        return s ? s : dp;
+      }), ...saved.filter(p => !DEFAULT_PRODS.find(d => d.id === p.id))];
+    } else {
+      prods = DEFAULT_PRODS.map(p => ({...p, image: null}));
+    }
+    
+    cats = sc ? JSON.parse(sc) : [...DEFAULT_CATS];
+    viewCounts = sv ? JSON.parse(sv) : {};
+    salesLog = sl ? JSON.parse(sl) : [];
+    ordersToday = so ? parseInt(so) : 0;
+    
+    // Save to Firebase for future use
+    saveToFirebase();
   }
- 
-  cats        = sc  ? JSON.parse(sc)   : [...DEFAULT_CATS];
-  cart        = sc2 ? JSON.parse(sc2)  : [];
-  viewCounts  = sv  ? JSON.parse(sv)   : {};
-  ordersToday = so  ? parseInt(so)     : 0;
-  salesLog    = sl  ? JSON.parse(sl)   : [];
- 
-  saveProd(); saveCats();
-  renderCats(); renderProds(); updateBadge();
- 
+  
+  cart = localStorage.getItem('ds_cart') ? JSON.parse(localStorage.getItem('ds_cart')) : [];
+  
+  renderCats();
+  renderProds();
+  updateBadge();
+  
   setTimeout(() => {
     const s = document.getElementById('splash');
     s.classList.add('out');
     setTimeout(() => s.remove(), 700);
   }, 2000);
 }
- 
-function saveProd() { localStorage.setItem('ds_prods', JSON.stringify(prods)); }
-function saveCats() { localStorage.setItem('ds_cats',  JSON.stringify(cats));  }
-function saveCart() { localStorage.setItem('ds_cart',  JSON.stringify(cart));  }
-function saveViews(){ localStorage.setItem('ds_views', JSON.stringify(viewCounts)); }
-function saveSalesLog(){ localStorage.setItem('ds_sales_log', JSON.stringify(salesLog)); }
- 
-// ---- CATEGORIES ----
+
+// ===== FIREBASE FUNCTIONS =====
+async function loadFromFirebase() {
+  try {
+    const productsSnapshot = await db.collection('products').get();
+    const categoriesSnapshot = await db.collection('categories').get();
+    const viewsSnapshot = await db.collection('views').doc('counts').get();
+    const salesLogSnapshot = await db.collection('sales').get();
+    const ordersSnapshot = await db.collection('orders').doc('today').get();
+    
+    if (!productsSnapshot.empty) {
+      const items = [];
+      productsSnapshot.forEach(doc => {
+        items.push(doc.data());
+      });
+      prods = items;
+    }
+    
+    if (!categoriesSnapshot.empty) {
+      const catsArray = [];
+      categoriesSnapshot.forEach(doc => {
+        catsArray.push(doc.id);
+      });
+      cats = ['الكل', ...catsArray];
+    }
+    
+    if (viewsSnapshot.exists) {
+      viewCounts = viewsSnapshot.data().counts || {};
+    }
+    
+    if (!salesLogSnapshot.empty) {
+      const salesArray = [];
+      salesLogSnapshot.forEach(doc => {
+        salesArray.push(doc.data());
+      });
+      salesLog = salesArray;
+    }
+    
+    if (ordersSnapshot.exists) {
+      ordersToday = ordersSnapshot.data().count || 0;
+    }
+    
+    isLoading = false;
+  } catch (error) {
+    console.error('Error loading from Firebase:', error);
+    isLoading = false;
+  }
+}
+
+async function saveToFirebase() {
+  try {
+    // Save products
+    const productsBatch = db.batch();
+    prods.forEach(p => {
+      const docRef = db.collection('products').doc(String(p.id));
+      productsBatch.set(docRef, p);
+    });
+    await productsBatch.commit();
+    
+    // Save categories
+    const categoriesBatch = db.batch();
+    cats.forEach(c => {
+      if (c !== 'الكل') {
+        const docRef = db.collection('categories').doc(c);
+        categoriesBatch.set(docRef, { name: c });
+      }
+    });
+    await categoriesBatch.commit();
+    
+    // Save views
+    await db.collection('views').doc('counts').set({ counts: viewCounts });
+    
+    // Save sales log
+    const salesBatch = db.batch();
+    salesLog.forEach(s => {
+      const docRef = db.collection('sales').doc(String(s.orderId));
+      salesBatch.set(docRef, s);
+    });
+    await salesBatch.commit();
+    
+    // Save orders today
+    await db.collection('orders').doc('today').set({ count: ordersToday });
+    
+  } catch (error) {
+    console.error('Error saving to Firebase:', error);
+  }
+}
+
+async function syncToFirebase() {
+  await saveToFirebase();
+}
+
+// ===== LOCAL STORAGE FUNCTIONS =====
+function saveProd() { 
+  localStorage.setItem('ds_prods', JSON.stringify(prods)); 
+  syncToFirebase();
+}
+function saveCats() { 
+  localStorage.setItem('ds_cats', JSON.stringify(cats)); 
+  syncToFirebase();
+}
+function saveCart() { localStorage.setItem('ds_cart', JSON.stringify(cart)); }
+function saveViews(){ 
+  localStorage.setItem('ds_views', JSON.stringify(viewCounts)); 
+  syncToFirebase();
+}
+function saveSalesLog(){ 
+  localStorage.setItem('ds_sales_log', JSON.stringify(salesLog)); 
+  syncToFirebase();
+}
+
+// ===== CATEGORIES =====
 function renderCats() {
   document.getElementById('catsScroll').innerHTML = cats.map(c =>
     `<button class="cat-chip ${c===activeCat?'active':''}" onclick="selCat('${c}')">${c}</button>`
   ).join('');
 }
 function selCat(c) { activeCat=c; renderCats(); renderProds(); }
- 
-// ---- SEARCH ----
+
+// ===== SEARCH =====
 function doSearch(v) {
   query = v.trim();
   document.getElementById('searchX').style.display = query ? 'block' : 'none';
@@ -1053,16 +1183,16 @@ function clearSearch() {
   document.getElementById('searchX').style.display='none';
   renderProds();
 }
- 
-// ---- VIEW ----
+
+// ===== VIEW =====
 function setView(v) {
   viewMode = v;
   document.getElementById('vGrid').classList.toggle('on', v==='grid');
   document.getElementById('vList').classList.toggle('on', v==='list');
   renderProds();
 }
- 
-// ---- FILTER ----
+
+// ===== FILTER =====
 function getFiltered() {
   return prods.filter(p => {
     const mc = activeCat==='الكل' || p.category===activeCat;
@@ -1070,16 +1200,16 @@ function getFiltered() {
     return mc && ms;
   });
 }
- 
-// ---- BADGE HTML ----
+
+// ===== BADGE HTML =====
 function badgeHTML(b) {
   if(b==='best')     return `<span class="badge-best"><i class="fa-solid fa-fire" style="font-size:9px;"></i> الأكثر مبيعاً</span>`;
-  if(b==='new')      return `<span class="badge-new">✦ جديد</span>`;
+  if(b==='new')      return `<span class="badge-new">جديد</span>`;
   if(b==='featured') return `<span class="badge-featured"><i class="fa-solid fa-star" style="font-size:9px;"></i> مميز</span>`;
   return '';
 }
- 
-// ---- RENDER PRODUCTS ----
+
+// ===== RENDER PRODUCTS =====
 function renderProds() {
   const f = getFiltered();
   const container = document.getElementById('productsContainer');
@@ -1097,7 +1227,7 @@ function renderProds() {
     container.innerHTML = `<div class="products-list">${f.map(p => rowHTML(p)).join('')}</div>`;
   }
 }
- 
+
 function cardHTML(p) {
   const t = CAT_THEMES[p.category] || DEFAULT_THEME;
   const imgContent = p.image
@@ -1122,7 +1252,7 @@ function cardHTML(p) {
       </div>
     </div>`;
 }
- 
+
 function rowHTML(p) {
   const t = CAT_THEMES[p.category] || DEFAULT_THEME;
   const imgContent = p.image
@@ -1139,8 +1269,8 @@ function rowHTML(p) {
       <button class="prow-btn" onclick="event.stopPropagation();addToCart(${p.id})"><i class="fa-solid fa-cart-plus"></i></button>
     </div>`;
 }
- 
-// ---- DETAIL ----
+
+// ===== DETAIL =====
 function openDetail(id) {
   const p = prods.find(x=>x.id===id);
   if(!p) return;
@@ -1171,18 +1301,18 @@ function goBack() {
 function addFromDetail() { if(currentProd) addToCart(currentProd.id); }
 function waOrder() {
   if(!currentProd) return;
-  const msg = `مرحباً،\nأرغب في طلب:\n\n📦 *${currentProd.name}*\n🔖 الكود: ${currentProd.code}\n💰 السعر: ${Number(currentProd.price).toLocaleString('ar-EG')} جنيه\n\nشكراً 🙏`;
+  const msg = `مرحباً،\nأرغب في طلب:\n\n🦷 *${currentProd.name}*\n🔢 الكود: ${currentProd.code}\n💰 السعر: ${Number(currentProd.price).toLocaleString('ar-EG')} جنيه\n\nشكراً 🙏`;
   window.open(`https://wa.me/${WANUM}?text=${encodeURIComponent(msg)}`, '_blank');
 }
- 
-// ---- CART ----
+
+// ===== CART =====
 function addToCart(id) {
   const p = prods.find(x=>x.id===id);
   if(!p) return;
   const ex = cart.find(c=>c.id===id);
   if(ex) ex.qty++; else cart.push({id,name:p.name,code:p.code,price:p.price,image:p.image,category:p.category,qty:1});
   saveCart(); updateBadge();
-  toast(`✓ تمت إضافة ${p.name}`);
+  toast(`✅ تمت إضافة ${p.name}`);
 }
 function updateBadge() {
   const t = cart.reduce((s,c)=>s+c.qty,0);
@@ -1225,8 +1355,8 @@ function chQty(id, d) {
   if(item.qty<=0) cart = cart.filter(c=>c.id!==id);
   saveCart(); updateBadge(); renderCart();
 }
- 
-// ---- CHECKOUT ----
+
+// ===== CHECKOUT =====
 function openCheckout()  { closeCart(); document.getElementById('checkoutOverlay').classList.add('open'); }
 function closeCheckout() { document.getElementById('checkoutOverlay').classList.remove('open'); }
 function sendOrder() {
@@ -1238,7 +1368,7 @@ function sendOrder() {
  
   const items = cart.map(c=>`• ${c.name} (${c.code}) × ${c.qty} = ${Number(c.price*c.qty).toLocaleString('ar-EG')} جنيه`).join('\n');
   const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
-  const msg   = `🛒 *طلب جديد من دليل الشروق*\n\n👤 ${name}\n📱 ${phone}\n📍 ${addr||'غير محدد'}\n💳 ${pay}\n\n📦 *المنتجات:*\n${items}\n\n💰 *الإجمالي: ${Number(total).toLocaleString('ar-EG')} جنيه*\n\nشكراً لتعاملكم مع دليل الشروق 🦷`;
+  const msg   = `🦷 *طلب جديد من دليل الشروق*\n\n👤 ${name}\n📱 ${phone}\n📍 ${addr||'غير محدد'}\n💳 ${pay}\n\n📦 *المنتجات:*\n${items}\n\n💰 *الإجمالي: ${Number(total).toLocaleString('ar-EG')} جنيه*\n\nشكراً لتعاملكم مع دليل الشروق 🙏`;
   window.open(`https://wa.me/${WANUM}?text=${encodeURIComponent(msg)}`, '_blank');
  
   const saleEntry = {
@@ -1257,10 +1387,10 @@ function sendOrder() {
   ordersToday++;
   localStorage.setItem('ds_orders', ordersToday);
   cart=[]; saveCart(); updateBadge(); closeCheckout();
-  toast('✓ تم إرسال طلبك بنجاح!');
+  toast('✅ تم إرسال طلبك بنجاح!');
 }
- 
-// ---- ADMIN ----
+
+// ===== ADMIN =====
 function openPassModal() {
   document.getElementById('passIn').value='';
   document.getElementById('passErr').style.display='none';
@@ -1336,7 +1466,7 @@ function renderStats() {
   }).join('');
 }
  
-// ---- SALES TAB ----
+// ===== SALES TAB =====
 function renderSalesTab() {
   const totalSales = salesLog.reduce((s,o)=>s+o.total, 0);
   const totalComm  = Math.round(totalSales * COMMISSION_RATE);
@@ -1403,10 +1533,10 @@ function renderSalesTab() {
 function clearSalesLog() {
   if(!confirm('هل أنت متأكد من مسح جميع سجلات المبيعات؟ لا يمكن التراجع.')) return;
   salesLog=[]; saveSalesLog(); renderSalesTab();
-  toast('✓ تم مسح سجل المبيعات');
+  toast('✅ تم مسح سجل المبيعات');
 }
  
-// ---- BACKUP ----
+// ===== BACKUP =====
 function exportBackup() {
   const data = { version:'2.0', exportDate:new Date().toISOString(), appName:'دليل الشروق - Dr. Bilal Al-Najashi', products:prods, categories:cats, viewCounts, salesLog, ordersToday };
   const json = JSON.stringify(data, null, 2);
@@ -1415,7 +1545,7 @@ function exportBackup() {
   const a    = document.createElement('a');
   a.href = url; a.download = `daleel-shrouk-backup-${new Date().toISOString().slice(0,10)}.json`;
   a.click(); URL.revokeObjectURL(url);
-  toast('✓ تم تصدير النسخة الاحتياطية');
+  toast('✅ تم تصدير النسخة الاحتياطية');
   renderBackupTab();
 }
  
@@ -1430,7 +1560,7 @@ function importBackup(input) {
       prods=data.products; cats=data.categories; viewCounts=data.viewCounts||{}; salesLog=data.salesLog||[]; ordersToday=data.ordersToday||0;
       saveProd(); saveCats(); saveViews(); saveSalesLog(); localStorage.setItem('ds_orders', ordersToday);
       renderCats(); renderProds(); updateBadge(); renderBackupTab();
-      toast(`✓ تم استيراد البيانات بنجاح (${prods.length} منتج)`);
+      toast(`✅ تم استيراد البيانات بنجاح (${prods.length} منتج)`);
     } catch(err) { toast('❌ خطأ في قراءة الملف'); }
   };
   reader.readAsText(file); input.value='';
@@ -1448,7 +1578,7 @@ function renderBackupTab() {
     </div>`;
 }
  
-// ---- PRODUCT MANAGEMENT ----
+// ===== PRODUCT MANAGEMENT =====
 function renderAdminList() {
   document.getElementById('adminList').innerHTML = prods.length===0
     ? `<div class="empty-state"><i class="fa-solid fa-box-open"></i><p>لا توجد منتجات</p></div>`
@@ -1485,7 +1615,7 @@ function editProd(id) {
  
 function delProd(id) {
   if(!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
-  prods=prods.filter(p=>p.id!==id); saveProd(); renderAdminList(); renderProds(); toast('✓ تم حذف المنتج');
+  prods=prods.filter(p=>p.id!==id); saveProd(); renderAdminList(); renderProds(); toast('✅ تم حذف المنتج');
 }
  
 function previewImg(input) {
@@ -1517,7 +1647,7 @@ function saveProduct() {
     const maxId=prods.length>0?Math.max(...prods.map(p=>p.id)):0;
     prods.push({id:maxId+1,name,code,price,category:cat,image:adminImgData,badge,emoji:'🦷'});
   }
-  saveProd(); renderProds(); renderAdminList(); resetAddForm(); toast('✓ تم حفظ المنتج بنجاح');
+  saveProd(); renderProds(); renderAdminList(); resetAddForm(); toast('✅ تم حفظ المنتج بنجاح');
 }
  
 function resetAddForm() {
@@ -1550,33 +1680,33 @@ function addCat() {
   if(cats.includes(v)) { toast('هذه الفئة موجودة'); return; }
   cats.push(v); saveCats(); renderCats(); renderAdminCats(); populateCatSel();
   document.getElementById('newCat').value='';
-  toast(`✓ تمت إضافة فئة "${v}"`);
+  toast(`✅ تمت إضافة فئة "${v}"`);
 }
  
 function delCat(c) {
   if(prods.some(p=>p.category===c)) { toast('لا يمكن حذف فئة تحتوي على منتجات'); return; }
   if(!confirm(`حذف فئة "${c}"؟`)) return;
   cats=cats.filter(x=>x!==c); saveCats(); renderCats(); renderAdminCats(); populateCatSel();
-  toast(`✓ تم حذف فئة "${c}"`);
+  toast(`✅ تم حذف فئة "${c}"`);
 }
  
-// ---- TOAST ----
+// ===== TOAST =====
 function toast(msg) {
   const el=document.getElementById('toast');
   el.textContent=msg; el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'), 2500);
 }
  
-// ---- OVERLAY CLOSE ON BACKDROP ----
+// ===== OVERLAY CLOSE ON BACKDROP =====
 ['cartOverlay','checkoutOverlay','adminOverlay'].forEach(id=>{
   document.getElementById(id).addEventListener('click',e=>{ if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 });
 document.getElementById('passVeil').addEventListener('click',e=>{ if(e.target.id==='passVeil') closePassModal(); });
  
+// ===== START =====
 init();
-</script>
- 
-<script> 
+
+// ===== MANIFEST =====
 const mdata = {
   name:'دليل الشروق – Dr. Bilal Al-Najashi', short_name:'دليل الشروق',
   display:'standalone', background_color:'#0f1e3d', theme_color:'#0f1e3d',
@@ -1589,4 +1719,3 @@ const lk=document.createElement('link'); lk.rel='manifest'; lk.href=ml; document
 </script>
 </body>
 </html>
-
