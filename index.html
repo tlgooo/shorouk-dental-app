@@ -231,7 +231,16 @@ let activeCategory = 'الكل';
 // ========== Load Data ==========
 function loadData() {
   db.ref('products').on('value', snapshot => {
-    products = snapshot.val() || [];
+    const data = snapshot.val();
+    if (data) {
+      // تحويل البيانات من Firebase إلى مصفوفة مع key
+      products = Object.keys(data).map(key => ({
+        key: key,
+        ...data[key]
+      }));
+    } else {
+      products = [];
+    }
     renderProducts();
   });
   
@@ -263,7 +272,7 @@ function renderProducts() {
   }
   
   container.innerHTML = filtered.map(p => `
-    <div class="product-card" onclick="addToCart(${p.id})">
+    <div class="product-card" onclick="addToCart('${p.key}')">
       <div class="product-img">🦷</div>
       <div class="product-name">${p.name}</div>
       <div style="color:#999;font-size:12px;">${p.code}</div>
@@ -292,11 +301,11 @@ function filterProducts() {
 }
 
 // ========== Cart ==========
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
+function addToCart(key) {
+  const product = products.find(p => p.key === key);
   if (!product) return;
   
-  const existing = cart.find(item => item.id === id);
+  const existing = cart.find(item => item.key === key);
   if (existing) {
     existing.qty++;
   } else {
@@ -407,10 +416,10 @@ function addProduct() {
     return;
   }
   
-  const maxId = products.length > 0 ? Math.max(...products.map(p => p.id)) : 0;
-  const newProduct = { id: maxId + 1, name, code, price, category, badge: '' };
+  const newProduct = { name, code, price, category, badge: '' };
   
-  db.ref('products').set([...products, newProduct]);
+  // ✅ استخدام push() لإضافة منتج جديد مباشرة
+  db.ref('products').push(newProduct);
   
   document.getElementById('newName').value = '';
   document.getElementById('newCode').value = '';
