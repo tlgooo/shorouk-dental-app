@@ -549,7 +549,7 @@ body { font-family: 'Tajawal', sans-serif; background: var(--off); color: var(--
 // FIREBASE SETUP — المصدر الوحيد للحقيقة
 // ================================================================
 import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, onValue, set, get, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
  
 const firebaseConfig = {
   apiKey: "AIzaSyCsgMuEv5KkuGwpSgH2usr0cl0_ObOG4-c",
@@ -677,16 +677,45 @@ async function fbWrite(path, data) {
   try {
     await set(ref(db, path), data);
   } catch(e) {
-    toast('⚠️ خطأ في الحفظ: ' + e.message);
+    toast('?? خطأ في الحفظ: ' + e.message);
   } finally {
     setTimeout(() => { isWriting = false; }, 500);
   }
 }
  
-async function fbSaveProds() { await fbWrite('daleel/products', prods); }
+async function fbSaveProds() {
+  // نحافظ على هذه الدالة لاستخدامات الاستيراد الكامل (Restore)، لكن دائماً
+  // بصيغة object مفتاحه id حتى تبقى متوافقة مع الحفظ الجزئي أدناه
+  const keyed = {};
+  prods.forEach(p => { keyed[p.id] = p; });
+  await fbWrite('daleel/products', keyed);
+}
 async function fbSaveCats()  { await fbWrite('daleel/categories', cats); }
 async function fbSaveSales() { await fbWrite('daleel/salesLog', salesLog); }
 async function fbSaveViews() { await fbWrite('daleel/viewCounts', viewCounts); }
+ 
+// ✅ حفظ منتج واحد فقط بدل رفع كل المنتجات — هذا هو حل مشكلة بطء "إضافة/تعديل السعر"
+async function fbSaveOneProduct(id, product) {
+  isWriting = true;
+  try {
+    await set(ref(db, 'daleel/products/' + id), product);
+  } catch(e) {
+    toast('?? خطأ في الحفظ: ' + e.message);
+  } finally {
+    setTimeout(() => { isWriting = false; }, 500);
+  }
+}
+// ✅ حذف منتج واحد فقط بدل إعادة رفع القائمة كاملة بعد الفلترة
+async function fbDeleteProduct(id) {
+  isWriting = true;
+  try {
+    await remove(ref(db, 'daleel/products/' + id));
+  } catch(e) {
+    toast('?? خطأ في الحذف: ' + e.message);
+  } finally {
+    setTimeout(() => { isWriting = false; }, 500);
+  }
+}
  
 // ================================================================
 // CART — localStorage فقط (بيانات المستخدم الحالي)
@@ -707,6 +736,34 @@ function getPlaceholderSVG(cat, size=120) {
     'تشخيص': `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect x="32" y="30" width="56" height="42" rx="6" fill="#b0f0e0" stroke="#00796b" stroke-width="2"/><rect x="38" y="37" width="44" height="28" rx="3" fill="#e0faf4" stroke="#00796b" stroke-width="1.2"/><circle cx="60" cy="51" r="8" fill="#00796b" opacity="0.25"/><circle cx="60" cy="51" r="4" fill="#00796b" opacity="0.5"/><rect x="54" y="72" width="12" height="18" rx="3" fill="#b0f0e0" stroke="#00796b" stroke-width="1.5"/></svg>`,
   };
   return svgs[cat] || `<svg width="${size}" height="${size}" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect x="35" y="28" width="50" height="60" rx="8" fill="#dce8ff" stroke="#334155" stroke-width="2"/><rect x="44" y="45" width="32" height="5" rx="2.5" fill="#334155" opacity="0.3"/><rect x="44" y="56" width="24" height="5" rx="2.5" fill="#334155" opacity="0.3"/></svg>`;
+}
+ 
+// ================================================================
+// ✅ ضغط الصور قبل رفعها — يقلل حجم صور الموبايل بشكل كبير
+// (تصغير الأبعاد لحد أقصى 1000px وضغط الجودة لـ 75%)
+// ================================================================
+function compressImage(file, maxDim = 1000, quality = 0.75) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+          else { width = Math.round(width * maxDim / height); height = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
  
 // ================================================================
@@ -731,14 +788,29 @@ async function init() {
  
     setSplashStatus('تحميل البيانات...');
  
-    // المنتجات
-    if (prodsSnap.exists() && Array.isArray(prodsSnap.val()) && prodsSnap.val().length > 0) {
-      prods = prodsSnap.val();
+    // المنتجات — ندعم الشكل الجديد (object مفتاحه id) والقديم (array) لضمان توافق البيانات السابقة
+    if (prodsSnap.exists() && prodsSnap.val()) {
+      const raw = prodsSnap.val();
+      if (Array.isArray(raw) && raw.length > 0) {
+        // بيانات قديمة بصيغة array — حوّلها مرة واحدة فقط إلى object مفتاحه id
+        // (هذا التحويل يحل مشكلة بطء الحفظ، لأن كل تعديل بعد ذلك سيرفع منتج واحد فقط)
+        prods = raw;
+        setSplashStatus('تحديث هيكلة البيانات لتحسين السرعة...');
+        const keyed = {};
+        prods.forEach(p => { keyed[p.id] = p; });
+        await fbWrite('daleel/products', keyed);
+      } else if (typeof raw === 'object') {
+        prods = Object.values(raw);
+      } else {
+        prods = SEED_PRODS;
+      }
     } else {
-      // Firebase فارغ — ارفع البيانات الافتراضية
+      // Firebase فارغ — ارفع البيانات الافتراضية بالصيغة الجديدة (object مفتاحه id)
       setSplashStatus('رفع البيانات الأولية...');
       prods = SEED_PRODS;
-      await fbWrite('daleel/products', prods);
+      const keyed = {};
+      prods.forEach(p => { keyed[p.id] = p; });
+      await fbWrite('daleel/products', keyed);
     }
  
     // الفئات
@@ -755,7 +827,7 @@ async function init() {
     // المشاهدات
     viewCounts = (viewsSnap.exists() && typeof viewsSnap.val() === 'object') ? viewsSnap.val() : {};
  
-    setSplashStatus('جاهز ✓');
+    setSplashStatus('جاهز ?');
  
     // الآن نُفعّل اللستنر للتحديث الفوري
     activateListeners();
@@ -791,8 +863,9 @@ function activateListeners() {
   // المنتجات
   onValue(ref(db, 'daleel/products'), snap => {
     if(isWriting) return; // تجاهل إذا نحن من يكتب
-    if(snap.exists() && Array.isArray(snap.val())) {
-      prods = snap.val();
+    if(snap.exists() && snap.val()) {
+      const raw = snap.val();
+      prods = Array.isArray(raw) ? raw : Object.values(raw);
       renderProds();
     }
   });
@@ -963,7 +1036,7 @@ function goBack() {
 function addFromDetail() { if(currentProd) addToCart(currentProd.id); }
 function waOrder() {
   if(!currentProd) return;
-  const msg = `مرحباً،\nأرغب في طلب:\n\n🦷 *${currentProd.name}*\n📦 الكود: ${currentProd.code}\n💰 السعر: ${Number(currentProd.price).toLocaleString('ar-EG')} جنيه\n\nشكراً 🙏`;
+  const msg = `مرحباً،\nأرغب في طلب:\n\n?? *${currentProd.name}*\n?? الكود: ${currentProd.code}\n?? السعر: ${Number(currentProd.price).toLocaleString('ar-EG')} جنيه\n\nشكراً ??`;
   window.open(`https://wa.me/${WANUM}?text=${encodeURIComponent(msg)}`, '_blank');
 }
  
@@ -976,7 +1049,7 @@ function addToCart(id) {
   if(ex) ex.qty++;
   else cart.push({id,name:p.name,code:p.code,price:p.price,image:p.image,category:p.category,qty:1});
   saveCart(); updateBadge();
-  toast(`✅ تمت إضافة ${p.name}`);
+  toast(`? تمت إضافة ${p.name}`);
 }
 function updateBadge() {
   const t = cart.reduce((s,c)=>s+c.qty,0);
@@ -1002,7 +1075,7 @@ function renderCart() {
         <div class="citem-price">${Number(item.price).toLocaleString('ar-EG')} × ${item.qty} = ${Number(item.price*item.qty).toLocaleString('ar-EG')} جنيه</div>
       </div>
       <div class="qty-ctrl">
-        <button class="qty-btn" onclick="chQty(${item.id},-1)">−</button>
+        <button class="qty-btn" onclick="chQty(${item.id},-1)">?</button>
         <span class="qty-n">${item.qty}</span>
         <button class="qty-btn" onclick="chQty(${item.id},1)">+</button>
       </div>
@@ -1034,7 +1107,7 @@ async function sendOrder() {
  
   const items = cart.map(c=>`• ${c.name} (${c.code}) × ${c.qty} = ${Number(c.price*c.qty).toLocaleString('ar-EG')} جنيه`).join('\n');
   const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
-  const msg   = `📋 *طلب جديد من دليل الشروق*\n\n👤 ${name}\n📞 ${phone}\n📍 ${addr||'غير محدد'}\n💳 ${pay}\n\n🛒 *المنتجات:*\n${items}\n\n💰 *الإجمالي: ${Number(total).toLocaleString('ar-EG')} جنيه*\n\nشكراً لتعاملكم مع دليل الشروق 🦷`;
+  const msg   = `?? *طلب جديد من دليل الشروق*\n\n?? ${name}\n?? ${phone}\n?? ${addr||'غير محدد'}\n?? ${pay}\n\n?? *المنتجات:*\n${items}\n\n?? *الإجمالي: ${Number(total).toLocaleString('ar-EG')} جنيه*\n\nشكراً لتعاملكم مع دليل الشروق ??`;
   window.open(`https://wa.me/${WANUM}?text=${encodeURIComponent(msg)}`, '_blank');
  
   const saleEntry = {
@@ -1047,7 +1120,7 @@ async function sendOrder() {
   await fbSaveSales(); // حفظ في السحابة
  
   cart=[]; saveCart(); updateBadge(); closeCheckout();
-  toast('✅ تم إرسال طلبك بنجاح!');
+  toast('? تم إرسال طلبك بنجاح!');
 }
  
 // ================================================================
@@ -1184,7 +1257,7 @@ async function clearSalesLog() {
   if(!confirm('هل أنت متأكد من مسح جميع سجلات المبيعات؟')) return;
   salesLog=[];
   await fbSaveSales();
-  renderSalesTab(); toast('🗑️ تم مسح سجل المبيعات');
+  renderSalesTab(); toast('??? تم مسح سجل المبيعات');
 }
  
 // ================================================================
@@ -1228,24 +1301,27 @@ async function delProd(id) {
   if(!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
   showLoading('جاري حذف المنتج...');
   prods = prods.filter(p=>p.id!==id);
-  await fbSaveProds(); // ← الحذف يُحفظ في Firebase مباشرة
+  await fbDeleteProduct(id); // ✅ نحذف هذا المنتج فقط من Firebase (أسرع وما يلمسش باقي المنتجات)
   hideLoading();
   renderAdminList(); renderProds();
-  toast('🗑️ تم حذف المنتج');
+  toast('??? تم حذف المنتج');
 }
  
 function previewImg(input) {
   const file=input.files[0]; if(!file) return;
-  const r=new FileReader();
-  r.onload=e=>{
-    adminImgData=e.target.result;
+  showLoading('جاري تجهيز الصورة...');
+  compressImage(file, 1000, 0.75).then(dataUrl => {
+    adminImgData = dataUrl;
+    hideLoading();
     const drop=document.getElementById('imgDrop');
     const ex=drop.querySelector('img'); if(ex) ex.remove();
     const im=document.createElement('img'); im.src=adminImgData;
     drop.insertBefore(im, drop.querySelector('input'));
     drop.querySelector('i').style.display='none'; drop.querySelector('p').style.display='none';
-  };
-  r.readAsDataURL(file);
+  }).catch(() => {
+    hideLoading();
+    toast('? تعذرت معالجة الصورة، جرب صورة أخرى');
+  });
 }
  
 async function saveProduct() {
@@ -1258,20 +1334,23 @@ async function saveProduct() {
  
   showLoading(editId ? 'جاري حفظ التعديلات...' : 'جاري إضافة المنتج...');
  
+  let savedProduct;
   if(editId) {
     const p=prods.find(x=>x.id===editId);
     if(p){ p.name=name; p.code=code; p.price=price; p.category=cat; p.image=adminImgData; p.badge=badge; }
+    savedProduct = p;
     editId=null;
     document.getElementById('saveBtn').innerHTML='<i class="fa-solid fa-plus"></i> حفظ المنتج';
   } else {
     const maxId = prods.length>0 ? Math.max(...prods.map(p=>p.id)) : 0;
-    prods.push({id:maxId+1, name, code, price, category:cat, image:adminImgData, badge});
+    savedProduct = {id:maxId+1, name, code, price, category:cat, image:adminImgData, badge};
+    prods.push(savedProduct);
   }
  
-  await fbSaveProds(); // ← الحفظ في Firebase مباشرة
+  await fbSaveOneProduct(savedProduct.id, savedProduct); // ✅ نرفع هذا المنتج فقط وليس كل القائمة (أسرع بكثير)
   hideLoading();
   renderProds(); renderAdminList(); resetAddForm();
-  toast('✅ تم حفظ المنتج بنجاح');
+  toast('? تم حفظ المنتج بنجاح');
 }
  
 function resetAddForm() {
@@ -1309,7 +1388,7 @@ async function addCat() {
   await fbSaveCats();
   renderCats(); renderAdminCats(); populateCatSel();
   document.getElementById('newCat').value='';
-  toast(`✅ تمت إضافة فئة "${v}"`);
+  toast(`? تمت إضافة فئة "${v}"`);
 }
  
 async function delCat(c) {
@@ -1318,7 +1397,7 @@ async function delCat(c) {
   cats=cats.filter(x=>x!==c);
   await fbSaveCats();
   renderCats(); renderAdminCats(); populateCatSel();
-  toast(`🗑️ تم حذف فئة "${c}"`);
+  toast(`??? تم حذف فئة "${c}"`);
 }
  
 // ================================================================
@@ -1332,7 +1411,7 @@ function exportBackup() {
   const a    = document.createElement('a');
   a.href=url; a.download=`daleel-shrouk-backup-${new Date().toISOString().slice(0,10)}.json`;
   a.click(); URL.revokeObjectURL(url);
-  toast('📥 تم تصدير النسخة الاحتياطية');
+  toast('?? تم تصدير النسخة الاحتياطية');
 }
  
 async function importBackup(input) {
@@ -1341,15 +1420,15 @@ async function importBackup(input) {
   reader.onload=async e=>{
     try {
       const data=JSON.parse(e.target.result);
-      if(!data.products||!data.categories) { toast('❌ ملف غير صالح'); return; }
+      if(!data.products||!data.categories) { toast('? ملف غير صالح'); return; }
       if(!confirm(`سيتم استبدال جميع البيانات بـ:\n• ${data.products.length} منتج\n• ${(data.salesLog||[]).length} سجل مبيعات\n\nهل تريد المتابعة؟`)) return;
       showLoading('جاري استيراد البيانات...');
       prods=data.products; cats=data.categories; viewCounts=data.viewCounts||{}; salesLog=data.salesLog||[];
       await Promise.all([fbSaveProds(), fbSaveCats(), fbSaveSales(), fbSaveViews()]);
       hideLoading();
       renderCats(); renderProds(); updateBadge(); renderBackupTab();
-      toast(`✅ تم الاستيراد (${prods.length} منتج)`);
-    } catch(err) { hideLoading(); toast('❌ خطأ في قراءة الملف'); }
+      toast(`? تم الاستيراد (${prods.length} منتج)`);
+    } catch(err) { hideLoading(); toast('? خطأ في قراءة الملف'); }
   };
   reader.readAsText(file); input.value='';
 }
@@ -1361,7 +1440,7 @@ function renderBackupTab() {
       <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">${prods.length}</div><div style="font-size:11px;color:var(--text-3);">منتج مسجل</div></div>
       <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">${salesLog.length}</div><div style="font-size:11px;color:var(--text-3);">سجل مبيعات</div></div>
       <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--gold-dark);">${Number(totalSales).toLocaleString('ar-EG')}</div><div style="font-size:11px;color:var(--text-3);">إجمالي المبيعات (جنيه)</div></div>
-      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">Firebase ☁️</div><div style="font-size:11px;color:var(--text-3);">وضع التخزين</div></div>
+      <div style="background:#fff;border-radius:var(--r-xs);padding:10px;border:1px solid var(--border);"><div style="font-size:20px;font-weight:900;color:var(--navy);">Firebase ??</div><div style="font-size:11px;color:var(--text-3);">وضع التخزين</div></div>
     </div>`;
 }
  
