@@ -549,7 +549,7 @@ body { font-family: 'Tajawal', sans-serif; background: var(--off); color: var(--
 // FIREBASE SETUP — المصدر الوحيد للحقيقة
 // ================================================================
 import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, get, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, onValue, set, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
  
 const firebaseConfig = {
   apiKey: "AIzaSyCsgMuEv5KkuGwpSgH2usr0cl0_ObOG4-c",
@@ -683,35 +683,20 @@ async function fbWrite(path, data) {
   }
 }
  
-async function fbSaveProds() {
-  // نحافظ على هذه الدالة لاستخدامات الاستيراد الكامل (Restore)، لكن دائماً
-  // بصيغة object مفتاحه id حتى تبقى متوافقة مع الحفظ الجزئي أدناه
-  const keyed = {};
-  prods.forEach(p => { keyed[p.id] = p; });
-  await fbWrite('daleel/products', keyed);
-}
+async function fbSaveProds() { await fbWrite('daleel/products', prods); }
 async function fbSaveCats()  { await fbWrite('daleel/categories', cats); }
 async function fbSaveSales() { await fbWrite('daleel/salesLog', salesLog); }
 async function fbSaveViews() { await fbWrite('daleel/viewCounts', viewCounts); }
  
-// ✅ حفظ منتج واحد فقط بدل رفع كل المنتجات — هذا هو حل مشكلة بطء "إضافة/تعديل السعر"
-async function fbSaveOneProduct(id, product) {
+// ✅ تحديث/إضافة منتج واحد بمكانه (index) جوه نفس القائمة بدل رفع كل المنتجات.
+// آمن 100% لأنه ما بيغيّرش شكل تخزين البيانات في فايربيز — تفضل array عادي
+// زي ما كانت بالظبط، وده اللي بيحل مشكلة بطء "إضافة/تعديل السعر".
+async function fbUpdateProductAt(index, product) {
   isWriting = true;
   try {
-    await set(ref(db, 'daleel/products/' + id), product);
+    await update(ref(db, 'daleel/products'), { [index]: product });
   } catch(e) {
     toast('?? خطأ في الحفظ: ' + e.message);
-  } finally {
-    setTimeout(() => { isWriting = false; }, 500);
-  }
-}
-// ✅ حذف منتج واحد فقط بدل إعادة رفع القائمة كاملة بعد الفلترة
-async function fbDeleteProduct(id) {
-  isWriting = true;
-  try {
-    await remove(ref(db, 'daleel/products/' + id));
-  } catch(e) {
-    toast('?? خطأ في الحذف: ' + e.message);
   } finally {
     setTimeout(() => { isWriting = false; }, 500);
   }
@@ -788,29 +773,29 @@ async function init() {
  
     setSplashStatus('تحميل البيانات...');
  
-    // المنتجات — ندعم الشكل الجديد (object مفتاحه id) والقديم (array) لضمان توافق البيانات السابقة
+    // المنتجات — array عادي (نفس الشكل الأصلي تمامًا). بنتعافى تلقائيًا لو
+    // البيانات كانت اتلخبطت بشكل غريب (object/سطور فاضية) لأي سبب سابق.
     if (prodsSnap.exists() && prodsSnap.val()) {
       const raw = prodsSnap.val();
-      if (Array.isArray(raw) && raw.length > 0) {
-        // بيانات قديمة بصيغة array — حوّلها مرة واحدة فقط إلى object مفتاحه id
-        // (هذا التحويل يحل مشكلة بطء الحفظ، لأن كل تعديل بعد ذلك سيرفع منتج واحد فقط)
-        prods = raw;
-        setSplashStatus('تحديث هيكلة البيانات لتحسين السرعة...');
-        const keyed = {};
-        prods.forEach(p => { keyed[p.id] = p; });
-        await fbWrite('daleel/products', keyed);
-      } else if (typeof raw === 'object') {
-        prods = Object.values(raw);
+      const arr = Array.isArray(raw) ? raw : Object.values(raw);
+      const clean = arr.filter(p => p && typeof p === 'object' && p.id != null);
+      if (clean.length > 0) {
+        prods = clean;
+        // لو الشكل المخزّن مش array سليم 100% (فيه فراغات أو كان object) — صلّحه بكتابة نظيفة مرة وحدة
+        const needsHealing = !Array.isArray(raw) || raw.length !== clean.length;
+        if (needsHealing) {
+          setSplashStatus('إصلاح هيكلة البيانات...');
+          await fbWrite('daleel/products', prods);
+        }
       } else {
         prods = SEED_PRODS;
+        await fbWrite('daleel/products', prods);
       }
     } else {
-      // Firebase فارغ — ارفع البيانات الافتراضية بالصيغة الجديدة (object مفتاحه id)
+      // Firebase فارغ — ارفع البيانات الافتراضية
       setSplashStatus('رفع البيانات الأولية...');
       prods = SEED_PRODS;
-      const keyed = {};
-      prods.forEach(p => { keyed[p.id] = p; });
-      await fbWrite('daleel/products', keyed);
+      await fbWrite('daleel/products', prods);
     }
  
     // الفئات
@@ -835,20 +820,24 @@ async function init() {
   } catch(e) {
     setSplashStatus('خطأ في الاتصال - وضع غير متصل');
     console.error(e);
-    prods = SEED_PRODS;
-    cats  = SEED_CATS;
+    if (!Array.isArray(prods) || prods.length === 0) prods = SEED_PRODS;
+    if (!Array.isArray(cats)  || cats.length === 0)  cats  = SEED_CATS;
   }
  
-  updateBadge();
-  renderCats();
-  renderProds();
+  // ✅ مهما حصل (حتى لو فيه خطأ غير متوقع) — لازم الموقع يفتح ويوريك حاجة،
+  // وشاشة التحميل لازم تختفي. كده الموقع متعطلش بالكامل تاني زي اللي حصل.
+  try {
+    updateBadge();
+    renderCats();
+    renderProds();
+  } catch(e2) {
+    console.error(e2);
+  }
  
-  // أخفِ splash
   setTimeout(() => {
     const s = document.getElementById('splash');
-    s.classList.add('out');
-    setTimeout(() => s.remove(), 700);
-  }, 1800);
+    if (s) { s.classList.add('out'); setTimeout(() => s.remove(), 700); }
+  }, 1200);
 }
  
 function setSplashStatus(msg) {
@@ -865,7 +854,8 @@ function activateListeners() {
     if(isWriting) return; // تجاهل إذا نحن من يكتب
     if(snap.exists() && snap.val()) {
       const raw = snap.val();
-      prods = Array.isArray(raw) ? raw : Object.values(raw);
+      const arr = Array.isArray(raw) ? raw : Object.values(raw);
+      prods = arr.filter(p => p && typeof p === 'object' && p.id != null);
       renderProds();
     }
   });
@@ -1301,7 +1291,7 @@ async function delProd(id) {
   if(!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
   showLoading('جاري حذف المنتج...');
   prods = prods.filter(p=>p.id!==id);
-  await fbDeleteProduct(id); // ✅ نحذف هذا المنتج فقط من Firebase (أسرع وما يلمسش باقي المنتجات)
+  await fbSaveProds(); // الحذف عملية نادرة، فالرفع الكامل هنا آمن ومريح
   hideLoading();
   renderAdminList(); renderProds();
   toast('??? تم حذف المنتج');
@@ -1334,9 +1324,10 @@ async function saveProduct() {
  
   showLoading(editId ? 'جاري حفظ التعديلات...' : 'جاري إضافة المنتج...');
  
-  let savedProduct;
+  let savedProduct, savedIndex;
   if(editId) {
-    const p=prods.find(x=>x.id===editId);
+    savedIndex = prods.findIndex(x=>x.id===editId);
+    const p = prods[savedIndex];
     if(p){ p.name=name; p.code=code; p.price=price; p.category=cat; p.image=adminImgData; p.badge=badge; }
     savedProduct = p;
     editId=null;
@@ -1345,9 +1336,10 @@ async function saveProduct() {
     const maxId = prods.length>0 ? Math.max(...prods.map(p=>p.id)) : 0;
     savedProduct = {id:maxId+1, name, code, price, category:cat, image:adminImgData, badge};
     prods.push(savedProduct);
+    savedIndex = prods.length - 1;
   }
  
-  await fbSaveOneProduct(savedProduct.id, savedProduct); // ✅ نرفع هذا المنتج فقط وليس كل القائمة (أسرع بكثير)
+  await fbUpdateProductAt(savedIndex, savedProduct); // ✅ نرفع بيانات هذا المنتج فقط (مكانه في القائمة) — أسرع بكثير وآمن 100%
   hideLoading();
   renderProds(); renderAdminList(); resetAddForm();
   toast('? تم حفظ المنتج بنجاح');
