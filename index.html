@@ -706,7 +706,7 @@ async function init() {
   if (prodsSnap.exists() && prodsSnap.val()) {
       const raw = prodsSnap.val();
       const arr = Array.isArray(raw) ? raw : Object.values(raw);
-      const clean = arr.filter(p => p && typeof p === 'object' && p.id != null);
+      const clean = arr.filter(p => p && typeof p === 'object').map((p, i) => ({ id: p.id ?? (i + 1), ...p }));
       if (clean.length > 0) {
         prods = clean;
         const needsHealing = !Array.isArray(raw) || raw.length !== clean.length;
