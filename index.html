@@ -1330,7 +1330,7 @@ async function importBackup(input) {
       if(!data.products||!data.categories) { toast('? ملف غير صالح'); return; }
       if(!confirm(`سيتم استبدال جميع البيانات بـ:\n• ${data.products.length} منتج\n• ${(data.salesLog||[]).length} سجل مبيعات\n\nهل تريد المتابعة؟`)) return;
       showLoading('جاري استيراد البيانات...');
-      prods=data.products; cats=data.categories; viewCounts=data.viewCounts||{}; salesLog=data.salesLog||[];
+     prods = data.products.map((p, i) => ({ id: p.id ?? (i + 1), ...p })); cats=data.categories; viewCounts=data.viewCounts||{}; salesLog=data.salesLog||[];
       await Promise.all([fbSaveProds(), fbSaveCats(), fbSaveSales(), fbSaveViews()]);
       hideLoading();
       renderCats(); renderProds(); updateBadge(); renderBackupTab();
