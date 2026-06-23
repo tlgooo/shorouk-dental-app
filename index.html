@@ -585,79 +585,7 @@ const DEFAULT_THEME = { bg: 'linear-gradient(135deg,#eef2ff,#dce8ff)', color: '#
 // ================================================================
 // DEFAULT DATA (تُرفع إلى Firebase مرة واحدة فقط إذا Firebase فارغ)
 // ================================================================
-const SEED_CATS = ['الكل','تقويم','أندو','جلدز','كمبوزيت','مستهلكات','زراعة','تشخيص'];
-const SEED_PRODS = [
-  {id:1,  name:'كيت تقويم سيراميكي كامل',         code:'ORTH-001', price:1850, category:'تقويم',     badge:'best',     image:null},
-  {id:2,  name:'أسلاك نيتي تقويم 0.016',            code:'ORTH-002', price:320,  category:'تقويم',     badge:'',         image:null},
-  {id:3,  name:'براكيت ميتال MBT 022',              code:'ORTH-003', price:750,  category:'تقويم',     badge:'',         image:null},
-  {id:4,  name:'كيت فلور إيدج تقويم شفاف',          code:'ORTH-004', price:5500, category:'تقويم',     badge:'featured', image:null},
-  {id:5,  name:'أسلاك ستانلس ستيل 0.018',           code:'ORTH-005', price:280,  category:'تقويم',     badge:'',         image:null},
-  {id:6,  name:'مواد لصق براكيت لايت كيور',          code:'ORTH-006', price:420,  category:'تقويم',     badge:'',         image:null},
-  {id:7,  name:'بند أورثو إليسيتك ستاندرد',         code:'ORTH-007', price:95,   category:'تقويم',     badge:'',         image:null},
-  {id:8,  name:'كيت توتال أورثو بريميوم',           code:'ORTH-008', price:2800, category:'تقويم',     badge:'new',      image:null},
-  {id:9,  name:'براكيت توربو أنتيريور',             code:'ORTH-009', price:650,  category:'تقويم',     badge:'',         image:null},
-  {id:10, name:'ريتينر وير كامل سيليكون',           code:'ORTH-010', price:180,  category:'تقويم',     badge:'',         image:null},
-  {id:11, name:'فايلات ProTaper Gold',              code:'ENDO-001', price:980,  category:'أندو',      badge:'best',     image:null},
-  {id:12, name:'أوبتشورايتر جودة عالية',            code:'ENDO-002', price:1200, category:'أندو',      badge:'',         image:null},
-  {id:13, name:'فايلات روتاري ويف ون',              code:'ENDO-003', price:850,  category:'أندو',      badge:'new',      image:null},
-  {id:14, name:'بابر بوينت ستيريل 04',              code:'ENDO-004', price:65,   category:'أندو',      badge:'',         image:null},
-  {id:15, name:'إيريجيشن نيدل 30G',                code:'ENDO-005', price:45,   category:'أندو',      badge:'',         image:null},
-  {id:16, name:'جتا-فيلا بوكس كامل',               code:'ENDO-006', price:1600, category:'أندو',      badge:'featured', image:null},
-  {id:17, name:'فايلات هاند K-Files #15-40',        code:'ENDO-007', price:120,  category:'أندو',      badge:'',         image:null},
-  {id:18, name:'سيلر AH Plus أندو',                code:'ENDO-008', price:680,  category:'أندو',      badge:'',         image:null},
-  {id:19, name:'سوداليس EDTA 17%',                 code:'ENDO-009', price:95,   category:'أندو',      badge:'',         image:null},
-  {id:20, name:'أبكس لوكيتر رقمي Root ZX',          code:'ENDO-010', price:3400, category:'أندو',      badge:'featured', image:null},
-  {id:21, name:'جلدز لاتكس خالي من البودرة M',      code:'GLOVE-001',price:185,  category:'جلدز',      badge:'',         image:null},
-  {id:22, name:'جلدز نيتريل أسود L',               code:'GLOVE-002',price:220,  category:'جلدز',      badge:'new',      image:null},
-  {id:23, name:'جلدز لاتكس معقمة جراحية 7.5',       code:'GLOVE-003',price:350,  category:'جلدز',      badge:'',         image:null},
-  {id:24, name:'جلدز نيتريل شفاف S',               code:'GLOVE-004',price:200,  category:'جلدز',      badge:'',         image:null},
-  {id:25, name:'جلدز نيتريل XL مقاوم',             code:'GLOVE-005',price:240,  category:'جلدز',      badge:'',         image:null},
-  {id:26, name:'جلدز فينيل اقتصادي M',             code:'GLOVE-006',price:130,  category:'جلدز',      badge:'',         image:null},
-  {id:27, name:'جلدز نيتريل كيمياء مقاومة',         code:'GLOVE-007',price:290,  category:'جلدز',      badge:'',         image:null},
-  {id:28, name:'كمبوزيت روبي سيرام A2',             code:'COMP-001', price:650,  category:'كمبوزيت',   badge:'best',     image:null},
-  {id:29, name:'كمبوزيت 3M Filtek Z350 A3',         code:'COMP-002', price:890,  category:'كمبوزيت',   badge:'',         image:null},
-  {id:30, name:'بوند سيلفي سيلف إيتش',             code:'COMP-003', price:420,  category:'كمبوزيت',   badge:'',         image:null},
-  {id:31, name:'كمبوزيت فيلتيك سوبريم XTE',        code:'COMP-004', price:950,  category:'كمبوزيت',   badge:'featured', image:null},
-  {id:32, name:'كمبوزيت Herculite Ultra A1',        code:'COMP-005', price:780,  category:'كمبوزيت',   badge:'',         image:null},
-  {id:33, name:'بوند أدبير سيلف إيتش 2',            code:'COMP-006', price:380,  category:'كمبوزيت',   badge:'',         image:null},
-  {id:34, name:'فلو كمبوزيت A2 سيرنج',             code:'COMP-007', price:490,  category:'كمبوزيت',   badge:'',         image:null},
-  {id:35, name:'إيتش جيل 37% سيرنج',              code:'COMP-008', price:85,   category:'كمبوزيت',   badge:'',         image:null},
-  {id:36, name:'بوليشينج كيت كمبوزيت سوفليكس',     code:'COMP-009', price:560,  category:'كمبوزيت',   badge:'',         image:null},
-  {id:37, name:'كمبوزيت ناانوهايبريد B1',           code:'COMP-010', price:720,  category:'كمبوزيت',   badge:'new',      image:null},
-  {id:38, name:'إبر تخدير كارب مع سرنجة',           code:'CONS-001', price:95,   category:'مستهلكات',  badge:'',         image:null},
-  {id:39, name:'أمالغام كبسولات GS-80',             code:'CONS-002', price:1100, category:'مستهلكات',  badge:'',         image:null},
-  {id:40, name:'قطن رولز طبي معقم',                code:'CONS-003', price:45,   category:'مستهلكات',  badge:'',         image:null},
-  {id:41, name:'مبارد تشكيل كمبوزيت',              code:'CONS-004', price:290,  category:'مستهلكات',  badge:'',         image:null},
-  {id:42, name:'مزيل جير بالتراسونيك NSK',          code:'CONS-005', price:3200, category:'مستهلكات',  badge:'featured', image:null},
-  {id:43, name:'كمامات N95 طبية علبة 20',           code:'CONS-006', price:140,  category:'مستهلكات',  badge:'',         image:null},
-  {id:44, name:'مناديل تعقيم كحول 70%',            code:'CONS-007', price:65,   category:'مستهلكات',  badge:'',         image:null},
-  {id:45, name:'أكياس تعقيم بخار علبة 200',        code:'CONS-008', price:110,  category:'مستهلكات',  badge:'',         image:null},
-  {id:46, name:'مواد حشو جلاس أيونومر كيماوي',      code:'CONS-009', price:340,  category:'مستهلكات',  badge:'',         image:null},
-  {id:47, name:'كرات قطن معقمة بوكس',              code:'CONS-010', price:55,   category:'مستهلكات',  badge:'',         image:null},
-  {id:48, name:'بكرة حرير طبي معقمة',              code:'CONS-011', price:38,   category:'مستهلكات',  badge:'',         image:null},
-  {id:49, name:'صواني فحص معقمة ستيريل',           code:'CONS-012', price:185,  category:'مستهلكات',  badge:'',         image:null},
-  {id:50, name:'سرنجات مياه بلاستيك معقمة',        code:'CONS-013', price:42,   category:'مستهلكات',  badge:'',         image:null},
-  {id:51, name:'ضوء كيور LED لايت 1200mW',          code:'CONS-014', price:1800, category:'مستهلكات',  badge:'best',     image:null},
-  {id:52, name:'طبق خلط سيليكون مزدوج',            code:'CONS-015', price:75,   category:'مستهلكات',  badge:'',         image:null},
-  {id:53, name:'مجرفة سيمنت ستيريل ستيل',          code:'CONS-016', price:120,  category:'مستهلكات',  badge:'',         image:null},
-  {id:54, name:'فرشاة ميكروتيب أصفر 100',          code:'CONS-017', price:50,   category:'مستهلكات',  badge:'',         image:null},
-  {id:55, name:'فلاشر بيروكسيد للتنظيف',           code:'CONS-018', price:90,   category:'مستهلكات',  badge:'',         image:null},
-  {id:56, name:'مطاط داي 5×5 حزمة',               code:'CONS-019', price:115,  category:'مستهلكات',  badge:'',         image:null},
-  {id:57, name:'كلامب رابر داي فريمي',              code:'CONS-020', price:850,  category:'مستهلكات',  badge:'',         image:null},
-  {id:58, name:'إمبلانت ستراومان SLA 4.1mm',        code:'IMP-001',  price:8500, category:'زراعة',     badge:'featured', image:null},
-  {id:59, name:'أبتمنت زراعة أفيلا 3.5mm',          code:'IMP-002',  price:2200, category:'زراعة',     badge:'',         image:null},
-  {id:60, name:'إمبلانت تيتانيوم نوبل بيوكير',      code:'IMP-003',  price:7200, category:'زراعة',     badge:'featured', image:null},
-  {id:61, name:'بون جراف Bio-Oss 0.5g',             code:'IMP-004',  price:1800, category:'زراعة',     badge:'',         image:null},
-  {id:62, name:'غشاء Bio-Gide لإعادة تشكيل العظم', code:'IMP-005',  price:2400, category:'زراعة',     badge:'',         image:null},
-  {id:63, name:'هيل كاب سيليكون مؤقت',             code:'IMP-006',  price:350,  category:'زراعة',     badge:'',         image:null},
-  {id:64, name:'موتور زراعة إيمبلانت فيزيولوجي',    code:'IMP-007',  price:18000,category:'زراعة',     badge:'featured', image:null},
-  {id:65, name:'كاميرا داخل الفم WIFI',            code:'DIAG-001', price:4500, category:'تشخيص',     badge:'new',      image:null},
-  {id:66, name:'مرايا تشخيص ستاينلس ستيل',         code:'DIAG-002', price:150,  category:'تشخيص',     badge:'',         image:null},
-  {id:67, name:'مجساس بيريودونتال UNC-15',          code:'DIAG-003', price:280,  category:'تشخيص',     badge:'',         image:null},
-  {id:68, name:'مجموعة فحص أساسية 5 قطع',          code:'DIAG-004', price:420,  category:'تشخيص',     badge:'',         image:null},
-  {id:69, name:'مصور رقمي RVG سينسور',              code:'DIAG-005', price:12000,category:'تشخيص',     badge:'featured', image:null},
-  {id:70, name:'شارة إكسراي حامية من الأشعة',       code:'DIAG-006', price:95,   category:'تشخيص',     badge:'',         image:null},
-];
+
  
 // ================================================================
 // STATE
@@ -775,37 +703,24 @@ async function init() {
  
     // المنتجات — array عادي (نفس الشكل الأصلي تمامًا). بنتعافى تلقائيًا لو
     // البيانات كانت اتلخبطت بشكل غريب (object/سطور فاضية) لأي سبب سابق.
-    if (prodsSnap.exists() && prodsSnap.val()) {
+  if (prodsSnap.exists() && prodsSnap.val()) {
       const raw = prodsSnap.val();
       const arr = Array.isArray(raw) ? raw : Object.values(raw);
       const clean = arr.filter(p => p && typeof p === 'object' && p.id != null);
       if (clean.length > 0) {
         prods = clean;
-        // لو الشكل المخزّن مش array سليم 100% (فيه فراغات أو كان object) — صلّحه بكتابة نظيفة مرة وحدة
         const needsHealing = !Array.isArray(raw) || raw.length !== clean.length;
         if (needsHealing) {
           setSplashStatus('إصلاح هيكلة البيانات...');
           await fbWrite('daleel/products', prods);
         }
-      } else {
-        prods = SEED_PRODS;
-        await fbWrite('daleel/products', prods);
       }
-    } else {
-      // Firebase فارغ — ارفع البيانات الافتراضية
-      setSplashStatus('رفع البيانات الأولية...');
-      prods = SEED_PRODS;
-      await fbWrite('daleel/products', prods);
     }
- 
+
     // الفئات
     if (catsSnap.exists() && Array.isArray(catsSnap.val()) && catsSnap.val().length > 0) {
       cats = catsSnap.val();
-    } else {
-      cats = SEED_CATS;
-      await fbWrite('daleel/categories', cats);
     }
- 
     // المبيعات
     salesLog = (salesSnap.exists() && Array.isArray(salesSnap.val())) ? salesSnap.val() : [];
  
@@ -820,8 +735,8 @@ async function init() {
   } catch(e) {
     setSplashStatus('خطأ في الاتصال - وضع غير متصل');
     console.error(e);
-    if (!Array.isArray(prods) || prods.length === 0) prods = SEED_PRODS;
-    if (!Array.isArray(cats)  || cats.length === 0)  cats  = SEED_CATS;
+   if (!Array.isArray(prods)) prods = [];
+if (!Array.isArray(cats))  cats  = ['الكل'];
   }
  
   // ✅ مهما حصل (حتى لو فيه خطأ غير متوقع) — لازم الموقع يفتح ويوريك حاجة،
